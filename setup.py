@@ -30,12 +30,10 @@ setup(
         'pytest-runner'
     ],
     install_requires=[
-        'Django>=1.11',
         'requests',
         'python-jose'
     ],
     tests_require=[
-        'pytest-django',
         'pytest-cov',
         'mock>=2.0',
     ],
