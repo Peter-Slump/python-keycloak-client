@@ -37,7 +37,8 @@ class KeycloakClient(object):
 
     def post(self, url, data, headers=None, **kwargs):
         return self._handle_response(
-            self.session.post(url, headers=headers or {}, params=kwargs, data=data)
+            self.session.post(url, headers=headers or {}, params=kwargs,
+                              data=data)
         )
 
     def get(self, url, headers=None, **kwargs):

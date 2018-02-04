@@ -17,16 +17,19 @@ class KeycloakAuthz(object):
 
     def entitlement(self, token):
         """
-        Client applications can use a specific endpoint to obtain a special security token
-        called a requesting party token (RPT). This token consists of all the entitlements
-        (or permissions) for a user as a result of the evaluation of the permissions and authorization
-        policies associated with the resources being requested. With an RPT, client applications can
-        gain access to protected resources at the resource server.
+        Client applications can use a specific endpoint to obtain a special
+        security token called a requesting party token (RPT). This token
+        consists of all the entitlements (or permissions) for a user as a
+        result of the evaluation of the permissions and authorization policies
+        associated with the resources being requested. With an RPT, client
+        applications can gain access to protected resources at the resource
+        server.
 
         :return:
         """
         headers = {"Authorization": "Bearer " + token}
 
         return self._realm.client.get(
-            self._realm.client.get_full_url(PATH_ENTITLEMENT.format(self._realm.realm_name, self._client_id)),
+            self._realm.client.get_full_url(PATH_ENTITLEMENT.format(
+                self._realm.realm_name, self._client_id)),
             headers=headers)

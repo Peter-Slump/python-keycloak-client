@@ -16,11 +16,13 @@ class KeycloakUMA(object):
     @property
     def well_known(self):
         if self._well_known is None:
-            url = self._realm.client.get_full_url(PATH_WELL_KNOWN.format(self._realm.realm_name))
+            url = self._realm.client.get_full_url(PATH_WELL_KNOWN.format(
+                self._realm.realm_name))
             self._well_known = KeycloakWellKnown(url)
         return self._well_known
 
-    def resource_set_create(self, token, name, uri=None, type=None, scopes=None, icon_url=None):
+    def resource_set_create(self, token, name, uri=None, type=None,
+                            scopes=None, icon_url=None):
         """
         Create a resource set.
 

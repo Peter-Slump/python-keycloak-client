@@ -32,7 +32,8 @@ class KeycloakOpenidConnect(object):
     @property
     def well_known(self):
         if self._well_known is None:
-            url = self._realm.client.get_full_url(PATH_WELL_KNOWN.format(self._realm.realm_name))
+            url = self._realm.client.get_full_url(PATH_WELL_KNOWN.format(
+                self._realm.realm_name))
             self._well_known = KeycloakWellKnown(url)
         return self._well_known
 
@@ -76,9 +77,9 @@ class KeycloakOpenidConnect(object):
 
     def certs(self):
         """
-        The certificate endpoint returns the public keys enabled by the realm, encoded as a
-        JSON Web Key (JWK). Depending on the realm settings there can be one or more keys enabled
-        for verifying tokens.
+        The certificate endpoint returns the public keys enabled by the realm,
+        encoded as a JSON Web Key (JWK). Depending on the realm settings there
+        can be one or more keys enabled for verifying tokens.
 
         https://tools.ietf.org/html/rfc7517
 
@@ -88,10 +89,12 @@ class KeycloakOpenidConnect(object):
 
     def userinfo(self, token):
         """
-        The UserInfo Endpoint is an OAuth 2.0 Protected Resource that returns Claims about the authenticated End-User.
-        To obtain the requested Claims about the End-User, the Client makes a request to the UserInfo Endpoint using
-        an Access Token obtained through OpenID Connect Authentication. These Claims are normally represented by a
-        JSON object that contains a collection of name and value pairs for the Claims.
+        The UserInfo Endpoint is an OAuth 2.0 Protected Resource that returns
+        Claims about the authenticated End-User. To obtain the requested Claims
+        about the End-User, the Client makes a request to the UserInfo Endpoint
+        using an Access Token obtained through OpenID Connect Authentication.
+        These Claims are normally represented by a JSON object that contains a
+        collection of name and value pairs for the Claims.
 
         http://openid.net/specs/openid-connect-core-1_0.html#UserInfo
 
@@ -100,9 +103,14 @@ class KeycloakOpenidConnect(object):
         """
         url = self.well_known['userinfo_endpoint']
 
-        return self._realm.client.get(url, headers={"Authorization": "Bearer {}".format(token)})
+        return self._realm.client.get(url, headers={
+                                          "Authorization": "Bearer {}".format(
+                                              token
+                                          )
+                                      })
 
-    def authorization_url(self, response_type='code', redirect_uri=None, scope=None, state=None):
+    def authorization_url(self, response_type='code', redirect_uri=None,
+                          scope=None, state=None):
         """
         Get authorization URL to redirect the resource owner to.
 
@@ -133,7 +141,8 @@ class KeycloakOpenidConnect(object):
 
         return '{}?{}'.format(url, params)
 
-    def authorization_code(self, code, redirect_uri, grant_type='authorization_code'):
+    def authorization_code(self, code, redirect_uri,
+                           grant_type='authorization_code'):
         """
         Retrieve access token by `authorization_code` grant.
 
@@ -144,7 +153,8 @@ class KeycloakOpenidConnect(object):
         :param str grant_type:
         :rtype: dict
         """
-        return self._token_request(grant_type=grant_type, code=code, redirect_uri=redirect_uri)
+        return self._token_request(grant_type=grant_type, code=code,
+                                   redirect_uri=redirect_uri)
 
     def client_credentials(self, scope=None, grant_type='client_credentials'):
         """
@@ -155,7 +165,8 @@ class KeycloakOpenidConnect(object):
         """
         return self._token_request(grant_type=grant_type, scope=scope)
 
-    def refresh_token(self, refresh_token, grant_type='refresh_token', scope=None):
+    def refresh_token(self, refresh_token, grant_type='refresh_token',
+                      scope=None):
         """
         Refresh an access token
 
@@ -167,9 +178,11 @@ class KeycloakOpenidConnect(object):
         :rtype: dict
         """
         if scope:
-            return self._token_request(grant_type=grant_type, refresh_token=refresh_token, scope=None)
+            return self._token_request(grant_type=grant_type,
+                                       refresh_token=refresh_token, scope=None)
         else:
-            return self._token_request(grant_type=grant_type, refresh_token=refresh_token)
+            return self._token_request(grant_type=grant_type,
+                                       refresh_token=refresh_token)
 
     def _token_request(self, grant_type, **kwargs):
         """
@@ -187,4 +200,5 @@ class KeycloakOpenidConnect(object):
 
         payload.update(**kwargs)
 
-        return self._realm.client.post(self.get_url('token_endpoint'), data=payload)
+        return self._realm.client.post(self.get_url('token_endpoint'),
+                                       data=payload)

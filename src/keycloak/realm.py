@@ -14,9 +14,11 @@ class KeycloakRealm(object):
 
     def __init__(self, server_url, realm_name, headers=None):
         """
-        :param str server_url: The base URL where the Keycloak server can be found
+        :param str server_url: The base URL where the Keycloak server can be
+            found
         :param str realm_name: REALM name
-        :param dict headers: Optional extra headers to send with requests to the server
+        :param dict headers: Optional extra headers to send with requests to
+            the server
         """
         self._server_url = server_url
         self._realm_name = realm_name
@@ -28,7 +30,8 @@ class KeycloakRealm(object):
         :rtype: keycloak.client.KeycloakClient
         """
         if self._client is None:
-            self._client = KeycloakClient(server_url=self._server_url, headers=self._headers)
+            self._client = KeycloakClient(server_url=self._server_url,
+                                          headers=self._headers)
         return self._client
 
     @property
@@ -47,7 +50,8 @@ class KeycloakRealm(object):
         :param str client_secret:
         :rtype: keycloak.openid_connect.KeycloakOpenidConnect
         """
-        return KeycloakOpenidConnect(realm=self, client_id=client_id, client_secret=client_secret,
+        return KeycloakOpenidConnect(realm=self, client_id=client_id,
+                                     client_secret=client_secret,
                                      well_known=well_known)
 
     def authz(self, client_id):
