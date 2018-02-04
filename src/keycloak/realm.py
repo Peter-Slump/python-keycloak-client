@@ -42,7 +42,7 @@ class KeycloakRealm(object):
     def server_url(self):
         return self._server_url
 
-    def open_id_connect(self, client_id, client_secret, well_known=None):
+    def open_id_connect(self, client_id, client_secret):
         """
         Get OpenID Connect client
 
@@ -51,8 +51,7 @@ class KeycloakRealm(object):
         :rtype: keycloak.openid_connect.KeycloakOpenidConnect
         """
         return KeycloakOpenidConnect(realm=self, client_id=client_id,
-                                     client_secret=client_secret,
-                                     well_known=well_known)
+                                     client_secret=client_secret)
 
     def authz(self, client_id):
         """

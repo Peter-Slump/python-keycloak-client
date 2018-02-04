@@ -17,7 +17,7 @@ class KeycloakOpenidConnect(object):
     _client_secret = None
     _realm = None
 
-    def __init__(self, realm, client_id, client_secret, well_known=None):
+    def __init__(self, realm, client_id, client_secret):
         """
         :param keycloak.realm.KeycloakRealm realm:
         :param str client_id:
@@ -26,15 +26,16 @@ class KeycloakOpenidConnect(object):
         self._client_id = client_id
         self._client_secret = client_secret
         self._realm = realm
-        if well_known:
-            self._well_known = well_known
 
     @property
     def well_known(self):
         if self._well_known is None:
-            url = self._realm.client.get_full_url(PATH_WELL_KNOWN.format(
-                self._realm.realm_name))
-            self._well_known = KeycloakWellKnown(url)
+            self._well_known = KeycloakWellKnown(
+                realm=self._realm,
+                path=self._realm.client.get_full_url(
+                    PATH_WELL_KNOWN.format(self._realm.realm_name)
+                )
+            )
         return self._well_known
 
     def get_url(self, name):

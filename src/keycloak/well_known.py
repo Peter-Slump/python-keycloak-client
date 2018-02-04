@@ -1,5 +1,3 @@
-import requests
-
 try:
     from collections import Mapping
 except ImportError:
@@ -9,23 +7,29 @@ except ImportError:
 class KeycloakWellKnown(Mapping):
 
     _contents = None
-    _url = None
+    _realm = None
+    _path = None
 
-    def __init__(self, url, content=None):
+    def __init__(self, realm, path, content=None):
         """
+        :param keycloak.realm.KeycloakRealm realm:
         :param str url: URL to find the .well-known
         :param dict | None content:
         """
-        self._url = url
+        self._realm = realm
+        self._path = path
         if content:
             self._contents = content
 
     @property
     def contents(self):
         if self._contents is None:
-            response = requests.get(self._url)
-            self._contents = response.json()
+            self._contents = self._realm.client.get(self._path)
         return self._contents
+
+    @contents.setter
+    def contents(self, content):
+        self._contents = content
 
     def __getitem__(self, key):
         return self.contents[key]
