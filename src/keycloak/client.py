@@ -41,10 +41,19 @@ class KeycloakClient(object):
                               data=data)
         )
 
+    def put(self, url, data, headers=None, **kwargs):
+        return self._handle_response(
+            self.session.put(url, headers=headers or {}, params=kwargs,
+                             data=data)
+        )
+
     def get(self, url, headers=None, **kwargs):
         return self._handle_response(
             self.session.get(url, headers=headers or {}, params=kwargs)
         )
+
+    def delete(self, url, headers, **kwargs):
+        return self.session.delete(url, headers=headers, **kwargs)
 
     def _handle_response(self, response):
         try:
