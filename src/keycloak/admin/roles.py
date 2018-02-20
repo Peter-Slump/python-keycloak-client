@@ -73,7 +73,7 @@ class Role(KeycloakAdminBase):
 
     def update(self, name, description=None, id=None, client_role=None,
                composite=None, composites=None, container_id=None,
-               scope_param_required=None ):
+               scope_param_required=None):
         payload = {
             'name': name
         }

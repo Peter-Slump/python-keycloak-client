@@ -14,7 +14,7 @@ class KeycloakAdminBase(object):
             raise NotImplementedError()
 
         return self._paths[name].format(**kwargs)
-    
+
 
 class KeycloakAdmin(object):
 
