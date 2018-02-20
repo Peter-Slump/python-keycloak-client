@@ -62,6 +62,7 @@ class KeycloakClient(object):
             import logging
             logger = logging.getLogger(__name__)
             logger.debug(response.content)
+            logger.debug(response.headers)
             logger.debug(response.request.headers)
             raise
 
