@@ -1,7 +1,7 @@
 try:
     from urllib.parse import urlencode
 except ImportError:
-    from urlparse import urlencode
+    from urllib import urlencode
 
 from jose import jwt
 

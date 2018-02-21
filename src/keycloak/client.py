@@ -3,7 +3,7 @@ from requests.exceptions import HTTPError
 try:
     from urllib.parse import urljoin
 except ImportError:
-    from urlparse import urljoin
+    from urllib import urlencode
 
 import requests
 
