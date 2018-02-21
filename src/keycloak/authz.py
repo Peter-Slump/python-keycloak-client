@@ -25,7 +25,9 @@ class KeycloakAuthz(object):
         applications can gain access to protected resources at the resource
         server.
 
-        :return:
+        http://www.keycloak.org/docs/latest/authorization_services/index.html#_service_entitlement_api
+
+        :rtype: dict
         """
         headers = {"Authorization": "Bearer " + token}
 

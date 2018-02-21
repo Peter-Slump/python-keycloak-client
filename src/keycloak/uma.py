@@ -92,7 +92,7 @@ class KeycloakUMA(object):
 
     def resource_set_delete(self, token, id):
         """
-        Read a resource set.
+        Delete a resource set.
 
         https://docs.kantarainitiative.org/uma/rec-oauth-resource-reg-v1_0_1.html#delete-resource-set
 

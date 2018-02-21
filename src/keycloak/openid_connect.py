@@ -66,8 +66,8 @@ class KeycloakOpenidConnect(object):
         """
         The logout endpoint logs out the authenticated user.
 
-        :param refresh_token:
-        :return:
+        :param str refresh_token:
+        :rtype: requests.Response
         """
         return self._realm.client.post(self.get_url('end_session_endpoint'),
                                        data={
@@ -84,7 +84,7 @@ class KeycloakOpenidConnect(object):
 
         https://tools.ietf.org/html/rfc7517
 
-        :return:
+        :rtype: dict
         """
         return self._realm.client.get(self.get_url('jwks_uri'))
 
@@ -160,6 +160,7 @@ class KeycloakOpenidConnect(object):
     def client_credentials(self, scope=None, grant_type='client_credentials'):
         """
         Retrieve access token by `client_credentials` grant.
+
         :param str | None scope:
         :param str grant_type:
         :rtype: dict

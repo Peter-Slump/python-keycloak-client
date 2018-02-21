@@ -17,7 +17,18 @@ class Users(KeycloakAdminBase):
 
     def create(self, username, credentials=None, first_name=None,
                last_name=None, email=None, enabled=None):
+        """
+        Create a user in Keycloak
 
+        http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_users_resource
+
+        :param str username:
+        :param object credentials:
+        :param str first_name:
+        :param str last_name:
+        :param str email:
+        :param boolean enabled:
+        """
         payload = {
             'username': username,
         }
