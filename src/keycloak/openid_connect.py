@@ -67,7 +67,6 @@ class KeycloakOpenidConnect(object):
         The logout endpoint logs out the authenticated user.
 
         :param str refresh_token:
-        :rtype: requests.Response
         """
         return self._realm.client.post(self.get_url('end_session_endpoint'),
                                        data={
