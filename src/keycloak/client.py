@@ -1,9 +1,9 @@
 from requests.exceptions import HTTPError
 
 try:
-    from urllib.parse import urljoin
+    from urllib.parse import urljoin  # noqa: F401
 except ImportError:
-    from urllib import urlencode
+    from urllib import urlencode  # noqa: F401
 
 import requests
 
@@ -58,7 +58,7 @@ class KeycloakClient(object):
     def _handle_response(self, response):
         try:
             response.raise_for_status()
-        except HTTPError as e:
+        except HTTPError:
             import logging
             logger = logging.getLogger(__name__)
             logger.debug(response.content)

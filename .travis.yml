@@ -10,4 +10,4 @@ before_install:
 install:
   - python setup.py -q install
 script:
-  - flake8 .
+  - flake8 ./src
