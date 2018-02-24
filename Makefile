@@ -1,4 +1,3 @@
-
 install-python:
 	pip install --upgrade setuptools
 	pip install -e .
@@ -9,10 +8,3 @@ bump-patch:
 
 bump-minor:
 	bumpversion minor
-
-deploy-pypi: clear
-	python setup.py sdist bdist_wheel
-	twine upload dist/*
-
-clear:
-	rm -rf dist/*

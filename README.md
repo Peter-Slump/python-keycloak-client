@@ -7,6 +7,7 @@ Python Client for Keycloak identity and access management service
 [Documentation](http://python-keycloak-client.readthedocs.io/en/latest/)
 
 http://www.keycloak.org/
+
 https://github.com/Peter-Slump/python-keycloak-client
 
 ## Development
