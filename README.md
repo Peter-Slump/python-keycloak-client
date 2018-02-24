@@ -1,6 +1,8 @@
 # Python Keycloak Client
 
 [![Build Status](https://www.travis-ci.org/Peter-Slump/python-keycloak-client.svg?branch=master)](https://www.travis-ci.org/Peter-Slump/python-keycloak-client)
+[![Documentation Status](https://readthedocs.org/projects/python-keycloak-client/badge/?version=latest)](http://python-keycloak-client.readthedocs.io/en/latest/?badge=latest)
+
 
 Python Client for Keycloak identity and access management service
 
