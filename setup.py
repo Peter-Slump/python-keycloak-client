@@ -43,5 +43,4 @@ setup(
     author_email='peter@yarf.nl',
     description='Install Python Keycloak client.',
     classifiers=[]
-
 )

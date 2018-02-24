@@ -11,6 +11,12 @@ https://github.com/Peter-Slump/python-keycloak-client
 
 ## Development
 
+Install development environment:
+
+```bash
+$ make install-python
+```
+
 ### Writing docs
 
 Documentation is written using Sphinx and maintained in the docs folder.
