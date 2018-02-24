@@ -7,6 +7,7 @@ python:
 before_install:
   - pip install -U pip
   - pip install -U wheel setuptools flake8
-
+install:
+  - python setup.py -q install
 script:
   - flake8 .
