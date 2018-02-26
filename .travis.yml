@@ -12,7 +12,7 @@ install:
   - python setup.py -q install
 script:
   - flake8 ./src ./tests
-  - python setup.py test --addopts "--cov=./src/dynamic_fixtures"
+  - python setup.py test --addopts "--cov=keycloak"
 
 after_success:
   - codecov
