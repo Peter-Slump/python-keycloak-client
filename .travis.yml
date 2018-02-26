@@ -7,7 +7,12 @@ python:
 before_install:
   - pip install -U pip
   - pip install -U wheel setuptools flake8
+  - pip install codecov
 install:
   - python setup.py -q install
 script:
-  - flake8 ./src
+  - flake8 ./src ./tests
+  - python setup.py test --addopts "--cov=./src/dynamic_fixtures"
+
+after_success:
+  - codecov

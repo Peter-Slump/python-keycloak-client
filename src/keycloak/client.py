@@ -3,7 +3,7 @@ from requests.exceptions import HTTPError
 try:
     from urllib.parse import urljoin  # noqa: F401
 except ImportError:
-    from urllib import urlencode  # noqa: F401
+    from urlparse import urljoin  # noqa: F401
 
 import requests
 
