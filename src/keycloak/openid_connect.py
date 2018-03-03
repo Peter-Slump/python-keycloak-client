@@ -117,10 +117,10 @@ class KeycloakOpenidConnect(WellKnownMixin):
         :return: URL to redirect the resource owner to
         :rtype: str
         """
-        payload = OrderedDict(
-            response_type=response_type,
-            client_id=self._client_id
-        )
+        payload = OrderedDict()
+        payload['response_type'] = response_type,
+        payload['client_id'] = self._client_id
+
         if redirect_uri:
             payload['redirect_uri'] = redirect_uri
 
