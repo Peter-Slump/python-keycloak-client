@@ -1,5 +1,7 @@
 from collections import OrderedDict
 
+from keycloak.mixins import WellKnownMixin
+
 try:
     from urllib.parse import urlencode
 except ImportError:
@@ -7,12 +9,10 @@ except ImportError:
 
 from jose import jwt
 
-from keycloak.well_known import KeycloakWellKnown
-
 PATH_WELL_KNOWN = "auth/realms/{}/.well-known/openid-configuration"
 
 
-class KeycloakOpenidConnect(object):
+class KeycloakOpenidConnect(WellKnownMixin):
 
     _well_known = None
     _client_id = None
@@ -29,16 +29,8 @@ class KeycloakOpenidConnect(object):
         self._client_secret = client_secret
         self._realm = realm
 
-    @property
-    def well_known(self):
-        if self._well_known is None:
-            self._well_known = KeycloakWellKnown(
-                realm=self._realm,
-                path=self._realm.client.get_full_url(
-                    PATH_WELL_KNOWN.format(self._realm.realm_name)
-                )
-            )
-        return self._well_known
+    def get_path_well_known(self):
+        return PATH_WELL_KNOWN
 
     def get_url(self, name):
         return self.well_known[name]

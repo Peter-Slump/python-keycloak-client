@@ -1,11 +1,11 @@
 import json
 
-from keycloak.well_known import KeycloakWellKnown
+from keycloak.mixins import WellKnownMixin
 
 PATH_WELL_KNOWN = "auth/realms/{}/.well-known/uma-configuration"
 
 
-class KeycloakUMA(object):
+class KeycloakUMA(WellKnownMixin, object):
 
     _realm = None
     _well_known = None
@@ -13,16 +13,8 @@ class KeycloakUMA(object):
     def __init__(self, realm):
         self._realm = realm
 
-    @property
-    def well_known(self):
-        if self._well_known is None:
-            self._well_known = KeycloakWellKnown(
-                realm=self._realm,
-                path=self._realm.client.get_full_url(
-                    PATH_WELL_KNOWN.format(self._realm.realm_name)
-                )
-            )
-        return self._well_known
+    def get_path_well_known(self):
+        return PATH_WELL_KNOWN
 
     def resource_set_create(self, token, name, uri=None, type=None,
                             scopes=None, icon_url=None):
