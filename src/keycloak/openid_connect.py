@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 try:
     from urllib.parse import urlencode
 except ImportError:
@@ -123,10 +125,10 @@ class KeycloakOpenidConnect(object):
         :return: URL to redirect the resource owner to
         :rtype: str
         """
-        payload = {
-            'response_type': response_type,
-            'client_id': self._client_id
-        }
+        payload = OrderedDict(
+            response_type=response_type,
+            client_id=self._client_id
+        )
         if redirect_uri:
             payload['redirect_uri'] = redirect_uri
 
@@ -180,7 +182,7 @@ class KeycloakOpenidConnect(object):
         """
         if scope:
             return self._token_request(grant_type=grant_type,
-                                       refresh_token=refresh_token, scope=None)
+                                       refresh_token=refresh_token, scope=scope)
         else:
             return self._token_request(grant_type=grant_type,
                                        refresh_token=refresh_token)
