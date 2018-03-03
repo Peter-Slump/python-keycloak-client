@@ -118,7 +118,7 @@ class KeycloakOpenidConnect(WellKnownMixin):
         :rtype: str
         """
         payload = OrderedDict()
-        payload['response_type'] = response_type,
+        payload['response_type'] = response_type
         payload['client_id'] = self._client_id
 
         if redirect_uri:
