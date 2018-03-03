@@ -1,5 +1,7 @@
 import json
 
+from collections import OrderedDict
+
 from keycloak.admin import KeycloakAdminBase
 
 
@@ -29,9 +31,7 @@ class Users(KeycloakAdminBase):
         :param str email:
         :param boolean enabled:
         """
-        payload = {
-            'username': username,
-        }
+        payload = OrderedDict(username=username)
 
         if credentials is not None:
             payload['credentials'] = [credentials]

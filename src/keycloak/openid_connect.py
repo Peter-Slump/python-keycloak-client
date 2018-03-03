@@ -182,7 +182,8 @@ class KeycloakOpenidConnect(object):
         """
         if scope:
             return self._token_request(grant_type=grant_type,
-                                       refresh_token=refresh_token, scope=scope)
+                                       refresh_token=refresh_token,
+                                       scope=scope)
         else:
             return self._token_request(grant_type=grant_type,
                                        refresh_token=refresh_token)

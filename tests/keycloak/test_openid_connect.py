@@ -27,7 +27,6 @@ class KeycloakOpenidConnectTestCase(TestCase):
             'token_endpoint': 'https://token'
         }
 
-
     def test_well_known(self):
         """
         Case: .well-known is requested

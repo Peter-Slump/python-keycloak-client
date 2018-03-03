@@ -80,5 +80,5 @@ class KeycloakAdmin(object):
 
         headers = headers or {}
         headers['Authorization'] = "Bearer {}".format(token)
-        headers['Content-type'] = 'application/json'
+        headers['Content-Type'] = 'application/json'
         return headers

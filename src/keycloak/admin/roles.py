@@ -1,5 +1,7 @@
 import json
 
+from collections import OrderedDict
+
 from keycloak.admin import KeycloakAdminBase
 
 
@@ -23,9 +25,7 @@ class Roles(KeycloakAdminBase):
     def create(self, name, description=None, id=None, client_role=None,
                composite=None, composites=None, container_id=None,
                scope_param_required=None):
-        payload = {
-            'name': name
-        }
+        payload = OrderedDict(name=name)
 
         if description is not None:
             payload['description'] = description
@@ -74,9 +74,7 @@ class Role(KeycloakAdminBase):
     def update(self, name, description=None, id=None, client_role=None,
                composite=None, composites=None, container_id=None,
                scope_param_required=None):
-        payload = {
-            'name': name
-        }
+        payload = OrderedDict(name=name)
 
         if description is not None:
             payload['description'] = description
