@@ -11,8 +11,8 @@ Python Keycloak Client
 .. image:: https://codecov.io/gh/Peter-Slump/python-keycloak-client/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/Peter-Slump/python-keycloak-client
    :alt: codecov
-.. image:: https://api.codeclimate.com/v1/badges/2b19eae6a4aaa8cfa03b/maintainability
-   :target: https://codeclimate.com/github/Peter-Slump/django-dynamic-fixtures/maintainability
+.. image:: https://api.codeclimate.com/v1/badges/30e837f8c737b5b3e120/maintainability
+   :target: https://codeclimate.com/github/Peter-Slump/python-keycloak-client/maintainability
    :alt: Maintainability
 
 Python Client for Keycloak identity and access management service
