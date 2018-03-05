@@ -8,3 +8,10 @@ bump-patch:
 
 bump-minor:
 	bumpversion minor
+
+deploy-pypi: clear
+	python setup.py sdist bdist_wheel
+	twine upload dist/*
+
+clear:
+	rm -rf dist/*
