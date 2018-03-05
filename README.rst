@@ -1,0 +1,58 @@
+======================
+Python Keycloak Client
+======================
+
+.. image:: https://www.travis-ci.org/Peter-Slump/python-keycloak-client.svg?branch=master
+   :target: https://www.travis-ci.org/Peter-Slump/python-keycloak-client
+   :alt: Build Status
+.. image:: https://readthedocs.org/projects/python-keycloak-client/badge/?version=latest
+   :target: http://python-keycloak-client.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+.. image:: https://codecov.io/gh/Peter-Slump/python-keycloak-client/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/Peter-Slump/python-keycloak-client
+   :alt: codecov
+.. image:: https://api.codeclimate.com/v1/badges/2b19eae6a4aaa8cfa03b/maintainability
+   :target: https://codeclimate.com/github/Peter-Slump/django-dynamic-fixtures/maintainability
+   :alt: Maintainability
+
+Python Client for Keycloak identity and access management service
+
+Current version: 0.1.1
+
+`Documentation <http://python-keycloak-client.readthedocs.io/en/latest/>`_
+
+http://www.keycloak.org/
+
+https://github.com/Peter-Slump/python-keycloak-client
+
+Development
+===========
+
+Install development environment:
+
+.. code:: bash
+
+  $ make install-python
+
+------------
+Writing docs
+------------
+
+Documentation is written using Sphinx and maintained in the docs folder.
+
+To make it easy to write docs Docker support is available.
+
+First build the Docker container:
+
+.. code:: bash
+
+    $ docker build . -f DockerfileDocs -t python-keycloak-client-docs
+
+Run the container
+
+.. code:: bash
+
+    $ docker run -v `pwd`:/src --rm -t -i -p 8050:8050 python-keycloak-client-docs
+
+Go in the browser to http://localhost:8050 and view the documentation which get
+refreshed and updated on every update in the documentation source.
