@@ -19,7 +19,7 @@ Installation
 
 .. code-block:: bash
 
-    $ pip install git+https://github.com/Peter-Slump/python-keycloak-client.git
+    $ pip install python-keycloak-client
 
 Preparation
 ===========
