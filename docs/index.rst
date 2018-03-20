@@ -39,7 +39,7 @@ Everything starts with an instance of :class:`keycloak.realm.KeycloakRealm`
     from keycloak.realm import KeycloakRealm
 
 
-    realm = KeycloakRealm(server_url='https://example.com', server_url='my_realm')
+    realm = KeycloakRealm(server_url='https://example.com', realm_name='my_realm')
 
 --------------
 OpenID Connect
@@ -52,7 +52,7 @@ The OpenID Connect entry point can be retrieved from the realm object.
     from keycloak.realm import KeycloakRealm
 
 
-    realm = KeycloakRealm(server_url='https://example.com', server_url='my_realm')
+    realm = KeycloakRealm(server_url='https://example.com', realm_name='my_realm')
 
     oidc_client = realm.open_id_connect(client_id='my-client',
                                         client_secret='very-secret-client-secret')
@@ -83,7 +83,7 @@ The Authz client can be retrieved from the realm object.
     from keycloak.realm import KeycloakRealm
 
 
-    realm = KeycloakRealm(server_url='https://example.com', server_url='my_realm')
+    realm = KeycloakRealm(server_url='https://example.com', realm_name='my_realm')
 
     authz_client = realm.authz(client_id='my-client')
 
@@ -105,7 +105,7 @@ The admin API client get be retrieved from the realm object.
     from keycloak.realm import KeycloakRealm
 
 
-    realm = KeycloakRealm(server_url='https://example.com', server_url='my_realm')
+    realm = KeycloakRealm(server_url='https://example.com', realm_name='my_realm')
 
     admin_client = realm.admin
 
@@ -182,7 +182,7 @@ http://www.keycloak.org/docs/latest/authorization_services/index.html#_service_o
     from keycloak.realm import KeycloakRealm
 
 
-    realm = KeycloakRealm(server_url='https://example.com', server_url='my_realm')
+    realm = KeycloakRealm(server_url='https://example.com', realm_name='my_realm')
 
     uma_client = realm.uma()
 
@@ -207,4 +207,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
