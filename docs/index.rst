@@ -58,6 +58,8 @@ The OpenID Connect entry point can be retrieved from the realm object.
                                         client_secret='very-secret-client-secret')
 
 
+.. automethod:: keycloak.openid_connect.KeycloakOpenidConnect.decode_token
+
 .. automethod:: keycloak.openid_connect.KeycloakOpenidConnect.authorization_url
 
 .. automethod:: keycloak.openid_connect.KeycloakOpenidConnect.authorization_code
