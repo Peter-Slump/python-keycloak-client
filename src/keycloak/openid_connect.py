@@ -212,12 +212,59 @@ class KeycloakOpenidConnect(WellKnownMixin):
         return self._token_request(grant_type='refresh_token',
                                    refresh_token=refresh_token, **kwargs)
 
+    def token_exchange(self, **kwargs):
+        """
+        Token exchange is the process of using a set of credentials or token to
+        obtain an entirely different token.
+
+        http://www.keycloak.org/docs/latest/securing_apps/index.html#_token-exchange
+        https://www.ietf.org/id/draft-ietf-oauth-token-exchange-12.txt
+
+        :param subject_token: A security token that represents the identity of
+            the party on behalf of whom the request is being made. It is
+            required if you are exchanging an existing token for a new one.
+        :param subject_issuer: Identifies the issuer of the subject_token. It
+            can be left blank if the token comes from the current realm or if
+            the issuer can be determined from the subject_token_type. Otherwise
+            it is required to be specified. Valid values are the alias of an
+            Identity Provider configured for your realm. Or an issuer claim
+            identifier configured by a specific Identity Provider.
+        :param subject_token_type: This parameter is the type of the token
+            passed with the subject_token parameter. This defaults to
+            urn\:ietf:params:oauth:token-type:access_token if the subject_token
+            comes from the realm and is an access token. If it is an external
+            token, this parameter may or may not have to be specified depending
+            on the requirements of the subject_issuer.
+        :param requested_token_type:  This parameter represents the type of
+            token the client wants to exchange for. Currently only oauth and
+            OpenID Connect token types are supported. The default value for
+            this depends on whether the is
+            urn:ietf:params:oauth:token-type:refresh_token in which case you
+            will be returned both an access token and refresh token within the
+            response. Other appropriate values are
+            urn\:ietf:params:oauth:token-type:access_token and
+            urn\:ietf:params:oauth:token-type:id_token
+        :param audience: This parameter specifies the target client you want
+            the new token minted for.
+        :param requested_issuer: This parameter specifies that the client wants
+            a token minted by an external provider. It must be the alias of an
+            Identity Provider configured within the realm.
+        :param requested_subject: This specifies a username or user id if your
+            client wants to impersonate a different user.
+        :rtype: dict
+        :return: access_token, refresh_token and expires_in
+        """
+        return self._token_request(
+            grant_type='urn:ietf:params:oauth:grant-type:token-exchange',
+            **kwargs
+        )
+
     def _token_request(self, grant_type, **kwargs):
         """
         Do the actual call to the token end-point.
 
         :param grant_type:
-        :param kwargs:
+        :param kwargs: See invoking methods.
         :return:
         """
         payload = {

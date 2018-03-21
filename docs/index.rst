@@ -74,6 +74,8 @@ The OpenID Connect entry point can be retrieved from the realm object.
 
 .. automethod:: keycloak.openid_connect.KeycloakOpenidConnect.userinfo
 
+.. automethod:: keycloak.openid_connect.KeycloakOpenidConnect.token_exchange
+
 ------------------------------
 Authz (Authorization services)
 ------------------------------
