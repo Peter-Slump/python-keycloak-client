@@ -134,3 +134,20 @@ class KeycloakOpenidConnectTestCase(TestCase):
             }
         )
         self.assertEqual(response, self.realm.client.post.return_value)
+
+    def test_token_exchange(self):
+        response = self.openid_client.token_exchange(
+            subject_token='some-token',
+            audience='some-audience'
+        )
+        self.realm.client.post.assert_called_once_with(
+            'https://token',
+            data={
+                'grant_type': 'urn:ietf:params:oauth:grant-type:token-exchange',
+                'client_id': self.client_id,
+                'client_secret': self.client_secret,
+                'subject_token': 'some-token',
+                'audience': 'some-audience'
+            }
+        )
+        self.assertEqual(response, self.realm.client.post.return_value)
