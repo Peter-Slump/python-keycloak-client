@@ -143,7 +143,8 @@ class KeycloakOpenidConnectTestCase(TestCase):
         self.realm.client.post.assert_called_once_with(
             'https://token',
             data={
-                'grant_type': 'urn:ietf:params:oauth:grant-type:token-exchange',
+                'grant_type': 'urn:ietf:params:oauth:grant-type:token-'
+                              'exchange',
                 'client_id': self.client_id,
                 'client_secret': self.client_secret,
                 'subject_token': 'some-token',
