@@ -15,6 +15,17 @@ Python Keycloak Client
    :target: https://codeclimate.com/github/Peter-Slump/python-keycloak-client/maintainability
    :alt: Maintainability
 
+.. image:: https://img.shields.io/pypi/l/python-keycloak-client.svg
+   :target: https://pypi.python.org/pypi/python-keycloak-client
+   :alt: License
+.. image:: https://img.shields.io/pypi/v/python-keycloak-client.svg
+   :target: https://pypi.python.org/pypi/python-keycloak-client
+   :alt: Version
+.. image:: https://img.shields.io/pypi/wheel/python-keycloak-client.svg
+   :target: https://pypi.python.org/pypi/python-keycloak-client
+   :alt: Wheel
+
+
 Python Client for Keycloak identity and access management service
 
 Current version: 0.1.3
