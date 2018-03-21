@@ -16,32 +16,30 @@ class KeycloakUMA(WellKnownMixin, object):
     def get_path_well_known(self):
         return PATH_WELL_KNOWN
 
-    def resource_set_create(self, token, name, uri=None, type=None,
-                            scopes=None, icon_url=None):
+    def resource_set_create(self, token, name, **kwargs):
         """
         Create a resource set.
 
         https://docs.kantarainitiative.org/uma/rec-oauth-resource-reg-v1_0_1.html#rfc.section.2.2.1
 
         :param str token: client access token
+        :param str id: Identifier of the resource set
         :param str name:
-        :param str | None uri:
-        :param str | None type:
-        :param list | None scopes:
-        :param str | none icon_url:
+        :param str uri: (optional)
+        :param str type: (optional)
+        :param list scopes: (optional)
+        :param str icon_url: (optional)
         :rtype: str
         """
         return self._realm.client.post(
             self.well_known['resource_set_registration_endpoint'],
             data=json.dumps(
-                self.get_payload(name=name, uri=uri, type=type, scopes=scopes,
-                                 icon_url=icon_url)
+                self.get_payload(name=name, **kwargs)
             ),
             headers=self.get_headers(token)
         )
 
-    def resource_set_update(self, token, id, name, uri=None, type=None,
-                            scopes=None, icon_url=None):
+    def resource_set_update(self, token, id, name, **kwargs):
         """
         Update a resource set.
 
@@ -50,18 +48,17 @@ class KeycloakUMA(WellKnownMixin, object):
         :param str token: client access token
         :param str id: Identifier of the resource set
         :param str name:
-        :param str | None uri:
-        :param str | None type:
-        :param list | None scopes:
-        :param str | none icon_url:
+        :param str uri: (optional)
+        :param str type: (optional)
+        :param list scopes: (optional)
+        :param str icon_url: (optional)
         :rtype: str
         """
         return self._realm.client.put(
             '{}/{}'.format(
                 self.well_known['resource_set_registration_endpoint'], id),
             data=json.dumps(
-                self.get_payload(name=name, uri=uri, type=type, scopes=scopes,
-                                 icon_url=icon_url)
+                self.get_payload(name=name, **kwargs)
             ),
             headers=self.get_headers(token)
         )
@@ -117,19 +114,11 @@ class KeycloakUMA(WellKnownMixin, object):
             "Content-type": 'application/json'
         }
 
-    def get_payload(self, name, uri=None, type=None, scopes=None,
-                    icon_url=None):
+    def get_payload(self, name, scopes=None, **kwargs):
         payload = {
             'name': name,
             'scopes': scopes or []
         }
-        if uri:
-            payload['uri'] = uri
-
-        if type:
-            payload['type'] = type
-
-        if icon_url:
-            payload['icon_url'] = icon_url
+        payload.update(**kwargs)
 
         return payload

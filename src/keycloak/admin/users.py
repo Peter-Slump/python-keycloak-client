@@ -17,36 +17,35 @@ class Users(KeycloakAdminBase):
         self._realm_name = realm_name
         super(Users, self).__init__(*args, **kwargs)
 
-    def create(self, username, credentials=None, first_name=None,
-               last_name=None, email=None, enabled=None):
+    def create(self, username, **kwargs):
         """
         Create a user in Keycloak
 
         http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_users_resource
 
         :param str username:
-        :param object credentials:
-        :param str first_name:
-        :param str last_name:
-        :param str email:
-        :param boolean enabled:
+        :param object credentials: (optional)
+        :param str first_name: (optional)
+        :param str last_name: (optional)
+        :param str email: (optional)
+        :param boolean enabled: (optional)
         """
         payload = OrderedDict(username=username)
 
-        if credentials is not None:
-            payload['credentials'] = [credentials]
+        if 'credentials' in kwargs:
+            payload['credentials'] = [kwargs['credentials']]
 
-        if first_name is not None:
-            payload['firstName'] = first_name
+        if 'first_name' in kwargs:
+            payload['firstName'] = kwargs['first_name']
 
-        if last_name is not None:
-            payload['lastName'] = last_name
+        if 'last_name' in kwargs:
+            payload['lastName'] = kwargs['last_name']
 
-        if email is not None:
-            payload['email'] = email
+        if 'email' in kwargs:
+            payload['email'] = kwargs['email']
 
-        if enabled is not None:
-            payload['enabled'] = enabled
+        if 'enabled' in kwargs:
+            payload['enabled'] = kwargs['enabled']
 
         self._client.post(
             url=self._client.get_full_url(

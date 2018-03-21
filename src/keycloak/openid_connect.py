@@ -46,15 +46,55 @@ class KeycloakOpenidConnect(WellKnownMixin):
 
         https://tools.ietf.org/html/rfc7517
 
-        :param str token:
-        :param str key:
-        :param list | None algorithms: RS256 will be used by default.
-        :return:
-        """
-        algorithms = algorithms or ['RS256']
+        :param str token: A signed JWS to be verified.
+        :param str key: A key to attempt to verify the payload with.
+        :param str,list algorithms: (optional) Valid algorithms that should be
+            used to verify the JWS. Defaults to `['RS256']`
+        :param str audience: (optional) The intended audience of the token. If
+            the "aud" claim is included in the claim set, then the audience
+            must be included and must equal the provided claim.
+        :param str,iterable issuer: (optional) Acceptable value(s) for the
+            issuer of the token. If the "iss" claim is included in the claim
+            set, then the issuer must be given and the claim in the token must
+            be among the acceptable values.
+        :param str subject: (optional) The subject of the token. If the "sub"
+            claim is included in the claim set, then the subject must be
+            included and must equal the provided claim.
+        :param str access_token: (optional) An access token returned alongside
+            the id_token during the authorization grant flow. If the "at_hash"
+            claim is included in the claim set, then the access_token must be
+            included, and it must match the "at_hash" claim.
+        :param dict options: (optional) A dictionary of options for skipping
+            validation steps.
+            defaults:
 
-        return jwt.decode(token, key, algorithms=algorithms,
-                          audience=self._client_id, **kwargs)
+             .. code-block:: python
+
+                 {
+                    'verify_signature': True,
+                    'verify_aud': True,
+                    'verify_iat': True,
+                    'verify_exp': True,
+                    'verify_nbf': True,
+                    'verify_iss': True,
+                    'verify_sub': True,
+                    'verify_jti': True,
+                    'leeway': 0,
+                }
+
+        :return: The dict representation of the claims set, assuming the
+            signature is valid and all requested data validation passes.
+        :rtype: dict
+        :raises jose.exceptions.JWTError: If the signature is invalid in any
+            way.
+        :raises jose.exceptions.ExpiredSignatureError: If the signature has
+            expired.
+        :raises jose.exceptions.JWTClaimsError: If any claim is invalid in any
+            way.
+        """
+        return jwt.decode(token, key,
+                          audience=kwargs.get('audience') or self._client_id,
+                          algorithms=algorithms or ['RS256'], **kwargs)
 
     def logout(self, refresh_token):
         """
@@ -103,82 +143,74 @@ class KeycloakOpenidConnect(WellKnownMixin):
                                           )
                                       })
 
-    def authorization_url(self, response_type='code', redirect_uri=None,
-                          scope=None, state=None):
+    def authorization_url(self, **kwargs):
         """
         Get authorization URL to redirect the resource owner to.
 
         https://tools.ietf.org/html/rfc6749#section-4.1.1
 
-        :param str response_type:
-        :param str redirect_uri:
-        :param str scope:
-        :param str state:
+        :param str redirect_uri: (optional) Absolute URL of the client where
+            the user-agent will be redirected to.
+        :param str scope: (optional) Space delimited list of strings.
+        :param str state: (optional) An opaque value used by the client to
+            maintain state between the request and callback
         :return: URL to redirect the resource owner to
         :rtype: str
         """
         payload = OrderedDict()
-        payload['response_type'] = response_type
+        payload['response_type'] = 'code'
         payload['client_id'] = self._client_id
 
-        if redirect_uri:
-            payload['redirect_uri'] = redirect_uri
-
-        if scope:
-            payload['scope'] = scope
-
-        if state:
-            payload['state'] = state
+        for key in sorted(kwargs.keys()):
+            # Add items in a sorted way for unittest purposes.
+            payload[key] = kwargs[key]
 
         params = urlencode(payload)
         url = self.get_url('authorization_endpoint')
 
         return '{}?{}'.format(url, params)
 
-    def authorization_code(self, code, redirect_uri,
-                           grant_type='authorization_code'):
+    def authorization_code(self, code, redirect_uri):
         """
         Retrieve access token by `authorization_code` grant.
 
         https://tools.ietf.org/html/rfc6749#section-4.1.3
 
-        :param str code:
-        :param str redirect_uri:
-        :param str grant_type:
+        :param str code: The authorization code received from the authorization
+            server.
+        :param str redirect_uri: the identical value of the "redirect_uri"
+            parameter in the authorization request.
         :rtype: dict
+        :return: Access token response
         """
-        return self._token_request(grant_type=grant_type, code=code,
+        return self._token_request(grant_type='authorization_code', code=code,
                                    redirect_uri=redirect_uri)
 
-    def client_credentials(self, scope=None, grant_type='client_credentials'):
+    def client_credentials(self, **kwargs):
         """
         Retrieve access token by `client_credentials` grant.
 
-        :param str | None scope:
-        :param str grant_type:
-        :rtype: dict
-        """
-        return self._token_request(grant_type=grant_type, scope=scope)
+        https://tools.ietf.org/html/rfc6749#section-4.4
 
-    def refresh_token(self, refresh_token, grant_type='refresh_token',
-                      scope=None):
+        :param str scope: (optional) Space delimited list of strings.
+        :rtype: dict
+        :return: Access token response
+        """
+        return self._token_request(grant_type='client_credentials', **kwargs)
+
+    def refresh_token(self, refresh_token, **kwargs):
         """
         Refresh an access token
 
         https://tools.ietf.org/html/rfc6749#section-6
 
         :param str refresh_token:
-        :param str grant_type:
-        :param str \ None scope:
+        :param str scope: (optional) Space delimited list of strings.
         :rtype: dict
+        :return: Access token response
         """
-        if scope:
-            return self._token_request(grant_type=grant_type,
-                                       refresh_token=refresh_token,
-                                       scope=scope)
-        else:
-            return self._token_request(grant_type=grant_type,
-                                       refresh_token=refresh_token)
+        return self._token_request(grant_type='refresh_token',
+                                   refresh_token=refresh_token, **kwargs)
 
     def _token_request(self, grant_type, **kwargs):
         """
