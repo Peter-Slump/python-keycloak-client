@@ -2,7 +2,7 @@ import json
 
 from keycloak.mixins import WellKnownMixin
 
-PATH_WELL_KNOWN = "auth/realms/{}/.well-known/uma-configuration"
+PATH_WELL_KNOWN = "auth/realms/{}/.well-known/uma2-configuration"
 
 
 class KeycloakUMA(WellKnownMixin, object):
@@ -32,7 +32,7 @@ class KeycloakUMA(WellKnownMixin, object):
         :rtype: str
         """
         return self._realm.client.post(
-            self.well_known['resource_set_registration_endpoint'],
+            self.well_known['resource_registration_endpoint'],
             data=json.dumps(
                 self.get_payload(name=name, **kwargs)
             ),
@@ -56,7 +56,7 @@ class KeycloakUMA(WellKnownMixin, object):
         """
         return self._realm.client.put(
             '{}/{}'.format(
-                self.well_known['resource_set_registration_endpoint'], id),
+                self.well_known['resource_registration_endpoint'], id),
             data=json.dumps(
                 self.get_payload(name=name, **kwargs)
             ),
@@ -75,7 +75,7 @@ class KeycloakUMA(WellKnownMixin, object):
         """
         return self._realm.client.get(
             '{}/{}'.format(
-                self.well_known['resource_set_registration_endpoint'], id),
+                self.well_known['resource_registration_endpoint'], id),
             headers=self.get_headers(token)
         )
 
