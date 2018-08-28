@@ -1,5 +1,7 @@
 import json
 
+from urllib.parse import urlencode
+
 from keycloak.mixins import WellKnownMixin
 
 PATH_WELL_KNOWN = "auth/realms/{}/.well-known/uma2-configuration"
@@ -90,21 +92,30 @@ class KeycloakUMA(WellKnownMixin, object):
         """
         return self._realm.client.delete(
             '{}/{}'.format(
-                self.well_known['resource_set_registration_endpoint'], id),
+                self.well_known['resource_registration_endpoint'], id),
             headers=self.get_headers(token)
         )
 
-    def resource_set_list(self, token):
+    def resource_set_list(self, token, **kwargs):
         """
         List a resource set.
 
         https://docs.kantarainitiative.org/uma/rec-oauth-resource-reg-v1_0_1.html#list-resource-sets
 
         :param str token: client access token
+        :param str name: (optional)
+        :param str uri: (optional)
+        :param str owner: (optional)
+        :param str type: (optional)
+        :param str scope: (optional)
         :rtype: list
         """
+        params = ''
+        if kwargs:
+            params = '?' + urlencode(kwargs)
+
         return self._realm.client.get(
-            self.well_known['resource_set_registration_endpoint'],
+            self.well_known['resource_registration_endpoint'] + params,
             headers=self.get_headers(token)
         )
 
