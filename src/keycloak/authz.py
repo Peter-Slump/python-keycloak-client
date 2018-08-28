@@ -64,7 +64,7 @@ class KeycloakAuthz(WellKnownMixin, object):
         result = json.loads(base64.b64decode(token))
         return result
 
-    def get_permissions(self, token, resource_scopes_tuples=None, submit_request=False):
+    def get_permissions(self, token, resource_scopes_tuples=None, submit_request=False, ticket=None):
         """
         Request permissions for user from keycloak server.
 
@@ -90,6 +90,8 @@ class KeycloakAuthz(WellKnownMixin, object):
             for atuple in resource_scopes_tuples:
                 data.append(('permission', '#'.join(atuple)))
             data.append(('submit_request', submit_request))
+        elif ticket:
+            data.append(('ticket', ticket))
 
         authz_info = {}
 
