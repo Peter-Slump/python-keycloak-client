@@ -31,6 +31,9 @@ class KeycloakUMA(WellKnownMixin, object):
         :param str type: (optional)
         :param list scopes: (optional)
         :param str icon_url: (optional)
+        :param str DisplayName: (optional)
+        :param boolean ownerManagedAccess: (optional)
+        :param str owner: (optional)
         :rtype: str
         """
         return self._realm.client.post(
@@ -118,6 +121,116 @@ class KeycloakUMA(WellKnownMixin, object):
             self.well_known['resource_registration_endpoint'] + params,
             headers=self.get_headers(token)
         )
+
+    def resource_create_ticket(self, token, id, scopes, **kwargs):
+        """
+        Create a ticket form permission to resource.
+
+        https://www.keycloak.org/docs/latest/authorization_services/index.html#_service_protection_permission_api_papi
+
+        :param str token: user access token
+        :param str id: resource id
+        :param list scopes: scopes access is wanted
+        :param dict claims: (optional)
+        :rtype: dict
+        """
+        data = [{
+                    'resource_id': id,
+                    'resource_scopes': scopes
+                }]
+        data[0].update(kwargs)
+
+        return self._realm.client.post(
+            self.well_known['permission_endpoint'],
+            data=json.dumps(data),
+            headers=self.get_headers(token)
+        )
+
+    def resource_associate_permission(self, token, id, name, scopes, **kwargs):
+        """
+        Associates a permission with a Resource.
+
+        https://www.keycloak.org/docs/latest/authorization_services/index.html#_service_authorization_uma_policy_api
+
+        :param str token: client access token
+        :param str id: resource id
+        :param str name: permission name
+        :param list scopes: scopes access is wanted
+        :param str description:optional
+        :param list roles: (optional)
+        :param list groups: (optional)
+        :param list clients: (optional)
+        :param str condition: (optional)
+        :rtype: dict
+        """
+        data = {
+            'name': name,
+            'scopes': scopes,
+        }
+        data.update(kwargs)
+
+        return self._realm.client.post(
+            self.well_known['policy_endpoint'] + '/' + id,
+            data=json.dumps(data),
+            headers=self.get_headers(token)
+        )
+
+    def permission_update(self, token, id, **kwargs):
+        """
+        To update an existing permission.
+
+        https://www.keycloak.org/docs/latest/authorization_services/index.html#_service_authorization_uma_policy_api
+
+        :param str token: client access token
+        :param str id: permission id
+
+        :rtype: dict
+        """
+        return self._realm.client.put(
+            self.well_known['policy_endpoint'] + '/' + id,
+            data=json.dumps(kwargs),
+            headers=self.get_headers(token)
+        )
+
+    def permission_delete(self, token, id):
+        """
+        Removing a Permission.
+
+        https://www.keycloak.org/docs/latest/authorization_services/index.html#removing-a-permission
+
+        :param str token: client access token
+        :param str id: permission id
+
+        :rtype: dict
+        """
+        return self._realm.client.delete(
+            self.well_known['policy_endpoint'] + '/' + id,
+            headers=self.get_headers(token)
+        )
+
+    def permission_list(self, token, **kwargs):
+        """
+        Querying permission
+
+        https://www.keycloak.org/docs/latest/authorization_services/index.html#querying-permission
+
+
+        :param str token: client access token
+        :param str resource: (optional)
+        :param str name: (optional)
+        :param str scope: (optional)
+
+        :rtype: dict
+        """
+        params = ''
+        if kwargs:
+            params = '?' + urlencode(kwargs)
+
+        return self._realm.client.get(
+            self.well_known['policy_endpoint'] + params,
+            headers=self.get_headers(token)
+        )
+
 
     def get_headers(self, token):
         return {
