@@ -186,6 +186,20 @@ class KeycloakOpenidConnect(WellKnownMixin):
         return self._token_request(grant_type='authorization_code', code=code,
                                    redirect_uri=redirect_uri)
 
+    def password_credentials(self, username, password, **kwargs):
+        """
+        Retrieve access token by 'password credentials' grant.
+
+        https://tools.ietf.org/html/rfc6749#section-4.3
+
+        :param str username: The user name to obtain an access token for
+        :param str password: The user's password
+        :rtype: dict
+        :return: Access token response
+        """
+        return self._token_request(grant_type='password',
+                                   username=username, password=password, **kwargs)
+
     def client_credentials(self, **kwargs):
         """
         Retrieve access token by `client_credentials` grant.
