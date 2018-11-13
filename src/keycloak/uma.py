@@ -1,6 +1,9 @@
 import json
 
-from urllib.parse import urlencode
+try:
+    from urllib.parse import urlencode  # noqa: F401
+except ImportError:
+    from urllib import urlencode  # noqa: F401
 
 from keycloak.mixins import WellKnownMixin
 
@@ -230,7 +233,6 @@ class KeycloakUMA(WellKnownMixin, object):
             self.well_known['policy_endpoint'] + params,
             headers=self.get_headers(token)
         )
-
 
     def get_headers(self, token):
         return {

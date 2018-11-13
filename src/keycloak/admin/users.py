@@ -1,12 +1,12 @@
 import json
-
 from collections import OrderedDict
 
 from keycloak.admin import KeycloakAdminBase
 
+__all__ = ('Users',)
+
 
 class Users(KeycloakAdminBase):
-
     _paths = {
         'collection': '/auth/admin/realms/{realm}/users'
     }
@@ -47,7 +47,7 @@ class Users(KeycloakAdminBase):
         if 'enabled' in kwargs:
             payload['enabled'] = kwargs['enabled']
 
-        self._client.post(
+        return self._client.post(
             url=self._client.get_full_url(
                 self.get_path('collection', realm=self._realm_name)
             ),

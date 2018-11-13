@@ -1,6 +1,6 @@
-import mock
-
 from unittest import TestCase
+
+import mock
 from requests import Session
 
 from keycloak.client import KeycloakClient
@@ -15,6 +15,15 @@ class KeycloakClientTestCase(TestCase):
         self.client = KeycloakClient(server_url=self.server_url,
                                      headers=self.headers)
 
+    def test_default_client_logger_name(self):
+        """
+        Case: Session get requested
+        Expected: Session object get returned and the same one if called for
+                  the second time
+        """
+
+        self.assertEqual(self.client.logger.name, 'KeycloakClient')
+
     def test_session(self):
         """
         Case: Session get requested
@@ -26,6 +35,15 @@ class KeycloakClientTestCase(TestCase):
         self.assertIsInstance(session, Session)
 
         self.assertEqual(session, self.client.session)
+
+    def test_close_session(self):
+        """
+        Case: Session get requested
+        Expected: Session object get returned and the same one if called for
+                  the second time
+        """
+        self.client.close()
+        self.assertIsNone(self.client._session)
 
     def test_get_full_url(self):
         """

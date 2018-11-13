@@ -6,6 +6,7 @@ from keycloak.admin import KeycloakAdmin
 from keycloak.authz import KeycloakAuthz
 from keycloak.client import KeycloakClient
 from keycloak.openid_connect import KeycloakOpenidConnect
+from keycloak.uma import KeycloakUMA
 from keycloak.realm import KeycloakRealm
 
 
@@ -78,3 +79,14 @@ class KeycloakRealmTestCase(TestCase):
         self.assertIsInstance(authz_client, KeycloakAuthz)
         mocked_authz_client.assert_called_once_with(realm=self.realm,
                                                     client_id='client-id')
+
+    @mock.patch('keycloak.realm.KeycloakUMA', autospec=True)
+    def test_uma(self, mocked_uma_client):
+        """
+        Case: UMA client get requested
+        Expected: UMA client get returned
+        """
+        uma_client = self.realm.uma()
+
+        self.assertIsInstance(uma_client, KeycloakUMA)
+        mocked_uma_client.assert_called_once_with(realm=self.realm)

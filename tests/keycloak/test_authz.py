@@ -1,6 +1,6 @@
-import mock
-
 from unittest import TestCase
+
+import mock
 
 from keycloak.authz import KeycloakAuthz
 from keycloak.realm import KeycloakRealm

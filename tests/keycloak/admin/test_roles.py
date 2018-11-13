@@ -1,6 +1,6 @@
-import mock
-
 from unittest import TestCase
+
+import mock
 
 from keycloak.admin import KeycloakAdmin
 from keycloak.realm import KeycloakRealm
@@ -14,7 +14,7 @@ class KeycloakAdminRolesTestCase(TestCase):
         self.admin.set_token('some-token')
 
     def test_create(self):
-        self.admin.realms.by_name('realm-name').clients.by_id('#123').roles.\
+        self.admin.realms.by_name('realm-name').clients.by_id('#123').roles. \
             create(
             name='my-role-name',
             description='my-description',

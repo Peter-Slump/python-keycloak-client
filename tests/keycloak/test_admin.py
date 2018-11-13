@@ -1,6 +1,6 @@
-import mock
-
 from unittest import TestCase
+
+import mock
 
 from keycloak.admin import KeycloakAdmin
 from keycloak.admin.realm import Realms
@@ -14,6 +14,5 @@ class KeycloakAdminTestCase(TestCase):
         self.admin = KeycloakAdmin(realm=self.realm)
 
     def test_realm(self):
-
         realm = self.admin.realms
         self.assertIsInstance(realm, Realms)

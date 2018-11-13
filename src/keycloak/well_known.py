@@ -13,7 +13,7 @@ class KeycloakWellKnown(Mapping):
     def __init__(self, realm, path, content=None):
         """
         :param keycloak.realm.KeycloakRealm realm:
-        :param str url: URL to find the .well-known
+        :param str path: URL to find the .well-known
         :param dict | None content:
         """
         self._realm = realm

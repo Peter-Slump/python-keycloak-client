@@ -1,10 +1,14 @@
 import base64
-import logging
 import json
+import logging
 
-from urllib.parse import urlencode
+try:
+    from urllib.parse import urlencode  # noqa: F401
+except ImportError:
+    from urllib import urlencode  # noqa: F401
+
 from keycloak.mixins import WellKnownMixin
-import requests
+from keycloak.exceptions import KeycloakClientError
 
 PATH_ENTITLEMENT = "auth/realms/{}/authz/entitlement/{}"
 
@@ -12,7 +16,6 @@ PATH_WELL_KNOWN = "auth/realms/{}/.well-known/uma2-configuration"
 
 
 class KeycloakAuthz(WellKnownMixin, object):
-
     _realm = None
     _client_id = None
     _well_known = None
@@ -41,42 +44,44 @@ class KeycloakAuthz(WellKnownMixin, object):
         applications can gain access to protected resources at the resource
         server.
 
-        http://www.keycloak.org/docs/latest/authorization_services/index.html#_service_entitlement_api
+        http://www.keycloak.org/docs/latest/authorization_services/index
+        .html#_service_entitlement_api
 
         :rtype: dict
         """
-        headers = {"Authorization": "Bearer " + token}
-
-        return self._realm.client.get(
-            self._realm.client.get_full_url(PATH_ENTITLEMENT.format(
-                self._realm.realm_name, self._client_id)),
-            headers=headers)
+        headers = {"Authorization": "Bearer %s" % token}
+        url = self._realm.client.get_full_url(
+            PATH_ENTITLEMENT.format(self._realm.realm_name, self._client_id)
+        )
+        return self._realm.client.get(url, headers=headers)
 
     @classmethod
     def _decode_token(cls, token):
         """
         Permission information is encoded in an authorization token.
         """
-        result = None
         missing_padding = len(token) % 4
         if missing_padding != 0:
             token += '=' * (4 - missing_padding)
-        result = json.loads(base64.b64decode(token).decode('utf-8'))
-        return result
+        return json.loads(base64.b64decode(token).decode('utf-8'))
 
-    def get_permissions(self, token, resource_scopes_tuples=None, submit_request=False, ticket=None):
+    def get_permissions(self, token, resource_scopes_tuples=None,
+                        submit_request=False, ticket=None):
         """
         Request permissions for user from keycloak server.
 
-        https://www.keycloak.org/docs/latest/authorization_services/index.html#_service_protection_permission_api_papi
+        https://www.keycloak.org/docs/latest/authorization_services/index
+        .html#_service_protection_permission_api_papi
 
         :param str token: client access token
-        :param tuple resource_scopes_tuples: list of tuples (resource, scope)
-        :param boolean submit_request: when resource_scopes_tuples are provided submit request if not allowed to access?
+        :param Iterable[Tuple[str, str]] resource_scopes_tuples:
+            list of tuples (resource, scope)
+        :param boolean submit_request: submit request if not allowed to access?
+        :param str ticket: Permissions ticket
         rtype: dict
         """
         headers = {
-            "Authorization": "Bearer " + token,
+            "Authorization": "Bearer %s" % token,
             'Content-type': 'application/x-www-form-urlencoded',
         }
 
@@ -104,13 +109,17 @@ class KeycloakAuthz(WellKnownMixin, object):
 
             error = response.get('error')
             if error:
-                self.logger.warn('%s: %s', error, response.get('error_description'))
+                self.logger.warning(
+                    '%s: %s',
+                    error,
+                    response.get('error_description')
+                )
             else:
                 token = response.get('refresh_token')
                 decoded_token = self._decode_token(token.split('.')[1])
                 authz_info = decoded_token.get('authorization', {})
-        except (requests.exceptions.HTTPError) as error:
-            self.logger.warn(str(error))
+        except KeycloakClientError as error:
+            self.logger.warning(str(error))
         return authz_info
 
     def eval_permission(self, token, resource, scope, submit_request=False):
@@ -123,19 +132,30 @@ class KeycloakAuthz(WellKnownMixin, object):
         :param boolean submit_request: submit request if not allowed to access?
         rtype: boolean
         """
-        return self.eval_permissions(token, [(resource, scope)], submit_request)
+        return self.eval_permissions(
+            token=token,
+            resource_scopes_tuples=[(resource, scope)],
+            submit_request=submit_request
+        )
 
-    def eval_permissions(self, token, resource_scopes_tuples=None, submit_request=False):
+    def eval_permissions(self, token, resource_scopes_tuples=None,
+                         submit_request=False):
         """
-        Evalutes if user has permission for all the resource scope combinations.
+        Evaluates if user has permission for all the resource scope
+        combinations.
 
         :param str token: client access token
-        :param str resource: resource to access
-        :param str scope: scope on resource
+        :param Iterable[Tuple[str, str]] resource_scopes_tuples: resource to
+        access
         :param boolean submit_request: submit request if not allowed to access?
         rtype: boolean
         """
-        permissions = self.get_permissions(token, resource_scopes_tuples, submit_request)
+        permissions = self.get_permissions(
+            token=token,
+            resource_scopes_tuples=resource_scopes_tuples,
+            submit_request=submit_request
+        )
+
         res = []
         for permission in permissions.get('permissions', []):
             for scope in permission.get('scopes', []):
