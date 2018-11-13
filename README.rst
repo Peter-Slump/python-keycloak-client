@@ -2,14 +2,14 @@
 Python Keycloak Client
 ======================
 
-.. image:: https://travis-ci.com/nkoshell/python-keycloak-client.svg?branch=aio-client
-   :target: https://travis-ci.com/nkoshell/python-keycloak-client
+.. image:: https://travis-ci.com/Peter-Slump/python-keycloak-client.svg?branch=master
+   :target: https://travis-ci.com/Peter-Slump/python-keycloak-client
    :alt: Build Status
 .. image:: https://readthedocs.org/projects/python-keycloak-client/badge/?version=latest
    :target: http://python-keycloak-client.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
-.. image:: https://codecov.io/gh/nkoshell/python-keycloak-client/branch/aio-client/graph/badge.svg
-   :target: https://codecov.io/gh/nkoshell/python-keycloak-client
+.. image:: https://codecov.io/gh/Peter-Slump/python-keycloak-client/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/Peter-Slump/python-keycloak-client
    :alt: codecov
 .. image:: https://api.codeclimate.com/v1/badges/30e837f8c737b5b3e120/maintainability
    :target: https://codeclimate.com/github/Peter-Slump/python-keycloak-client/maintainability
