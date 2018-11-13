@@ -95,7 +95,7 @@ class KeycloakClient(object):
 
     def close(self):
         if self._session is not None:
-            self.session.close()
+            self._session.close()
             self._session = None
 
     def __enter__(self):

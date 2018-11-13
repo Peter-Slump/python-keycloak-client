@@ -70,5 +70,5 @@ class KeycloakClient(AsyncInit, SyncKeycloakClient):
 
     async def close(self) -> None:
         if self._session is not None:
-            await self.session.close()
+            await self._session.close()
             self._session = None
