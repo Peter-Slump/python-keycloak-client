@@ -20,8 +20,7 @@ class KeycloakAuthz(WellKnownMixin, SyncKeycloakAuthz):
         """
         Request permissions for user from keycloak server.
 
-        https://www.keycloak.org/docs/latest/authorization_services/index
-        .html#_service_protection_permission_api_papi
+        https://www.keycloak.org/docs/latest/authorization_services/index.html#_service_protection_permission_api_papi
 
         :param str token: client access token
         :param Iterable[Tuple[str, str]] resource_scopes_tuples:

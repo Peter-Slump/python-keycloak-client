@@ -20,7 +20,12 @@ class KeycloakRealm(AsyncInit, SyncKeycloakRealm):
         self._loop = loop or asyncio.get_event_loop()
 
     @property
-    def client(self) -> KeycloakClient:
+    def client(self):
+        """
+        Get Keycloak client
+
+        :rtype: keycloak.aio.client.KeycloakClient
+        """
         if self._client is None:
             raise RuntimeError
         return self._client
@@ -36,7 +41,7 @@ class KeycloakRealm(AsyncInit, SyncKeycloakRealm):
         return KeycloakOpenidConnect(realm=self, client_id=client_id,
                                      client_secret=client_secret)
 
-    def authz(self, client_id) -> KeycloakAuthz:
+    def authz(self, client_id):
         """
         Get async Authz client
 
@@ -45,7 +50,7 @@ class KeycloakRealm(AsyncInit, SyncKeycloakRealm):
         """
         return KeycloakAuthz(realm=self, client_id=client_id)
 
-    def uma(self) -> KeycloakUMA:
+    def uma(self):
         """
         Get UMA client
         :return: keycloak.aio.uma.KeycloakUMA
