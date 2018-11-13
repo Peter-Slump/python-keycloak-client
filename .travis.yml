@@ -1,20 +1,47 @@
+git:
+  depth: false
+
+sudo: false
+
 language: python
+
+matrix:
+  fast_finish: true
+
 python:
   - "2.7"
   - "3.4"
   - "3.5"
   - "3.6"
   - "nightly"
+
 before_install:
   - pip install -U pip
-  - pip install -U wheel setuptools flake8
-  - pip install codecov
+  - pip install -U wheel setuptools
+  - pip install flake8 codecov
+
 install:
-  - python setup.py -q install
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.5' || $TRAVIS_PYTHON_VERSION == '3.6' || $TRAVIS_PYTHON_VERSION == 'nightly' ]]; then make install-python[aio]; fi
+  - pip install -e .
+
+env: TEST_OPTS="--cov=keycloak --ignore=tests/keycloak/aio" FLAKE_OPTS="--exclude=src/keycloak/aio,tests/keycloak/aio"
+
 script:
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.5' || $TRAVIS_PYTHON_VERSION == '3.6' || $TRAVIS_PYTHON_VERSION == 'nightly' ]]; then flake8 src/keycloak tests/keycloak; else flake8 src/keycloak tests/keycloak --exclude=src/keycloak/aio,tests/keycloak/aio; fi
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.5' || $TRAVIS_PYTHON_VERSION == '3.6' || $TRAVIS_PYTHON_VERSION == 'nightly' ]]; then python setup.py test --addopts  "--cov=keycloak"; else python setup.py test --addopts  "--cov=keycloak --ignore=tests/keycloak/aio"; fi
+  - flake8 src/keycloak tests/keycloak $FLAKE_OPTS
+  - python setup.py test --addopts "$TEST_OPTS"
 
 after_success:
   - codecov
+
+.mixins:
+  - &aio-mixin
+    env: TEST_OPTS="--cov=keycloak"  FLAKE_OPTS=""
+    install: pip install -e .[aio]
+
+jobs:
+  include:
+    - python: "3.5"
+      <<: *aio-mixin
+    - python: "3.6"
+      <<: *aio-mixin
+    - python: "nightly"
+      <<: *aio-mixin
