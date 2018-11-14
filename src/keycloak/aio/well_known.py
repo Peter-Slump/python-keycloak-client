@@ -9,6 +9,8 @@ __all__ = (
 
 
 class KeycloakWellKnown(AsyncInit, SyncKeycloakWellKnown):
+    _lock = None
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._lock = asyncio.Lock()
