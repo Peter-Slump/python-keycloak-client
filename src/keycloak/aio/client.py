@@ -55,7 +55,7 @@ class KeycloakClient(AsyncInit, SyncKeycloakClient):
                 raise KeycloakClientError(original_exc=cre)
 
             try:
-                result = await response.json()
+                result = await response.json(content_type=None)
             except ValueError:
                 result = await response.read()
 
