@@ -1,7 +1,7 @@
 try:
     import aiohttp  # noqa: F401
 except ImportError:
-    raise ImportWarning('Please install extra_requires "aio" (keycloak[aio]) '
+    raise ImportWarning('Please install extras_require "aio" '
                         'for using this module')
 
 from .abc import *  # noqa: F403
