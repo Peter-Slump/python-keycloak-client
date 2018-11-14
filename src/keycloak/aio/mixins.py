@@ -18,7 +18,7 @@ class WellKnownMixin(AsyncInit, SyncWellKnownMixin):
         return self._well_known
 
     async def __async_init__(self) -> 'WellKnownMixin':
-        async with self._realm.client._lock:
+        async with self._realm._lock:
             if self._well_known is None:
                 p = self.get_path_well_known().format(self._realm.realm_name)
                 self._well_known = await KeycloakWellKnown(

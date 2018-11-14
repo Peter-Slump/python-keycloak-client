@@ -1,3 +1,5 @@
+import asyncio
+
 from keycloak.aio.abc import AsyncInit
 from ..well_known import KeycloakWellKnown as SyncKeycloakWellKnown
 
@@ -7,6 +9,10 @@ __all__ = (
 
 
 class KeycloakWellKnown(AsyncInit, SyncKeycloakWellKnown):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._lock = asyncio.Lock()
+
     @property
     def contents(self):
         if self._contents is None:
@@ -18,7 +24,7 @@ class KeycloakWellKnown(AsyncInit, SyncKeycloakWellKnown):
         self._contents = content
 
     async def __async_init__(self) -> 'KeycloakWellKnown':
-        async with self._realm.client._lock:
+        async with self._lock:
             if self._contents is None:
                 self._contents = await self._realm.client.get(self._path)
         return self
