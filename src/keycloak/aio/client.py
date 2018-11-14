@@ -14,6 +14,10 @@ __all__ = (
 
 
 class KeycloakClient(AsyncInit, SyncKeycloakClient):
+    _lock = None
+    _loop = None
+    _session_factory = None
+
     def __init__(self, server_url, *, headers, logger=None, loop=None,
                  session_factory=aiohttp.client.ClientSession,
                  **session_params):

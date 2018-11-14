@@ -199,7 +199,7 @@ class KeycloakClientTestCase(asynctest.TestCase):
         processed_response = await self.client._handle_response(req_ctx)
 
         response.raise_for_status.assert_called_once_with()
-        response.json.assert_awaited_once_with()
+        response.json.assert_awaited_once_with(content_type=None)
 
         self.assertEqual(processed_response, await response.json())
 

@@ -14,7 +14,7 @@ else:
 class KeycloakAuthzTestCase(asynctest.TestCase):
     async def setUp(self):
         self.realm = asynctest.MagicMock(spec_set=KeycloakRealm)
-        self.realm.client = asynctest.MagicMock(spec_set=KeycloakClient)()
+        self.realm.client = asynctest.MagicMock(spec_set=KeycloakClient)
         self.realm.client.get = asynctest.CoroutineMock()
         self.realm.realm_name = 'realm-name'
         self.client_id = 'client-id'

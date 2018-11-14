@@ -15,7 +15,7 @@ else:
 class KeycloakOpenidConnectTestCase(asynctest.TestCase):
     async def setUp(self):
         self.realm = asynctest.MagicMock(spec_set=KeycloakRealm)
-        self.realm.client = asynctest.MagicMock(spec_set=KeycloakClient)()
+        self.realm.client = asynctest.MagicMock(spec_set=KeycloakClient)
         self.realm.client.get = asynctest.CoroutineMock()
         self.realm.client.post = asynctest.CoroutineMock()
         self.realm.client.put = asynctest.CoroutineMock()
