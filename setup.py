@@ -41,7 +41,7 @@ setup(
             'sphinx-autobuild==0.6.0',
         ],
         'aio': [
-            'aiohttp>=3.4.4,<4; python_version>="3.5.3"'
+            'aiohttp>=3.4.4,<4; python_full_version>="3.5.3"'
         ]
     },
     setup_requires=[
