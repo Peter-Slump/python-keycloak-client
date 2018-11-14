@@ -40,9 +40,9 @@ class KeycloakOpenidConnectTestCase(asynctest.TestCase):
     async def tearDown(self):
         await self.realm.close()
 
-    async def test_wel_known_loaded(self):
-        self.realm.client.get_full_url.assert_called_once()
-        self.realm.client.get.assert_called_once()
+    def test_well_known_loaded(self):
+        assert self.realm.client.get_full_url.call_count == 1
+        assert self.realm.client.get.await_count == 1
 
     def test_well_known(self):
         """
