@@ -92,11 +92,9 @@ class KeycloakOpenidConnect(WellKnownMixin):
         :raises jose.exceptions.JWTClaimsError: If any claim is invalid in any
             way.
         """
-        filtered_kwargs = {k: v for k, v in kwargs.items() if k != 'audience'}
         return jwt.decode(token, key,
-                          audience=kwargs.get('audience') or self._client_id,
-                          algorithms=algorithms or ['RS256'],
-                          **filtered_kwargs)
+                          audience=kwargs.pop('audience', None) or self._client_id,
+                          algorithms=algorithms or ['RS256'], **kwargs)
 
     def logout(self, refresh_token):
         """
