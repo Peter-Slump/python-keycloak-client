@@ -67,3 +67,11 @@ Run the container
 
 Go in the browser to http://localhost:8050 and view the documentation which get
 refreshed and updated on every update in the documentation source.
+
+Release Notes
+=============
+
+**unreleased** **0.1.4**
+
+* Add support for password grant (thanks to @scranen)
+* Bugfix: Prevent multiple values for keyword argument 'audience' in jwt.decode() (thanks to @eugenejo)
