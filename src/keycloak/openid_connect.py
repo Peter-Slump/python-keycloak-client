@@ -93,7 +93,7 @@ class KeycloakOpenidConnect(WellKnownMixin):
             way.
         """
         return jwt.decode(token, key,
-                          audience=kwargs.get('audience') or self._client_id,
+                          audience=kwargs.pop('audience', None) or self._client_id,
                           algorithms=algorithms or ['RS256'], **kwargs)
 
     def logout(self, refresh_token):
