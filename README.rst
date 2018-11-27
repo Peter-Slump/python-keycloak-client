@@ -28,8 +28,6 @@ Python Keycloak Client
 
 Python Client for Keycloak identity and access management service
 
-Current version: 0.1.3
-
 `Documentation <http://python-keycloak-client.readthedocs.io/en/latest/>`_
 
 http://www.keycloak.org/
