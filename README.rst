@@ -28,8 +28,6 @@ Python Keycloak Client
 
 Python Client for Keycloak identity and access management service
 
-Current version: 0.1.3
-
 `Documentation <http://python-keycloak-client.readthedocs.io/en/latest/>`_
 
 http://www.keycloak.org/
@@ -67,3 +65,26 @@ Run the container
 
 Go in the browser to http://localhost:8050 and view the documentation which get
 refreshed and updated on every update in the documentation source.
+
+--------------
+Create release
+--------------
+
+.. code:: bash
+
+    $ git checkout master
+    $ git pull
+    $ bumpversion release
+    $ make deploy-pypi
+    $ bumpversion --no-tag patch
+    $ git push origin master --tags
+
+Release Notes
+=============
+
+**unreleased**
+
+**v0.1.4**
+
+* Add support for password grant (thanks to @scranen)
+* Bugfix: Prevent multiple values for keyword argument 'audience' in jwt.decode() (thanks to @eugenejo)
