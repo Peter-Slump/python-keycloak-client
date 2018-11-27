@@ -77,7 +77,7 @@ Create release
     $ git checkout master
     $ git pull
     $ bumpversion release
-    $ deploy-pypi
+    $ make deploy-pypi
     $ bumpversion --no-tag patch
     $ git push origin master --tags
 
@@ -85,7 +85,7 @@ Release Notes
 =============
 
 **unreleased**
-**v0.1.5-dev**
+
 **v0.1.4**
 
 * Add support for password grant (thanks to @scranen)
