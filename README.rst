@@ -85,6 +85,7 @@ Release Notes
 =============
 
 **unreleased**
+**v0.1.5-dev**
 **v0.1.4**
 
 * Add support for password grant (thanks to @scranen)
