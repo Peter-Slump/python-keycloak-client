@@ -84,6 +84,8 @@ Release Notes
 
 **unreleased**
 
+* Added async client based on aiohttp (thanks to @nkoshell)
+
 **v0.1.4**
 
 * Add support for password grant (thanks to @scranen)
