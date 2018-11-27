@@ -83,6 +83,7 @@ Release Notes
 =============
 
 **unreleased**
+
 **v0.2.0**
 
 * Added async client based on aiohttp (thanks to @nkoshell)
