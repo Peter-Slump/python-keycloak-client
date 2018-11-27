@@ -73,3 +73,14 @@ class KeycloakRealm(object):
         :return: keycloak.uma.KeycloakUMA
         """
         return KeycloakUMA(realm=self)
+
+    def close(self):
+        if self._client is not None:
+            self._client.close()
+            self._client = None
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.close()

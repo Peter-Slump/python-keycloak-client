@@ -2,8 +2,8 @@
 Python Keycloak Client
 ======================
 
-.. image:: https://www.travis-ci.org/Peter-Slump/python-keycloak-client.svg?branch=master
-   :target: https://www.travis-ci.org/Peter-Slump/python-keycloak-client
+.. image:: https://travis-ci.org/Peter-Slump/python-keycloak-client.svg?branch=master
+   :target: https://travis-ci.org/Peter-Slump/python-keycloak-client
    :alt: Build Status
 .. image:: https://readthedocs.org/projects/python-keycloak-client/badge/?version=latest
    :target: http://python-keycloak-client.readthedocs.io/en/latest/?badge=latest

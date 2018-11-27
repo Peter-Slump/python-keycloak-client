@@ -2,6 +2,8 @@ from keycloak.well_known import KeycloakWellKnown
 
 
 class WellKnownMixin(object):
+    _well_known = None
+    _realm = None
 
     def get_path_well_known(self):
         raise NotImplementedError()

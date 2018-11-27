@@ -1,5 +1,7 @@
 from keycloak.admin import KeycloakAdminBase
 
+__all__ = ('Realm', 'Realms',)
+
 
 class Realms(KeycloakAdminBase):
 
@@ -8,7 +10,6 @@ class Realms(KeycloakAdminBase):
 
 
 class Realm(KeycloakAdminBase):
-
     _name = None
 
     def __init__(self, name, *args, **kwargs):

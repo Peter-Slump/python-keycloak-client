@@ -1,8 +1,9 @@
 from keycloak.admin import KeycloakAdminBase
 
+__all__ = ('Client', 'Clients',)
+
 
 class Clients(KeycloakAdminBase):
-
     _realm_name = None
     _paths = {
         'collection': '/auth/admin/realms/{realm}/clients'
@@ -24,7 +25,6 @@ class Clients(KeycloakAdminBase):
 
 
 class Client(KeycloakAdminBase):
-
     _id = None
     _realm_name = None
 

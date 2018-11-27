@@ -1,20 +1,30 @@
-from unittest import TestCase
+import asynctest
 
-import mock
+try:
+    import aiohttp  # noqa: F401
+except ImportError:
+    aiohttp = None
+else:
+    from keycloak.aio.client import KeycloakClient
+    from keycloak.aio.openid_connect import KeycloakOpenidConnect
+    from keycloak.aio.realm import KeycloakRealm
+    from keycloak.aio.well_known import KeycloakWellKnown
 
-from keycloak.openid_connect import KeycloakOpenidConnect
-from keycloak.realm import KeycloakRealm
-from keycloak.well_known import KeycloakWellKnown
 
+@asynctest.skipIf(aiohttp is None, 'aiohttp is not installed')
+class KeycloakOpenidConnectTestCase(asynctest.TestCase):
+    async def setUp(self):
+        self.realm = asynctest.MagicMock(spec_set=KeycloakRealm)
+        self.realm.client = asynctest.MagicMock(spec_set=KeycloakClient)
+        self.realm.client.get = asynctest.CoroutineMock()
+        self.realm.client.post = asynctest.CoroutineMock()
+        self.realm.client.put = asynctest.CoroutineMock()
+        self.realm.client.delete = asynctest.CoroutineMock()
 
-class KeycloakOpenidConnectTestCase(TestCase):
-
-    def setUp(self):
-        self.realm = mock.MagicMock(spec_set=KeycloakRealm)
         self.client_id = 'client-id'
         self.client_secret = 'client-secret'
 
-        self.openid_client = KeycloakOpenidConnect(
+        self.openid_client = await KeycloakOpenidConnect(
             realm=self.realm,
             client_id=self.client_id,
             client_secret=self.client_secret
@@ -27,6 +37,13 @@ class KeycloakOpenidConnectTestCase(TestCase):
             'token_endpoint': 'https://token'
         }
 
+    async def tearDown(self):
+        await self.realm.close()
+
+    def test_well_known_loaded(self):
+        assert self.realm.client.get_full_url.call_count == 1
+        assert self.realm.client.get.await_count == 1
+
     def test_well_known(self):
         """
         Case: .well-known is requested
@@ -37,16 +54,9 @@ class KeycloakOpenidConnectTestCase(TestCase):
         self.assertIsInstance(well_known, KeycloakWellKnown)
         self.assertEqual(well_known, self.openid_client.well_known)
 
-    @mock.patch('keycloak.openid_connect.jwt')
-    def test_decode_token(self, patched_jwt):
-        self.openid_client.decode_token(token='test-token', key='test-key')
-        patched_jwt.decode.assert_called_once_with('test-token', 'test-key',
-                                                   algorithms=['RS256'],
-                                                   audience=self.client_id)
-
-    def test_logout(self):
-        result = self.openid_client.logout(refresh_token='refresh-token')
-        self.realm.client.post.assert_called_once_with(
+    async def test_logout(self):
+        result = await self.openid_client.logout(refresh_token='refresh-token')
+        self.realm.client.post.assert_awaited_once_with(
             'https://logout',
             data={
                 'refresh_token': 'refresh-token',
@@ -56,15 +66,15 @@ class KeycloakOpenidConnectTestCase(TestCase):
         )
         self.assertEqual(result, self.realm.client.post.return_value)
 
-    def test_certs(self):
-        result = self.openid_client.certs()
+    async def test_certs(self):
+        result = await self.openid_client.certs()
         self.realm.client.get('https://certs')
 
         self.assertEqual(result, self.realm.client.get.return_value)
 
-    def test_userinfo(self):
-        result = self.openid_client.userinfo(token='token')
-        self.realm.client.get.assert_called_once_with(
+    async def test_userinfo(self):
+        result = await self.openid_client.userinfo(token='token')
+        self.realm.client.get.assert_any_await(
             'https://userinfo',
             headers={
                 'Authorization': 'Bearer token'
@@ -85,12 +95,12 @@ class KeycloakOpenidConnectTestCase(TestCase):
             'state=some-state'
         )
 
-    def test_authorization_code(self):
-        response = self.openid_client.authorization_code(
+    async def test_authorization_code(self):
+        response = await self.openid_client.authorization_code(
             code='some-code',
             redirect_uri='https://redirect-uri'
         )
-        self.realm.client.post.assert_called_once_with(
+        self.realm.client.post.assert_awaited_once_with(
             'https://token',
             data={
                 'grant_type': 'authorization_code',
@@ -102,11 +112,11 @@ class KeycloakOpenidConnectTestCase(TestCase):
         )
         self.assertEqual(response, self.realm.client.post.return_value)
 
-    def test_client_credentials(self):
-        response = self.openid_client.client_credentials(
+    async def test_client_credentials(self):
+        response = await self.openid_client.client_credentials(
             scope='scope another-scope'
         )
-        self.realm.client.post.assert_called_once_with(
+        self.realm.client.post.assert_awaited_once_with(
             'https://token',
             data={
                 'grant_type': 'client_credentials',
@@ -117,12 +127,12 @@ class KeycloakOpenidConnectTestCase(TestCase):
         )
         self.assertEqual(response, self.realm.client.post.return_value)
 
-    def test_refresh_token(self):
-        response = self.openid_client.refresh_token(
+    async def test_refresh_token(self):
+        response = await self.openid_client.refresh_token(
             refresh_token='refresh-token',
             scope='scope another-scope',
         )
-        self.realm.client.post.assert_called_once_with(
+        self.realm.client.post.assert_awaited_once_with(
             'https://token',
             data={
                 'grant_type': 'refresh_token',
@@ -134,12 +144,12 @@ class KeycloakOpenidConnectTestCase(TestCase):
         )
         self.assertEqual(response, self.realm.client.post.return_value)
 
-    def test_token_exchange(self):
-        response = self.openid_client.token_exchange(
+    async def test_token_exchange(self):
+        response = await self.openid_client.token_exchange(
             subject_token='some-token',
             audience='some-audience'
         )
-        self.realm.client.post.assert_called_once_with(
+        self.realm.client.post.assert_awaited_once_with(
             'https://token',
             data={
                 'grant_type': 'urn:ietf:params:oauth:grant-type:token-'

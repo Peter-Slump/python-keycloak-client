@@ -3,9 +3,9 @@ from collections import OrderedDict
 from keycloak.mixins import WellKnownMixin
 
 try:
-    from urllib.parse import urlencode
+    from urllib.parse import urlencode  # noqa: F041
 except ImportError:
-    from urllib import urlencode
+    from urllib import urlencode  # noqa: F041
 
 from jose import jwt
 

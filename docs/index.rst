@@ -1,7 +1,7 @@
 .. Python Keycloak Client documentation master file, created by
-   sphinx-quickstart on Wed Feb 21 19:29:55 2018.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+sphinx-quickstart on Wed Feb 21 19:29:55 2018.
+You can adapt this file completely to your liking, but it should at least
+contain the root `toctree` directive.
 
 ==================================================
 Welcome to Python Keycloak Client's documentation!
@@ -20,6 +20,15 @@ Installation
 .. code-block:: bash
 
     $ pip install python-keycloak-client
+
+-----
+Async
+-----
+
+.. code-block:: bash
+
+    $ pip install python-keycloak-client[aio]
+
 
 Preparation
 ===========
@@ -41,6 +50,32 @@ Everything starts with an instance of :class:`keycloak.realm.KeycloakRealm`
 
     realm = KeycloakRealm(server_url='https://example.com', realm_name='my_realm')
 
+
+Async
+-----
+
+.. code-block:: python3
+
+    from keycloak.aio.realm import KeycloakRealm
+
+
+    async def main(loop=None):
+        realm_params = dict(
+            server_url='https://example.com',
+            realm_name='my_realm',
+            loop=loop
+        )
+        async with KeycloakRealm(**realm_params) as realm:
+            # do something
+            print(realm.realm_name)
+
+    if __name__ == '__main__':
+        import asyncio
+
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main(loop))
+
+
 --------------
 OpenID Connect
 --------------
@@ -56,6 +91,35 @@ The OpenID Connect entry point can be retrieved from the realm object.
 
     oidc_client = realm.open_id_connect(client_id='my-client',
                                         client_secret='very-secret-client-secret')
+
+
+Async
+-----
+
+.. code-block:: python3
+
+    from keycloak.aio.realm import KeycloakRealm
+
+
+    async def main(loop=None):
+        realm_params = dict(
+            server_url='https://example.com',
+            realm_name='my_realm',
+            loop=loop
+        )
+        async with KeycloakRealm(**realm_params) as realm:
+            oidc_client = await realm.open_id_connect(
+                client_id='my-client',
+                client_secret='very-secret-client-secret'
+            )
+            # do something
+
+
+    if __name__ == '__main__':
+        import asyncio
+
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main(loop))
 
 
 .. automethod:: keycloak.openid_connect.KeycloakOpenidConnect.decode_token
@@ -92,6 +156,31 @@ The Authz client can be retrieved from the realm object.
     authz_client = realm.authz(client_id='my-client')
 
 
+Async
+-----
+
+.. code-block:: python3
+
+    from keycloak.aio.realm import KeycloakRealm
+
+
+    async def main(loop=None):
+        realm_params = dict(
+            server_url='https://example.com',
+            realm_name='my_realm',
+            loop=loop
+        )
+        async with KeycloakRealm(**realm_params) as realm:
+            authz_client = await realm.authz(client_id='my-client')
+            # do something
+
+
+    if __name__ == '__main__':
+        import asyncio
+
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main(loop))
+
 .. automethod:: keycloak.authz.KeycloakAuthz.entitlement
 
 ---------
@@ -104,7 +193,7 @@ http://www.keycloak.org/docs-api/3.4/rest-api/index.html
 
 The admin API client get be retrieved from the realm object.
 
-.. code-block:: python
+.. code-block:: python3
 
     from keycloak.realm import KeycloakRealm
 
@@ -112,6 +201,32 @@ The admin API client get be retrieved from the realm object.
     realm = KeycloakRealm(server_url='https://example.com', realm_name='my_realm')
 
     admin_client = realm.admin
+
+Async
+-----
+
+.. code-block:: python3
+
+    from keycloak.aio.realm import KeycloakRealm
+
+
+    async def main(loop=None):
+        realm_params = dict(
+            server_url='https://example.com',
+            realm_name='my_realm',
+            loop=loop
+        )
+        async with KeycloakRealm(**realm_params) as realm:
+            admin_client = realm.admin
+            # do something
+
+
+    if __name__ == '__main__':
+        import asyncio
+
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main(loop))
+
 
 Realms
 ------
@@ -189,6 +304,31 @@ http://www.keycloak.org/docs/latest/authorization_services/index.html#_service_o
     realm = KeycloakRealm(server_url='https://example.com', realm_name='my_realm')
 
     uma_client = realm.uma()
+
+Async
+-----
+
+.. code-block:: python3
+
+    from keycloak.aio.realm import KeycloakRealm
+
+
+    async def main(loop=None):
+        realm_params = dict(
+            server_url='https://example.com',
+            realm_name='my_realm',
+            loop=loop
+        )
+        async with KeycloakRealm(**realm_params) as realm:
+            uma_client = realm.uma()
+            # do something
+
+
+    if __name__ == '__main__':
+        import asyncio
+
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main(loop))
 
 
 Resource Set management

@@ -1,5 +1,10 @@
-class KeycloakAdminBase(object):
+__all__ = (
+    'KeycloakAdmin',
+    'KeycloakAdminBase',
+)
 
+
+class KeycloakAdminBase(object):
     _client = None
     _paths = None
 
@@ -17,7 +22,6 @@ class KeycloakAdminBase(object):
 
 
 class KeycloakAdmin(object):
-
     _realm = None
     _paths = {
         'root': '/'
@@ -68,6 +72,7 @@ class KeycloakAdmin(object):
         return self._realm.client.get(
             url=url, headers=self._add_auth_header(headers=headers)
         )
+
     #
     # def delete(self, url, headers, **kwargs):
     #     return self.session.delete(url, headers=headers, **kwargs)
