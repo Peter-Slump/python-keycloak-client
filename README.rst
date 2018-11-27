@@ -85,7 +85,6 @@ Release Notes
 =============
 
 **unreleased**
-**v0.1.4-dev**
 
 * Add support for password grant (thanks to @scranen)
 * Bugfix: Prevent multiple values for keyword argument 'audience' in jwt.decode() (thanks to @eugenejo)
