@@ -103,3 +103,4 @@ ENV/
 .idea
 
 docs/_build
+.pytest_cache

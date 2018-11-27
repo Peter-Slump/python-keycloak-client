@@ -231,7 +231,7 @@ class KeycloakOpenidConnect(WellKnownMixin):
             identifier configured by a specific Identity Provider.
         :param subject_token_type: This parameter is the type of the token
             passed with the subject_token parameter. This defaults to
-            urn\:ietf:params:oauth:token-type:access_token if the subject_token
+            urn:ietf:params:oauth:token-type:access_token if the subject_token
             comes from the realm and is an access token. If it is an external
             token, this parameter may or may not have to be specified depending
             on the requirements of the subject_issuer.
@@ -242,8 +242,8 @@ class KeycloakOpenidConnect(WellKnownMixin):
             urn:ietf:params:oauth:token-type:refresh_token in which case you
             will be returned both an access token and refresh token within the
             response. Other appropriate values are
-            urn\:ietf:params:oauth:token-type:access_token and
-            urn\:ietf:params:oauth:token-type:id_token
+            urn:ietf:params:oauth:token-type:access_token and
+            urn:ietf:params:oauth:token-type:id_token
         :param audience: This parameter specifies the target client you want
             the new token minted for.
         :param requested_issuer: This parameter specifies that the client wants
