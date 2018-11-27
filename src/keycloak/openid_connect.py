@@ -231,7 +231,8 @@ class KeycloakOpenidConnect(WellKnownMixin):
         Token exchange is the process of using a set of credentials or token to
         obtain an entirely different token.
 
-        http://www.keycloak.org/docs/latest/securing_apps/index.html#_token-exchange
+        http://www.keycloak.org/docs/latest/securing_apps/index.html
+        #_token-exchange
         https://www.ietf.org/id/draft-ietf-oauth-token-exchange-12.txt
 
         :param subject_token: A security token that represents the identity of
