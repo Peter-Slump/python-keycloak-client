@@ -83,6 +83,7 @@ Release Notes
 =============
 
 **unreleased**
+**v0.2.2-dev**
 **v0.2.1**
 
 **v0.2.0**
