@@ -74,6 +74,7 @@ Create release
 
     $ git checkout master
     $ git pull
+    -- Update release notes --
     $ bumpversion release
     $ make deploy-pypi
     $ bumpversion --no-tag patch
