@@ -38,3 +38,29 @@ class KeycloakAdminUsersTestCase(TestCase):
                 'Content-Type': 'application/json'
             }
         )
+
+    def test_get_collection(self):
+        self.admin.realms.by_name('realm-name').users.all()
+        self.realm.client.get_full_url.assert_called_once_with(
+            '/auth/admin/realms/realm-name/users'
+        )
+        self.realm.client.get.assert_called_once_with(
+            url=self.realm.client.get_full_url.return_value,
+            headers={
+                'Authorization': 'Bearer some-token',
+                'Content-Type': 'application/json'
+            }
+        )
+
+    def test_get_single(self):
+        self.admin.realms.by_name('realm-name').users.by_id('an-id').get()
+        self.realm.client.get_full_url.assert_called_once_with(
+            '/auth/admin/realms/realm-name/users/an-id'
+        )
+        self.realm.client.get.assert_called_once_with(
+            url=self.realm.client.get_full_url.return_value,
+            headers={
+                'Authorization': 'Bearer some-token',
+                'Content-Type': 'application/json'
+            }
+        )
