@@ -3,6 +3,7 @@ from keycloak.authz import KeycloakAuthz
 from keycloak.client import KeycloakClient
 from keycloak.openid_connect import KeycloakOpenidConnect
 from keycloak.uma import KeycloakUMA
+from keycloak.uma1 import KeycloakUMA1
 
 
 class KeycloakRealm(object):
@@ -70,9 +71,27 @@ class KeycloakRealm(object):
     def uma(self):
         """
         Get UMA client
+
+        This method is here for backwards compatibility
+
         :return: keycloak.uma.KeycloakUMA
         """
+        return self.uma2
+
+    @property
+    def uma2(self):
+        """
+        Starting from Keycloak 4 UMA2 is supported
+        :rtype: keycloak.uma.KeycloakUMA
+        """
         return KeycloakUMA(realm=self)
+
+    @property
+    def uma1(self):
+        """
+        :rtype: keycloak.uma1.KeycloakUMA1
+        """
+        return KeycloakUMA1(realm=self)
 
     def close(self):
         if self._client is not None:
