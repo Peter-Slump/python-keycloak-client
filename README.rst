@@ -84,6 +84,7 @@ Release Notes
 =============
 
 **unreleased**
+**v0.2.2**
 
 * Added support for UMA1 for Keycloak < 4.0
 * Allow to query registered users (thanks to [aberres](/aberres))
