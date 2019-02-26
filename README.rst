@@ -85,6 +85,9 @@ Release Notes
 
 **unreleased**
 
+* Added support for UMA1 for Keycloak < 4.0
+* Allow to query registered users (thanks to [aberres](/aberres))
+
 **v0.2.1**
 
 * Including aio version in released package. (thanks to @mackeyja92)
