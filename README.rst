@@ -84,7 +84,7 @@ Release Notes
 =============
 
 **unreleased**
-**v0.2.3-dev**
+
 **v0.2.2**
 
 * Added support for UMA1 for Keycloak < 4.0
