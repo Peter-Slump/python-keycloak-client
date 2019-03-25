@@ -36,7 +36,8 @@ class ClientRoles(KeycloakAdminBase):
         super(ClientRoles, self).__init__(*args, **kwargs)
 
     def by_name(self, role_name):
-        return ClientRole(realm_name=self._realm_name, client_id=self._client_id,
+        return ClientRole(realm_name=self._realm_name,
+                          client_id=self._client_id,
                           role_name=role_name, client=self._client)
 
     def create(self, name, **kwargs):

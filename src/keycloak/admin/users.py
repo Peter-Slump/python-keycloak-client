@@ -83,10 +83,11 @@ class Users(KeycloakAdminBase):
 
 
 class User(KeycloakAdminBase):
+    _BASE = "/auth/admin/realms/{realm}/users/{user_id}"
     _paths = {
-        'single': '/auth/admin/realms/{realm}/users/{user_id}',
-        'group': '/auth/admin/realms/{realm}/users/{user_id}/groups',
-        'groupAdd': '/auth/admin/realms/{realm}/users/{user_id}/groups/{group_id}'
+        'single': _BASE,
+        'group': _BASE + '/groups',
+        'groupAdd': _BASE + '/groups/{group_id}'
     }
 
     def __init__(self, realm_name, user_id, *args, **kwargs):
@@ -102,8 +103,9 @@ class User(KeycloakAdminBase):
         return self._it
 
     def roles(self):
-        from keycloak.admin.clientroles import ClientRoles
-        return ClientRoles(realm_name=self._realm_name, user_id=self._user_id, client=self._client)
+        from keycloak.admin.userroles import UserRoles
+        return UserRoles(realm_name=self._realm_name, user_id=self._user_id,
+                         client=self._client)
 
     def get(self):
         """

@@ -7,8 +7,10 @@ __all__ = ('UserRoles',)
 
 class UserRoles(KeycloakAdminBase):
     _paths = {
-        'availableRealm': '/auth/admin/realms/{realm}/users/{id}/role-mappings/realm/available',
-        'roleRealm': '/auth/admin/realms/{realm}/users/{id}/role-mappings/realm'
+        'availableRealm': '/auth/admin/realms/{realm}/users/{id}' +
+                          '/role-mappings/realm/available',
+        'roleRealm': '/auth/admin/realms/{realm}/users/{id}' +
+                     '/role-mappings/realm'
     }
 
     def __init__(self, realm_name, user_id, *args, **kwargs):
