@@ -37,5 +37,5 @@ class UserRoles(KeycloakAdminBase):
                     'roleRealm', realm=self._realm_name, id=self._user_id
                 )
             ),
-            data=json.dumps(roles)
+            data=json.dumps(roles, sort_keys=True)
         )

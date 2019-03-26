@@ -34,12 +34,12 @@ class KeycloakAdminUserRolesTestCase(TestCase):
             url=self.realm.client.get_full_url.return_value,
             data='['
                  '{'
-                 '"id": "00000000-0000-0000-0000-000000000000", '
-                 '"name": "Admin", '
-                 '"description": "${Admin}", '
-                 '"composite": true, '
                  '"clientRole": false, '
-                 '"containerId": "master"'
+                 '"composite": true, '
+                 '"containerId": "master", '
+                 '"description": "${Admin}", '
+                 '"id": "00000000-0000-0000-0000-000000000000", '
+                 '"name": "Admin"'
                  '}'
                  ']',
             headers={
