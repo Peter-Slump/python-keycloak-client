@@ -28,11 +28,14 @@ class UserRoles(KeycloakAdminBase):
         )
 
     def add_realm_role(self, roles):
+        """
+        :param roles: _rolerepresentation keycloak api
+        """
         return self._client.post(
             url=self._client.get_full_url(
                 self.get_path(
                     'roleRealm', realm=self._realm_name, id=self._user_id
                 )
             ),
-            data=json.dumps([roles])
+            data=json.dumps(roles)
         )

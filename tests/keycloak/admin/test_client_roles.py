@@ -6,7 +6,7 @@ from keycloak.admin import KeycloakAdmin
 from keycloak.realm import KeycloakRealm
 
 
-class KeycloakAdminRolesTestCase(TestCase):
+class KeycloakAdminClientRolesTestCase(TestCase):
 
     def setUp(self):
         self.realm = mock.MagicMock(spec_set=KeycloakRealm)
