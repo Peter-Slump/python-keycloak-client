@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 from keycloak.admin import KeycloakAdminBase
 
-__all__ = ('Users',)
+__all__ = ('Users', 'User',)
 
 USER_KWARGS = [
     'email',
@@ -13,7 +13,9 @@ USER_KWARGS = [
     'attributes',
     'realmRoles',
     'clientRoles',
-    'groups'
+    'groups',
+    'enabled',
+    'credentials'
 ]
 
 
@@ -36,13 +38,12 @@ class Users(KeycloakAdminBase):
 
         :param str username:
         :param object credentials: (optional)
-        :param str first_name: (optional)
-        :param str last_name: (optional)
+        :param str firstName: (optional)
+        :param str lastName: (optional)
         :param str email: (optional)
         :param boolean enabled: (optional)
         """
         payload = OrderedDict(username=username)
-
         if 'credentials' in kwargs:
             payload['credentials'] = [kwargs['credentials']]
 
@@ -58,11 +59,16 @@ class Users(KeycloakAdminBase):
         if 'enabled' in kwargs:
             payload['enabled'] = kwargs['enabled']
 
+        for key in USER_KWARGS:
+            from keycloak.admin.clientroles import to_camel_case
+            if key in kwargs:
+                payload[to_camel_case(key)] = kwargs[key]
+
         return self._client.post(
             url=self._client.get_full_url(
                 self.get_path('collection', realm=self._realm_name)
             ),
-            data=json.dumps(payload)
+            data=json.dumps(payload, sort_keys=True)
         )
 
     def all(self):
@@ -145,14 +151,13 @@ class User(KeycloakAdminBase):
             from keycloak.admin.clientroles import to_camel_case
             if key in kwargs:
                 payload[to_camel_case(key)] = kwargs[key]
-        print("*DEBUG* Update User:" + str(json.dumps(payload)))
         result = self._client.put(
             url=self._client.get_full_url(
                 self.get_path(
                     'single', realm=self._realm_name, user_id=self._user_id
                 )
             ),
-            data=json.dumps(payload)
+            data=json.dumps(payload, sort_keys=True)
         )
         self.get()
         return result
