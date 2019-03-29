@@ -39,8 +39,8 @@ class KeycloakAdminUsersTestCase(asynctest.TestCase):
             url=self.realm.client.get_full_url.return_value,
             data='{"username": "my-username", '
                  '"credentials": [{"some": "value"}], '
-                 '"firstName": "my-first-name", '
-                 '"lastName": "my-last-name", '
+                 '"first_name": "my-first-name", '
+                 '"last_name": "my-last-name", '
                  '"email": "my-email", '
                  '"enabled": true}',
             headers={

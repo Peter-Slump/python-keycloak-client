@@ -159,7 +159,7 @@ class KeycloakOpenidConnect(WellKnownMixin):
         :return: URL to redirect the resource owner to
         :rtype: str
         """
-        payload = OrderedDict()
+        payload = []
         payload['response_type'] = 'code'
         payload['client_id'] = self._client_id
 

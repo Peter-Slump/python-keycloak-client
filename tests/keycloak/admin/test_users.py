@@ -31,8 +31,8 @@ class KeycloakAdminUsersTestCase(TestCase):
                  '"credentials": [{"some": "value"}], '
                  '"email": "my-email", '
                  '"enabled": true, '
-                 '"firstName": "my-first-name", '
-                 '"lastName": "my-last-name", '
+                 '"first_name": "my-first-name", '
+                 '"last_name": "my-last-name", '
                  '"username": "my-username"'
                  '}',
             headers={
@@ -85,8 +85,8 @@ class KeycloakAdminUsersTestCase(TestCase):
         user = self.admin.realms.by_name('realm-name').users.by_id("user-id")
         user.update(
             credentials=[{'some': 'value'}],
-            firstName='my-first-name',
-            lastName='my-last-name',
+            first_name='my-first-name',
+            last_name='my-last-name',
             email='my-email',
             enabled=True
         )
@@ -99,9 +99,9 @@ class KeycloakAdminUsersTestCase(TestCase):
                  '"credentials": [{"some": "value"}], '
                  '"email": "my-email", '
                  '"enabled": true, '
-                 '"firstName": "my-first-name", '
+                 '"first_name": "my-first-name", '
                  '"id": "user-id", '
-                 '"lastName": "my-last-name"'
+                 '"last_name": "my-last-name"'
                  '}',
             headers={
                 'Authorization': 'Bearer some-token',

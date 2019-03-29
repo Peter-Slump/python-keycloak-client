@@ -7,7 +7,7 @@ __all__ = ('Groups',)
 
 class Groups(KeycloakAdminBase):
     _paths = {
-        'groups': '/auth/admin/realms/{realm}/groups',
+        'collection': '/auth/admin/realms/{realm}/groups',
     }
 
     def __init__(self, realm_name, *args, **kwargs):
@@ -18,7 +18,7 @@ class Groups(KeycloakAdminBase):
         return self._client.get(
             url=self._client.get_full_url(
                 self.get_path(
-                    'groups',
+                    'collection',
                     realm=self._realm_name
                 )
             ),
@@ -28,7 +28,7 @@ class Groups(KeycloakAdminBase):
         return self._client.post(
             url=self._client.get_full_url(
                 self.get_path(
-                    'groups',
+                    'collection',
                     realm=self._realm_name
                 )
             ),

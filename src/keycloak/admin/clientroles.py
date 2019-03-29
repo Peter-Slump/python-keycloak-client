@@ -13,7 +13,7 @@ ROLE_KWARGS = [
     'scope_param_required'
 ]
 
-__all__ = ('ClientRole', 'ClientRoles',)
+__all__ = ('to_camel_case','ClientRole', 'ClientRoles',)
 
 
 def to_camel_case(snake_cased_str):
@@ -68,7 +68,7 @@ class ClientRoles(KeycloakAdminBase):
                               realm=self._realm_name,
                               id=self._client_id)
             ),
-            data=json.dumps(payload)
+            data=json.dumps(payload, sort_keys=True)
         )
 
 
@@ -112,5 +112,5 @@ class ClientRole(KeycloakAdminBase):
                               id=self._client_id,
                               role_name=self._role_name)
             ),
-            data=json.dumps(payload)
+            data=json.dumps(payload, sort_keys=True)
         )
