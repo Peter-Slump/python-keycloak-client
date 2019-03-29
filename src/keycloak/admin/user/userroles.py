@@ -2,7 +2,7 @@ import json
 
 from keycloak.admin import KeycloakAdminBase
 
-__all__ = ('UserRoleMappings','UserRoleMappingsRealm')
+__all__ = ('UserRoleMappings', 'UserRoleMappingsRealm')
 
 
 class UserRoleMappings(KeycloakAdminBase):
@@ -34,7 +34,7 @@ class UserRoleMappingsRealm(KeycloakAdminBase):
         self._user_id = user_id
         super(UserRoleMappingsRealm, self).__init__(*args, **kwargs)
 
-    def available_realm_role(self):
+    def available(self):
         return self._client.get(
             url=self._client.get_full_url(
                 self.get_path(
@@ -43,7 +43,7 @@ class UserRoleMappingsRealm(KeycloakAdminBase):
             )
         )
 
-    def add_realm_role(self, roles):
+    def add(self, roles):
         """
         :param roles: _rolerepresentation keycloak api
         """

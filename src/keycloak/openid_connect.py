@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 from keycloak.mixins import WellKnownMixin
 
 try:
@@ -159,7 +157,7 @@ class KeycloakOpenidConnect(WellKnownMixin):
         :return: URL to redirect the resource owner to
         :rtype: str
         """
-        payload = []
+        payload = {}
         payload['response_type'] = 'code'
         payload['client_id'] = self._client_id
 

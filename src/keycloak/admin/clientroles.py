@@ -13,7 +13,7 @@ ROLE_KWARGS = [
     'scope_param_required'
 ]
 
-__all__ = ('to_camel_case','ClientRole', 'ClientRoles',)
+__all__ = ('to_camel_case', 'ClientRole', 'ClientRoles',)
 
 
 def to_camel_case(snake_cased_str):

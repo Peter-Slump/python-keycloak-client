@@ -25,7 +25,7 @@ class KeycloakAdminUserRolesTestCase(TestCase):
             }
         ]
         self.admin.realms.by_name('realm-name').users.by_id(
-            'user-id').roles().add_realm_role(role_representations)
+            'user-id').role_mappings.realm.add(role_representations)
         self.realm.client.get_full_url.assert_called_once_with(
             '/auth/admin/realms/realm-name/users/user-id' +
             '/role-mappings/realm'
@@ -50,7 +50,7 @@ class KeycloakAdminUserRolesTestCase(TestCase):
 
     def test_get_available_realm_role(self):
         self.admin.realms.by_name('realm-name').users.by_id(
-            'user-id').roles().available_realm_role()
+            'user-id').role_mappings.realm.available()
         self.realm.client.get_full_url.assert_called_once_with(
             '/auth/admin/realms/realm-name/users/user-id' +
             '/role-mappings/realm/available'

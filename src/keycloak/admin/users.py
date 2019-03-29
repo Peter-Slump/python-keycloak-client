@@ -92,14 +92,16 @@ class User(KeycloakAdminBase):
             self.get()
         return self._user
 
+    @property
     def role_mappings(self):
-        from keycloak.admin.users.userroles import UserRoleMappings
+        from keycloak.admin.user.userroles import UserRoleMappings
         return UserRoleMappings(realm_name=self._realm_name,
                                 user_id=self._user_id,
                                 client=self._client)
 
+    @property
     def groups(self):
-        from keycloak.admin.users.usergroup import UserGroups
+        from keycloak.admin.user.usergroup import UserGroups
         return UserGroups(realm_name=self._realm_name,
                           user_id=self._user_id,
                           client=self._client)
@@ -135,8 +137,8 @@ class User(KeycloakAdminBase):
         :param Map client_roles: Client Roles
         :param string array groups: Groups for user
         """
-        payload = []
-        for k, v in self.user.userems():
+        payload = {}
+        for k, v in self.user.items():
             payload[k] = v
         for key in USER_KWARGS:
             from keycloak.admin.clientroles import to_camel_case

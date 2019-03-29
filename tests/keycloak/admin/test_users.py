@@ -28,11 +28,15 @@ class KeycloakAdminUsersTestCase(TestCase):
         self.realm.client.post.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
             data='{'
-                 '"credentials": [{"some": "value"}], '
+                 '"credentials": ['
+                 '{'
+                 '"some": "value"'
+                 '}'
+                 '], '
                  '"email": "my-email", '
                  '"enabled": true, '
-                 '"first_name": "my-first-name", '
-                 '"last_name": "my-last-name", '
+                 '"firstName": "my-first-name", '
+                 '"lastName": "my-last-name", '
                  '"username": "my-username"'
                  '}',
             headers={
@@ -68,7 +72,7 @@ class KeycloakAdminUsersTestCase(TestCase):
         )
 
     def test_get_single_it(self):
-        self.admin.realms.by_name('realm-name').users.by_id('an-id').it
+        self.admin.realms.by_name('realm-name').users.by_id('an-id').user
         self.realm.client.get_full_url.assert_called_once_with(
             '/auth/admin/realms/realm-name/users/an-id'
         )
@@ -80,7 +84,7 @@ class KeycloakAdminUsersTestCase(TestCase):
             }
         )
 
-    @mock.patch('keycloak.admin.users.User.it', {"id": "user-id"})
+    @mock.patch('keycloak.admin.users.User.user', {"id": "user-id"})
     def test_update(self):
         user = self.admin.realms.by_name('realm-name').users.by_id("user-id")
         user.update(
@@ -96,12 +100,16 @@ class KeycloakAdminUsersTestCase(TestCase):
         self.realm.client.put.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
             data='{'
-                 '"credentials": [{"some": "value"}], '
+                 '"credentials": ['
+                 '{'
+                 '"some": "value"'
+                 '}'
+                 '], '
                  '"email": "my-email", '
                  '"enabled": true, '
-                 '"first_name": "my-first-name", '
+                 '"firstName": "my-first-name", '
                  '"id": "user-id", '
-                 '"last_name": "my-last-name"'
+                 '"lastName": "my-last-name"'
                  '}',
             headers={
                 'Authorization': 'Bearer some-token',
@@ -109,10 +117,10 @@ class KeycloakAdminUsersTestCase(TestCase):
             }
         )
 
-    @mock.patch('keycloak.admin.users.User.it', {"id": "user-id"})
+    @mock.patch('keycloak.admin.users.User.user', {"id": "user-id"})
     def test_delete_group(self):
         user = self.admin.realms.by_name('realm-name').users.by_id("user-id")
-        user.delete_group('group-id')
+        user.groups.delete('group-id')
         self.realm.client.get_full_url.assert_called_with(
             '/auth/admin/realms/realm-name/users/user-id/groups/group-id'
         )
