@@ -47,16 +47,14 @@ class KeycloakAdminRolesTestCase(asynctest.TestCase):
         )
         self.realm.client.post.assert_awaited_once_with(
             url=self.realm.client.get_full_url.return_value,
-            data='{'
-                 '"name": "my-role-name", '
-                 '"description": "my-description", '
-                 '"id": "my-id", '
-                 '"clientRole": "my-client-role", '
+            data='{"clientRole": "my-client-role", '
                  '"composite": false, '
                  '"composites": "my-composites", '
                  '"containerId": "my-container-id", '
-                 '"scopeParamRequired": true'
-                 '}',
+                 '"description": "my-description", '
+                 '"id": "my-id", '
+                 '"name": "my-role-name", '
+                 '"scopeParamRequired": true}',
             headers={
                 'Authorization': 'Bearer some-token',
                 'Content-Type': 'application/json'
@@ -83,16 +81,14 @@ class KeycloakAdminRolesTestCase(asynctest.TestCase):
         )
         self.realm.client.put.assert_awaited_once_with(
             url=self.realm.client.get_full_url.return_value,
-            data='{'
-                 '"name": "my-role-name", '
-                 '"description": "my-description", '
-                 '"id": "my-id", '
-                 '"clientRole": "my-client-role", '
+            data='{"clientRole": "my-client-role", '
                  '"composite": false, '
                  '"composites": "my-composites", '
                  '"containerId": "my-container-id", '
-                 '"scopeParamRequired": true'
-                 '}',
+                 '"description": "my-description", '
+                 '"id": "my-id", "name": '
+                 '"my-role-name", '
+                 '"scopeParamRequired": true}',
             headers={
                 'Authorization': 'Bearer some-token',
                 'Content-Type': 'application/json'
