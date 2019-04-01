@@ -77,7 +77,8 @@ class Users(KeycloakAdminBase):
 class User(KeycloakAdminBase):
     _BASE = "/auth/admin/realms/{realm}/users/{user_id}"
     _paths = {
-        'single': _BASE
+        'single': _BASE,
+        'reset_password': _BASE + "/reset-password"
     }
 
     def __init__(self, realm_name, user_id, *args, **kwargs):
@@ -153,4 +154,21 @@ class User(KeycloakAdminBase):
             data=json.dumps(payload, sort_keys=True)
         )
         self.get()
+        return result
+
+    def reset_password(self, password, temporary=False):
+        payload = {
+            "type": "password",
+            "value": password,
+            "temporary": temporary
+        }
+        result = self._client.put(
+            url=self._client.get_full_url(
+                self.get_path(
+                    'reset_password', realm=self._realm_name,
+                    user_id=self._user_id
+                )
+            ),
+            data=json.dumps(payload, sort_keys=True)
+        )
         return result

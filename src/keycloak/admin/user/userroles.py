@@ -45,9 +45,22 @@ class UserRoleMappingsRealm(KeycloakAdminBase):
 
     def add(self, roles):
         """
-        :param roles: _rolerepresentation keycloak api
+        :param roles: _rolerepresentation array keycloak api
         """
         return self._client.post(
+            url=self._client.get_full_url(
+                self.get_path(
+                    'single', realm=self._realm_name, id=self._user_id
+                )
+            ),
+            data=json.dumps(roles, sort_keys=True)
+        )
+
+    def delete(self, roles):
+        """
+        :param roles: _rolerepresentation array keycloak api
+        """
+        return self._client.delete(
             url=self._client.get_full_url(
                 self.get_path(
                     'single', realm=self._realm_name, id=self._user_id
