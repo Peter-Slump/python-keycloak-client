@@ -56,6 +56,15 @@ class UserRoleMappingsRealm(KeycloakAdminBase):
             data=json.dumps(roles, sort_keys=True)
         )
 
+    def get(self):
+        return self._client.get(
+            url=self._client.get_full_url(
+                self.get_path(
+                    'single', realm=self._realm_name, id=self._user_id
+                )
+            )
+        )
+
     def delete(self, roles):
         """
         :param roles: _rolerepresentation array keycloak api

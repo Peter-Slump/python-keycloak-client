@@ -63,6 +63,21 @@ class KeycloakAdminUserRolesTestCase(TestCase):
             }
         )
 
+    def test_get_realm_role(self):
+        self.admin.realms.by_name('realm-name').users.by_id(
+            'user-id').role_mappings.realm.get()
+        self.realm.client.get_full_url.assert_called_once_with(
+            '/auth/admin/realms/realm-name/users/user-id' +
+            '/role-mappings/realm'
+        )
+        self.realm.client.get.assert_called_once_with(
+            url=self.realm.client.get_full_url.return_value,
+            headers={
+                'Authorization': 'Bearer some-token',
+                'Content-Type': 'application/json'
+            }
+        )
+
     def test_delete_role(self):
         role_representations = [
             {
