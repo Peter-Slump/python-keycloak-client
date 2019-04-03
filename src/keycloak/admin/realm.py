@@ -25,3 +25,8 @@ class Realm(KeycloakAdminBase):
     def users(self):
         from keycloak.admin.users import Users
         return Users(realm_name=self._name, client=self._client)
+
+    @property
+    def groups(self):
+        from keycloak.admin.groups import Groups
+        return Groups(realm_name=self._name, client=self._client)

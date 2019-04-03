@@ -2,8 +2,8 @@ from unittest import TestCase
 
 import mock
 
-from keycloak.uma1 import KeycloakUMA1
 from keycloak.realm import KeycloakRealm
+from keycloak.uma1 import KeycloakUMA1
 from keycloak.well_known import KeycloakWellKnown
 
 

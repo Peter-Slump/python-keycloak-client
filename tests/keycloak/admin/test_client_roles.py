@@ -6,7 +6,7 @@ from keycloak.admin import KeycloakAdmin
 from keycloak.realm import KeycloakRealm
 
 
-class KeycloakAdminRolesTestCase(TestCase):
+class KeycloakAdminClientRolesTestCase(TestCase):
 
     def setUp(self):
         self.realm = mock.MagicMock(spec_set=KeycloakRealm)
@@ -31,13 +31,13 @@ class KeycloakAdminRolesTestCase(TestCase):
         self.realm.client.post.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
             data='{'
-                 '"name": "my-role-name", '
-                 '"description": "my-description", '
-                 '"id": "my-id", '
                  '"clientRole": "my-client-role", '
                  '"composite": false, '
                  '"composites": "my-composites", '
                  '"containerId": "my-container-id", '
+                 '"description": "my-description", '
+                 '"id": "my-id", '
+                 '"name": "my-role-name", '
                  '"scopeParamRequired": true'
                  '}',
             headers={
@@ -64,13 +64,13 @@ class KeycloakAdminRolesTestCase(TestCase):
         self.realm.client.put.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
             data='{'
-                 '"name": "my-role-name", '
-                 '"description": "my-description", '
-                 '"id": "my-id", '
                  '"clientRole": "my-client-role", '
                  '"composite": false, '
                  '"composites": "my-composites", '
                  '"containerId": "my-container-id", '
+                 '"description": "my-description", '
+                 '"id": "my-id", '
+                 '"name": "my-role-name", '
                  '"scopeParamRequired": true'
                  '}',
             headers={
