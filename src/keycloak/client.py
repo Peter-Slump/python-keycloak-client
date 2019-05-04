@@ -79,7 +79,7 @@ class KeycloakClient(object):
         return self.session.delete(url, headers=headers, **kwargs)
 
     def _handle_response(self, response):
-        with response:
+        with self:
             try:
                 response.raise_for_status()
             except HTTPError as err:
