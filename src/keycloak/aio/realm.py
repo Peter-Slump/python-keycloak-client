@@ -17,8 +17,8 @@ class KeycloakRealm(AsyncInit, SyncKeycloakRealm):
     _loop = None
 
     def __init__(self, *args, loop=None, **kwargs):
-        super().__init__(*args, **kwargs)
         self.client_class = kwargs.pop('client_class', KeycloakClient)
+        super().__init__(*args, **kwargs)
         self._lock = asyncio.Lock()
         self._loop = loop or asyncio.get_event_loop()
 
