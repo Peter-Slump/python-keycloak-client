@@ -104,3 +104,4 @@ ENV/
 
 docs/_build
 .pytest_cache
+.virtualenv

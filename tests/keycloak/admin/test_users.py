@@ -1,6 +1,8 @@
 from unittest import TestCase
-
-import mock
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 
 from keycloak.admin import KeycloakAdmin
 from keycloak.realm import KeycloakRealm
