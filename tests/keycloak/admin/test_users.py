@@ -118,6 +118,21 @@ class KeycloakAdminUsersTestCase(TestCase):
         )
 
     @mock.patch('keycloak.admin.users.User.user', {"id": "user-id"})
+    def test_delete(self):
+        user = self.admin.realms.by_name('realm-name').users.by_id("user-id")
+        user.delete()
+        self.realm.client.get_full_url.assert_called_with(
+            '/auth/admin/realms/realm-name/users/user-id'
+        )
+        self.realm.client.delete.assert_called_once_with(
+            url=self.realm.client.get_full_url.return_value,
+            headers={
+                'Authorization': 'Bearer some-token',
+                'Content-Type': 'application/json'
+            }
+        )
+
+    @mock.patch('keycloak.admin.users.User.user', {"id": "user-id"})
     def test_delete_group(self):
         user = self.admin.realms.by_name('realm-name').users.by_id("user-id")
         user.groups.delete('group-id')

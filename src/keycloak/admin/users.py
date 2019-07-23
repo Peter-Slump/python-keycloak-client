@@ -156,6 +156,22 @@ class User(KeycloakAdminBase):
         self.get()
         return result
 
+    def delete(self):
+        """
+        Return registered user with the given user id.
+
+        http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_users_resource
+        """
+        self._user = self._client.delete(
+            url=self._client.get_full_url(
+                self.get_path(
+                    'single', realm=self._realm_name, user_id=self._user_id
+                )
+            )
+        )
+        self._user_id = self.user["id"]
+        return self._user
+
     def reset_password(self, password, temporary=False):
         payload = {
             "type": "password",
