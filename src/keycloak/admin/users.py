@@ -167,8 +167,6 @@ class User(KeycloakAdminBase):
                 )
             )
         )
-        self._user_id = self.user["id"]
-        return self._user
 
     def reset_password(self, password, temporary=False):
         payload = {
