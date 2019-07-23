@@ -158,9 +158,7 @@ class User(KeycloakAdminBase):
 
     def delete(self):
         """
-        Return registered user with the given user id.
-
-        http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_users_resource
+        Delete registered user with the given user id.
         """
         self._user = self._client.delete(
             url=self._client.get_full_url(
