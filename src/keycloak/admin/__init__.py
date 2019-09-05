@@ -1,3 +1,5 @@
+import json
+
 __all__ = (
     'KeycloakAdmin',
     'KeycloakAdminBase',
@@ -19,6 +21,88 @@ class KeycloakAdminBase(object):
             raise NotImplementedError()
 
         return self._paths[name].format(**kwargs)
+
+
+# class KeycloakAdminCollection(KeycloakAdminBase):
+#     _paths = {}
+#
+#     def __init__(self, client, element_cls, url):
+#         self._paths['collection'] = url
+#         self._element_cls = element_cls
+#         super().__init__(client)
+#
+#     def get(self, id):
+#         return self._element_cls(id=id, client=self._client)
+#
+#     def all(self):
+#         return self._client.get(
+#             self._client.get_full_url(
+#                 self.get_path('collection')
+#             )
+#         )
+#
+#     def create(self, **kwargs):
+#         self._client.post(
+#             self._client.get_full_url(
+#                 self.get_path("collection")
+#             ),
+#             json.dumps(payload)
+#         )
+#         return Realm(id=, client=self._client)
+
+class KeycloakAdminEntity(KeycloakAdminBase):
+    _paths = {}
+
+    def __init__(self, client, url):
+        super().__init__(client)
+        self._BASE = url
+        self._paths['formatted'] = self._BASE
+        self._client = client
+        self._entity = None
+        self._get()
+
+    def _get(self):
+        self._entity = self._client.get(
+            self._client.get_full_url(
+                self.get_path('formatted')
+            )
+        )
+
+    @property
+    def entity(self):
+        return self._entity
+
+    def update(self, **kwargs):
+        """
+        Updates the given entity
+        Note: If the url identifier is changed by this method, url won't be changed
+
+        :param kwargs: Entity parameters
+        :return: Response
+        """
+        resp = self._client.put(
+            url=self._client.get_full_url(
+                self.get_path("formatted")
+            ),
+            data=json.dumps(kwargs, sort_keys=True)
+        )
+        self._get()
+        return resp
+
+    def delete(self):
+        """
+        Deleted given entity
+
+        :return: Response
+        """
+        return self._client.delete(
+            self._client.get_full_url(
+                self.get_path("formatted")
+            )
+        )
+
+    def __getattr__(self, item):
+        return self._entity[item]
 
 
 class KeycloakAdmin(object):

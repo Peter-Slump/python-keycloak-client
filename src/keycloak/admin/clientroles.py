@@ -1,7 +1,7 @@
 import json
 from collections import OrderedDict
 
-from keycloak.admin import KeycloakAdminBase
+from keycloak.admin import KeycloakAdminBase, KeycloakAdminEntity
 
 ROLE_KWARGS = [
     'description',
@@ -34,6 +34,13 @@ class ClientRoles(KeycloakAdminBase):
         self._client_id = client_id
         self._realm_name = realm_name
         super(ClientRoles, self).__init__(*args, **kwargs)
+
+    def all(self):
+        return self._client.get(
+            self._client.get_full_url(
+                self.get_path('collection', realm=self._realm_name, id=self._client_id)
+            )
+        )
 
     def by_name(self, role_name):
         return ClientRole(realm_name=self._realm_name,
@@ -72,45 +79,15 @@ class ClientRoles(KeycloakAdminBase):
         )
 
 
-class ClientRole(KeycloakAdminBase):
+class ClientRole(KeycloakAdminEntity):
     _paths = {
         'single': '/auth/admin/realms/{realm}/clients/{id}/roles/{role_name}'
     }
 
-    def __init__(self, realm_name, client_id, role_name, *args, **kwargs):
+    def __init__(self, realm_name, client_id, role_name, client):
         self._client_id = client_id
         self._realm_name = realm_name
         self._role_name = role_name
 
-        super(ClientRole, self).__init__(*args, **kwargs)
-
-    def update(self, name, **kwargs):
-        """
-        Update existing role.
-
-        http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_roles_resource
-
-        :param str name: Name for the role
-        :param str description: (optional)
-        :param str id: (optional)
-        :param bool client_role: (optional)
-        :param bool composite: (optional)
-        :param object composites: (optional)
-        :param str container_id: (optional)
-        :param bool scope_param_required: (optional)
-        """
-        payload = OrderedDict(name=name)
-
-        for key in ROLE_KWARGS:
-            if key in kwargs:
-                payload[to_camel_case(key)] = kwargs[key]
-
-        return self._client.put(
-            url=self._client.get_full_url(
-                self.get_path('single',
-                              realm=self._realm_name,
-                              id=self._client_id,
-                              role_name=self._role_name)
-            ),
-            data=json.dumps(payload, sort_keys=True)
-        )
+        super(ClientRole, self).__init__(url=self.get_path("single", realm=realm_name, id=client_id, role_name=role_name),
+                                         client=client)

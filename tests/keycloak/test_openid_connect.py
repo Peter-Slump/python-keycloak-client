@@ -115,7 +115,7 @@ class KeycloakOpenidConnectTestCase(TestCase):
                 'scope': 'scope another-scope'
             }
         )
-        self.assertEqual(response, self.realm.client.post.return_value)
+        self.assertEqual(response.token, self.realm.client.post.return_value)
 
     def test_refresh_token(self):
         response = self.openid_client.refresh_token(

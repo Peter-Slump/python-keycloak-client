@@ -1,4 +1,6 @@
-from keycloak.admin import KeycloakAdminBase
+import json
+
+from keycloak.admin import KeycloakAdminBase, KeycloakAdminEntity
 
 __all__ = ('Client', 'Clients',)
 
@@ -23,18 +25,60 @@ class Clients(KeycloakAdminBase):
     def by_id(self, id):
         return Client(client=self._client, realm_name=self._realm_name, id=id)
 
+    def by_client_id(self, client_id):
+        id = next(iter([client["id"] for client in self.all() if client["clientId"] == client_id]), None)
+        if id is None:
+            return None
+        return Client(client=self._client, realm_name=self._realm_name, id=id)
 
-class Client(KeycloakAdminBase):
+    def create(self, id, **kwargs):
+        payload = {
+            "id": id,
+            **kwargs
+        }
+        self._client.post(
+            self._client.get_full_url(
+                self.get_path("collection", realm=self._realm_name)
+            ),
+            json.dumps(payload)
+        )
+        return Client(realm_name=self._realm_name, id=id, client=self._client)
+
+
+class Client(KeycloakAdminEntity):
     _id = None
     _realm_name = None
+    _BASE = '/auth/admin/realms/{realm}/clients/{id}/'
+    _paths = {
+        'single': _BASE,
+        'service_account': _BASE + 'service-account-user'
+    }
 
-    def __init__(self, realm_name, id, *args, **kwargs):
+    def __init__(self, realm_name, id, client):
         self._id = id
         self._realm_name = realm_name
-        super(Client, self).__init__(*args, **kwargs)
+        self._info = None
+        super(Client, self).__init__(url=self.get_path("single", realm=realm_name, id=id),
+                                     client=client)
 
     @property
     def roles(self):
         from keycloak.admin.clientroles import ClientRoles
         return ClientRoles(client=self._client, client_id=self._id,
                            realm_name=self._realm_name)
+
+    @property
+    def service_account_user(self):
+        from keycloak.admin.users import User
+        user = self._client.get(
+            self._client.get_full_url(
+                self.get_path('service_account', realm=self._realm_name, id=self._id)
+            )
+        )
+        return User(user_id=user["id"], realm_name=self._realm_name, client=self._client)
+
+    @property
+    def client(self):
+        if self._info is None:
+            self.get()
+        return self._info

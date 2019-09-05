@@ -20,6 +20,14 @@ class UserRoleMappings(KeycloakAdminBase):
             client=self._client
         )
 
+    def client(self, client):
+        return UserRoleMappingsClient(
+            realm_name=self._realm_name,
+            user_id=self._user_id,
+            client_id=client._id,
+            client=self._client
+        )
+
 
 class UserRoleMappingsRealm(KeycloakAdminBase):
     _paths = {
@@ -73,6 +81,64 @@ class UserRoleMappingsRealm(KeycloakAdminBase):
             url=self._client.get_full_url(
                 self.get_path(
                     'single', realm=self._realm_name, id=self._user_id
+                )
+            ),
+            data=json.dumps(roles, sort_keys=True)
+        )
+
+
+class UserRoleMappingsClient(KeycloakAdminBase):
+    _BASE = '/auth/admin/realms/{realm}/users/{id}/role-mappings/clients/{client_id}'
+    _paths = {
+        'available': _BASE + '/available',
+        'single': _BASE
+    }
+
+    def __init__(self, realm_name, user_id, client_id, *args, **kwargs):
+        self._realm_name = realm_name
+        self._user_id = user_id
+        self._client_id = client_id
+        super(UserRoleMappingsClient, self).__init__(*args, **kwargs)
+
+    def available(self):
+        return self._client.get(
+            url=self._client.get_full_url(
+                self.get_path(
+                    'available', realm=self._realm_name, id=self._user_id, client_id=self._client_id
+                )
+            )
+        )
+
+    def add(self, roles):
+        """
+        :param roles: _rolerepresentation array keycloak api
+        """
+        return self._client.post(
+            url=self._client.get_full_url(
+                self.get_path(
+                    'single', realm=self._realm_name, id=self._user_id, client_id=self._client_id
+                )
+            ),
+            data=json.dumps(roles, sort_keys=True)
+        )
+
+    def get(self):
+        return self._client.get(
+            url=self._client.get_full_url(
+                self.get_path(
+                    'single', realm=self._realm_name, id=self._user_id, client_id=self._client_id
+                )
+            )
+        )
+
+    def delete(self, roles):
+        """
+        :param roles: _rolerepresentation array keycloak api
+        """
+        return self._client.delete(
+            url=self._client.get_full_url(
+                self.get_path(
+                    'single', realm=self._realm_name, id=self._user_id, client_id=self._client_id
                 )
             ),
             data=json.dumps(roles, sort_keys=True)

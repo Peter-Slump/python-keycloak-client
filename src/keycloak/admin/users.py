@@ -1,7 +1,7 @@
 import json
 from collections import OrderedDict
 
-from keycloak.admin import KeycloakAdminBase
+from keycloak.admin import KeycloakAdminBase, KeycloakAdminEntity
 
 __all__ = ('Users', 'User',)
 
@@ -74,18 +74,19 @@ class Users(KeycloakAdminBase):
                     user_id=user_id, client=self._client)
 
 
-class User(KeycloakAdminBase):
+class User(KeycloakAdminEntity):
     _BASE = "/auth/admin/realms/{realm}/users/{user_id}"
     _paths = {
         'single': _BASE,
         'reset_password': _BASE + "/reset-password"
     }
 
-    def __init__(self, realm_name, user_id, *args, **kwargs):
+    def __init__(self, realm_name, user_id, client):
         self._realm_name = realm_name
         self._user_id = user_id
         self._user = None
-        super(User, self).__init__(*args, **kwargs)
+        super(User, self).__init__(url=self.get_path('single', realm=realm_name, user_id=user_id),
+                                   client=client)
 
     @property
     def user(self):
@@ -106,67 +107,6 @@ class User(KeycloakAdminBase):
         return UserGroups(realm_name=self._realm_name,
                           user_id=self._user_id,
                           client=self._client)
-
-    def get(self):
-        """
-        Return registered user with the given user id.
-
-        http://www.keycloak.org/docs-api/3.4/rest-api/index.html#_users_resource
-        """
-        self._user = self._client.get(
-            url=self._client.get_full_url(
-                self.get_path(
-                    'single', realm=self._realm_name, user_id=self._user_id
-                )
-            )
-        )
-        self._user_id = self.user["id"]
-        return self._user
-
-    def update(self, **kwargs):
-        """
-        Update existing user.
-
-        https://www.keycloak.org/docs-api/2.5/rest-api/index.html#_userrepresentation
-
-        :param str first_name: first_name for user
-        :param str last_name: last_name for user
-        :param str email: Email for user
-        :param bool email_verified: User email verified
-        :param Map attributes: Atributes in user
-        :param string array realm_roles: Realm Roles
-        :param Map client_roles: Client Roles
-        :param string array groups: Groups for user
-        """
-        payload = {}
-        for k, v in self.user.items():
-            payload[k] = v
-        for key in USER_KWARGS:
-            from keycloak.admin.clientroles import to_camel_case
-            if key in kwargs:
-                payload[to_camel_case(key)] = kwargs[key]
-        result = self._client.put(
-            url=self._client.get_full_url(
-                self.get_path(
-                    'single', realm=self._realm_name, user_id=self._user_id
-                )
-            ),
-            data=json.dumps(payload, sort_keys=True)
-        )
-        self.get()
-        return result
-
-    def delete(self):
-        """
-        Delete registered user with the given user id.
-        """
-        self._user = self._client.delete(
-            url=self._client.get_full_url(
-                self.get_path(
-                    'single', realm=self._realm_name, user_id=self._user_id
-                )
-            )
-        )
 
     def reset_password(self, password, temporary=False):
         payload = {

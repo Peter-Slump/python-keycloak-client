@@ -72,7 +72,7 @@ class KeycloakAdminUsersTestCase(TestCase):
         )
 
     def test_get_single_user(self):
-        self.admin.realms.by_name('realm-name').users.by_id('an-id').user
+        self.admin.realms.by_name('realm-name').users.by_id('an-id')
         self.realm.client.get_full_url.assert_called_once_with(
             '/auth/admin/realms/realm-name/users/an-id'
         )

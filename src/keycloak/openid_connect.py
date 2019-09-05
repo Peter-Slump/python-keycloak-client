@@ -5,13 +5,12 @@ try:
 except ImportError:
     from urllib import urlencode  # noqa: F041
 
-from jose import jwt
+from jose import jwt, ExpiredSignatureError
 
 PATH_WELL_KNOWN = "auth/realms/{}/.well-known/openid-configuration"
 
 
 class KeycloakOpenidConnect(WellKnownMixin):
-
     _well_known = None
     _client_id = None
     _client_secret = None
@@ -138,10 +137,10 @@ class KeycloakOpenidConnect(WellKnownMixin):
         url = self.well_known['userinfo_endpoint']
 
         return self._realm.client.get(url, headers={
-                                          "Authorization": "Bearer {}".format(
-                                              token
-                                          )
-                                      })
+            "Authorization": "Bearer {}".format(
+                token
+            )
+        })
 
     def authorization_url(self, **kwargs):
         """
@@ -181,8 +180,9 @@ class KeycloakOpenidConnect(WellKnownMixin):
         :rtype: dict
         :return: Access token response
         """
-        return self._token_request(grant_type='authorization_code', code=code,
+        token = self._token_request(grant_type='authorization_code', code=code,
                                    redirect_uri=redirect_uri)
+        return Token(token, self)
 
     def password_credentials(self, username, password, **kwargs):
         """
@@ -195,9 +195,10 @@ class KeycloakOpenidConnect(WellKnownMixin):
         :rtype: dict
         :return: Access token response
         """
-        return self._token_request(grant_type='password',
+        token = self._token_request(grant_type='password',
                                    username=username, password=password,
                                    **kwargs)
+        return Token(token, self)
 
     def client_credentials(self, **kwargs):
         """
@@ -209,7 +210,8 @@ class KeycloakOpenidConnect(WellKnownMixin):
         :rtype: dict
         :return: Access token response
         """
-        return self._token_request(grant_type='client_credentials', **kwargs)
+        token = self._token_request(grant_type='client_credentials', **kwargs)
+        return Token(token, self)
 
     def refresh_token(self, refresh_token, **kwargs):
         """
@@ -291,3 +293,27 @@ class KeycloakOpenidConnect(WellKnownMixin):
 
         return self._realm.client.post(self.get_url('token_endpoint'),
                                        data=payload)
+
+
+class Token:
+    def __init__(self, token, oidc: KeycloakOpenidConnect) -> None:
+        self.oidc = oidc
+        self.key = self.oidc.certs()['keys'][0]
+        self.token = token
+
+    def __getattr__(self, attr):
+        return self.token[attr]
+
+    def __call__(self):
+        if self.is_expired():
+            print("Token expired, trying a new one")
+            self.token = self.oidc.refresh_token(self.token['refresh_token'])
+        return self.token["access_token"]
+
+    def is_expired(self):
+        try:
+            self.oidc.decode_token(self.token['access_token'], self.key)
+            return False
+        except ExpiredSignatureError:
+            return True
+
