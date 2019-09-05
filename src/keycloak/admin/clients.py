@@ -48,10 +48,11 @@ class Clients(KeycloakAdminBase):
 class Client(KeycloakAdminEntity):
     _id = None
     _realm_name = None
-    _BASE = '/auth/admin/realms/{realm}/clients/{id}/'
+    _BASE = '/auth/admin/realms/{realm}/clients/{id}'
     _paths = {
         'single': _BASE,
-        'service_account': _BASE + 'service-account-user'
+        'service_account': _BASE + '/service-account-user',
+        'secret': _BASE + '/client-secret'
     }
 
     def __init__(self, realm_name, id, client):
@@ -76,6 +77,14 @@ class Client(KeycloakAdminEntity):
             )
         )
         return User(user_id=user["id"], realm_name=self._realm_name, client=self._client)
+
+    @property
+    def secret(self):
+        return self._client.get(
+            self._client.get_full_url(
+                self.get_path('secret', realm=self._realm_name, id=self._id)
+            )
+        )
 
     @property
     def client(self):
