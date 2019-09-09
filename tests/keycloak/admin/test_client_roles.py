@@ -52,14 +52,11 @@ class KeycloakAdminClientRolesTestCase(TestCase):
             name='my-role-name',
             description='my-description',
             id='my-id',
-            client_role='my-client-role',
+            clientRole='my-client-role',
             composite=False,
             composites='my-composites',
-            container_id='my-container-id',
-            scope_param_required=True
-        )
-        self.realm.client.get_full_url.assert_called_once_with(
-            '/auth/admin/realms/realm-name/clients/#123/roles/role-name'
+            containerId='my-container-id',
+            scopeParamRequired=True
         )
         self.realm.client.put.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,

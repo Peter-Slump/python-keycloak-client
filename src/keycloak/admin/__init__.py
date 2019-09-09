@@ -23,33 +23,6 @@ class KeycloakAdminBase(object):
         return self._paths[name].format(**kwargs)
 
 
-# class KeycloakAdminCollection(KeycloakAdminBase):
-#     _paths = {}
-#
-#     def __init__(self, client, element_cls, url):
-#         self._paths['collection'] = url
-#         self._element_cls = element_cls
-#         super().__init__(client)
-#
-#     def get(self, id):
-#         return self._element_cls(id=id, client=self._client)
-#
-#     def all(self):
-#         return self._client.get(
-#             self._client.get_full_url(
-#                 self.get_path('collection')
-#             )
-#         )
-#
-#     def create(self, **kwargs):
-#         self._client.post(
-#             self._client.get_full_url(
-#                 self.get_path("collection")
-#             ),
-#             json.dumps(payload)
-#         )
-#         return Realm(id=, client=self._client)
-
 class KeycloakAdminEntity(KeycloakAdminBase):
     _paths = {}
 
@@ -59,7 +32,6 @@ class KeycloakAdminEntity(KeycloakAdminBase):
         self._paths['formatted'] = self._BASE
         self._client = client
         self._entity = None
-        self._get()
 
     def _get(self):
         self._entity = self._client.get(
@@ -102,6 +74,8 @@ class KeycloakAdminEntity(KeycloakAdminBase):
         )
 
     def __getattr__(self, item):
+        if self._entity is None:
+            self._get()
         return self._entity[item]
 
 

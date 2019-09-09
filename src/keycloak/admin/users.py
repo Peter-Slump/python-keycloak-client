@@ -108,6 +108,10 @@ class User(KeycloakAdminEntity):
                           user_id=self._user_id,
                           client=self._client)
 
+    def update(self, **kwargs):
+        data = {**kwargs, "id": self._user_id}
+        return super().update(**data)
+
     def reset_password(self, password, temporary=False):
         payload = {
             "type": "password",
