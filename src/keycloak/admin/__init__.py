@@ -45,6 +45,10 @@ class KeycloakAdminEntity(KeycloakAdminBase):
             self._get()
         return self._entity
 
+    @property
+    def url(self):
+        return self._url
+
     def update(self, **kwargs):
         """
         Updates the given entity
