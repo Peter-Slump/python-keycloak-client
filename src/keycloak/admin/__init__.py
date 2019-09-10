@@ -42,6 +42,8 @@ class KeycloakAdminEntity(KeycloakAdminBase):
 
     @property
     def entity(self):
+        if self._entity is None:
+            self._get()
         return self._entity
 
     def update(self, **kwargs):
