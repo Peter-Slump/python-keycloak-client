@@ -28,15 +28,14 @@ class KeycloakAdminEntity(KeycloakAdminBase):
 
     def __init__(self, client, url):
         super().__init__(client)
-        self._BASE = url
-        self._paths['formatted'] = self._BASE
+        self._url = url
         self._client = client
         self._entity = None
 
     def _get(self):
         self._entity = self._client.get(
             self._client.get_full_url(
-                self.get_path('formatted')
+                self._url
             )
         )
 
@@ -56,7 +55,7 @@ class KeycloakAdminEntity(KeycloakAdminBase):
         """
         resp = self._client.put(
             url=self._client.get_full_url(
-                self.get_path("formatted")
+                self._url
             ),
             data=json.dumps(kwargs, sort_keys=True)
         )
@@ -71,7 +70,7 @@ class KeycloakAdminEntity(KeycloakAdminBase):
         """
         return self._client.delete(
             self._client.get_full_url(
-                self.get_path("formatted")
+                self._url
             )
         )
 

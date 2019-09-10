@@ -85,9 +85,3 @@ class Client(KeycloakAdminEntity):
                 self.get_path('secret', realm=self._realm_name, id=self._id)
             )
         )
-
-    @property
-    def client(self):
-        if self._info is None:
-            self.get()
-        return self._info
