@@ -47,7 +47,7 @@ class KeycloakAdminEntity(KeycloakAdminBase):
 
     @property
     def url(self):
-        return self._url
+        return self.get_full_url(self._url)
 
     def update(self, **kwargs):
         """
