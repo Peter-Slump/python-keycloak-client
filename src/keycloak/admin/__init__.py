@@ -34,9 +34,7 @@ class KeycloakAdminEntity(KeycloakAdminBase):
 
     def _get(self):
         self._entity = self._client.get(
-            self._client.get_full_url(
-                self._url
-            )
+            self._client.get_full_url(self._url)
         )
 
     @property
@@ -47,9 +45,7 @@ class KeycloakAdminEntity(KeycloakAdminBase):
 
     @property
     def url(self):
-        return self._client.get_full_url(
-                self._url
-            )
+        return self._client.get_full_url(self._url)
 
     def update(self, **kwargs):
         """
@@ -60,9 +56,7 @@ class KeycloakAdminEntity(KeycloakAdminBase):
         :return: Response
         """
         resp = self._client.put(
-            url=self._client.get_full_url(
-                self._url
-            ),
+            url=self._client.get_full_url(self._url),
             data=json.dumps(kwargs, sort_keys=True)
         )
         self._get()
@@ -75,9 +69,7 @@ class KeycloakAdminEntity(KeycloakAdminBase):
         :return: Response
         """
         return self._client.delete(
-            self._client.get_full_url(
-                self._url
-            )
+            self._client.get_full_url(self._url)
         )
 
     def __getattr__(self, item):

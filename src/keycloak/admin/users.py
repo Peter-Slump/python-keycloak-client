@@ -50,12 +50,19 @@ class Users(KeycloakAdminBase):
             if key in kwargs:
                 payload[to_camel_case(key)] = kwargs[key]
 
-        return self._client.post(
+        self._client.post(
             url=self._client.get_full_url(
                 self.get_path('collection', realm=self._realm_name)
             ),
             data=json.dumps(payload, sort_keys=True)
         )
+        users = self._client.get(
+            url=self._client.get_full_url(
+                self.get_path('collection', realm=self._realm_name)
+            ),
+            username=username
+        )
+        return User(realm_name=self._realm_name, user_id=users[0]["id"], client=self._client)
 
     def all(self):
         """
