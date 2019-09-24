@@ -15,6 +15,6 @@ class WellKnownMixin(object):
                 realm=self._realm,
                 path=self._realm.client.get_full_url(
                     self.get_path_well_known().format(self._realm.realm_name)
-                )
+                ),
             )
         return self._well_known

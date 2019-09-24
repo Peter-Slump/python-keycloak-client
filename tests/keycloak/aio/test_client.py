@@ -8,17 +8,16 @@ else:
     from keycloak.aio.client import KeycloakClient
 
 
-@asynctest.skipIf(aiohttp is None, 'aiohttp is not installed')
+@asynctest.skipIf(aiohttp is None, "aiohttp is not installed")
 class KeycloakClientTestCase(asynctest.TestCase):
     async def setUp(self):
         self.Session_mock_handle = asynctest.patch(
-            'keycloak.aio.client.aiohttp.client.ClientSession',
-            autospec=True
+            "keycloak.aio.client.aiohttp.client.ClientSession", autospec=True
         )
 
         self.Session_mock = self.Session_mock_handle.start()
-        self.headers = {'initial': 'header'}
-        self.server_url = 'https://example.com'
+        self.headers = {"initial": "header"}
+        self.server_url = "https://example.com"
         self.client = await KeycloakClient(
             server_url=self.server_url,
             headers=self.headers,
@@ -38,7 +37,7 @@ class KeycloakClientTestCase(asynctest.TestCase):
                   the second time
         """
 
-        self.assertEqual(self.client.logger.name, 'KeycloakClient')
+        self.assertEqual(self.client.logger.name, "KeycloakClient")
 
     async def test_uninitialized_client(self):
         """
@@ -80,13 +79,12 @@ class KeycloakClientTestCase(asynctest.TestCase):
         Expected: The path get added to the base url or to the given url
         """
         self.assertEqual(
-            self.client.get_full_url('/some/path'),
-            'https://example.com/some/path'
+            self.client.get_full_url("/some/path"), "https://example.com/some/path"
         )
 
         self.assertEqual(
-            self.client.get_full_url('/some/path', 'https://another_url.com'),
-            'https://another_url.com/some/path'
+            self.client.get_full_url("/some/path", "https://another_url.com"),
+            "https://another_url.com/some/path",
         )
 
     async def test_post(self):
@@ -98,17 +96,17 @@ class KeycloakClientTestCase(asynctest.TestCase):
 
         self.client._handle_response = asynctest.CoroutineMock()
         response = await self.client.post(
-            url='https://example.com/test',
-            data={'some': 'data'},
-            headers={'some': 'header'},
-            extra='param'
+            url="https://example.com/test",
+            data={"some": "data"},
+            headers={"some": "header"},
+            extra="param",
         )
 
         self.Session_mock.return_value.post.assert_called_once_with(
-            'https://example.com/test',
-            data={'some': 'data'},
-            headers={'some': 'header'},
-            params={'extra': 'param'}
+            "https://example.com/test",
+            data={"some": "data"},
+            headers={"some": "header"},
+            params={"extra": "param"},
         )
 
         self.client._handle_response.assert_awaited_once_with(
@@ -124,14 +122,14 @@ class KeycloakClientTestCase(asynctest.TestCase):
         self.Session_mock.return_value.headers = asynctest.CoroutineMock()
 
         self.client._handle_response = asynctest.CoroutineMock()
-        response = await self.client.get(url='https://example.com/test',
-                                         headers={'some': 'header'},
-                                         extra='param')
+        response = await self.client.get(
+            url="https://example.com/test", headers={"some": "header"}, extra="param"
+        )
 
         self.Session_mock.return_value.get.assert_called_once_with(
-            'https://example.com/test',
-            headers={'some': 'header'},
-            params={'extra': 'param'}
+            "https://example.com/test",
+            headers={"some": "header"},
+            params={"extra": "param"},
         )
 
         self.client._handle_response.assert_awaited_once_with(
@@ -147,16 +145,18 @@ class KeycloakClientTestCase(asynctest.TestCase):
         self.Session_mock.return_value.headers = asynctest.MagicMock()
 
         self.client._handle_response = asynctest.CoroutineMock()
-        response = await self.client.put(url='https://example.com/test',
-                                         data={'some': 'data'},
-                                         headers={'some': 'header'},
-                                         extra='param')
+        response = await self.client.put(
+            url="https://example.com/test",
+            data={"some": "data"},
+            headers={"some": "header"},
+            extra="param",
+        )
 
         self.Session_mock.return_value.put.assert_called_once_with(
-            'https://example.com/test',
-            data={'some': 'data'},
-            headers={'some': 'header'},
-            params={'extra': 'param'}
+            "https://example.com/test",
+            data={"some": "data"},
+            headers={"some": "header"},
+            params={"extra": "param"},
         )
 
         self.client._handle_response.assert_awaited_once_with(
@@ -172,19 +172,14 @@ class KeycloakClientTestCase(asynctest.TestCase):
         self.Session_mock.return_value.headers = asynctest.MagicMock()
         self.Session_mock.return_value.delete = asynctest.CoroutineMock()
 
-        response = await self.client.delete(url='https://example.com/test',
-                                            headers={'some': 'header'},
-                                            extra='param')
+        response = await self.client.delete(
+            url="https://example.com/test", headers={"some": "header"}, extra="param"
+        )
 
         self.Session_mock.return_value.delete.assert_called_once_with(
-            'https://example.com/test',
-            headers={'some': 'header'},
-            extra='param'
+            "https://example.com/test", headers={"some": "header"}, extra="param"
         )
-        self.assertEqual(
-            response,
-            self.Session_mock.return_value.delete.return_value
-        )
+        self.assertEqual(response, self.Session_mock.return_value.delete.return_value)
 
     async def test_handle_response(self):
         """

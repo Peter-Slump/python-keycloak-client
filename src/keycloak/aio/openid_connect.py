@@ -4,9 +4,7 @@ from keycloak.openid_connect import (
     PATH_WELL_KNOWN,
 )
 
-__all__ = (
-    'KeycloakOpenidConnect',
-)
+__all__ = ("KeycloakOpenidConnect",)
 
 
 class KeycloakOpenidConnect(WellKnownMixin, SyncKeycloakOpenidConnect):

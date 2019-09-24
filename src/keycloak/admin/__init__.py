@@ -1,9 +1,6 @@
 import json
 
-__all__ = (
-    'KeycloakAdmin',
-    'KeycloakAdminBase',
-)
+__all__ = ("KeycloakAdmin", "KeycloakAdminBase")
 
 
 class KeycloakAdminBase(object):
@@ -33,9 +30,7 @@ class KeycloakAdminEntity(KeycloakAdminBase):
         self._entity = None
 
     def _get(self):
-        self._entity = self._client.get(
-            self._client.get_full_url(self._url)
-        )
+        self._entity = self._client.get(self._client.get_full_url(self._url))
 
     @property
     def entity(self):
@@ -57,7 +52,7 @@ class KeycloakAdminEntity(KeycloakAdminBase):
         """
         resp = self._client.put(
             url=self._client.get_full_url(self._url),
-            data=json.dumps(kwargs, sort_keys=True)
+            data=json.dumps(kwargs, sort_keys=True),
         )
         self._get()
         return resp
@@ -68,9 +63,7 @@ class KeycloakAdminEntity(KeycloakAdminBase):
 
         :return: Response
         """
-        return self._client.delete(
-            self._client.get_full_url(self._url)
-        )
+        return self._client.delete(self._client.get_full_url(self._url))
 
     def __getattr__(self, item):
         if self._entity is None:
@@ -80,9 +73,7 @@ class KeycloakAdminEntity(KeycloakAdminBase):
 
 class KeycloakAdmin(object):
     _realm = None
-    _paths = {
-        'root': '/'
-    }
+    _paths = {"root": "/"}
     _token = None
 
     def __init__(self, realm):
@@ -92,9 +83,7 @@ class KeycloakAdmin(object):
         self._realm = realm
 
     def root(self):
-        return self.get(
-            self.get_full_url(self._paths['root'])
-        )
+        return self.get(self.get_full_url(self._paths["root"]))
 
     def get_full_url(self, *args, **kwargs):
         return self._realm.client.get_full_url(*args, **kwargs)
@@ -113,6 +102,7 @@ class KeycloakAdmin(object):
     @property
     def realms(self):
         from keycloak.admin.realm import Realms
+
         return Realms(client=self)
 
     def post(self, url, data, headers=None, **kwargs):
@@ -142,6 +132,6 @@ class KeycloakAdmin(object):
             token = self._token
 
         headers = headers or {}
-        headers['Authorization'] = "Bearer {}".format(token)
-        headers['Content-Type'] = 'application/json'
+        headers["Authorization"] = "Bearer {}".format(token)
+        headers["Content-Type"] = "application/json"
         return headers
