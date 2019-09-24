@@ -10,9 +10,8 @@ else:
     from keycloak.aio.realm import KeycloakRealm
 
 
-@asynctest.skipIf(aiohttp is None, 'aiohttp is not installed')
+@asynctest.skipIf(aiohttp is None, "aiohttp is not installed")
 class KeycloakAdminTestCase(asynctest.TestCase):
-
     def setUp(self):
         self.realm = asynctest.MagicMock(spec_set=KeycloakRealm)
         self.admin = KeycloakAdmin(realm=self.realm)

@@ -7,13 +7,11 @@ from keycloak.client import KeycloakClient
 
 
 class KeycloakClientTestCase(TestCase):
-
     def setUp(self):
-        self.headers = {'initial': 'header'}
-        self.server_url = 'https://example.com'
+        self.headers = {"initial": "header"}
+        self.server_url = "https://example.com"
 
-        self.client = KeycloakClient(server_url=self.server_url,
-                                     headers=self.headers)
+        self.client = KeycloakClient(server_url=self.server_url, headers=self.headers)
 
     def test_default_client_logger_name(self):
         """
@@ -22,7 +20,7 @@ class KeycloakClientTestCase(TestCase):
                   the second time
         """
 
-        self.assertEqual(self.client.logger.name, 'KeycloakClient')
+        self.assertEqual(self.client.logger.name, "KeycloakClient")
 
     def test_session(self):
         """
@@ -51,14 +49,16 @@ class KeycloakClientTestCase(TestCase):
         Expected: The path get added to the base url or to the given url
         """
 
-        self.assertEqual(self.client.get_full_url('/some/path'),
-                         'https://example.com/some/path')
+        self.assertEqual(
+            self.client.get_full_url("/some/path"), "https://example.com/some/path"
+        )
 
-        self.assertEqual(self.client.get_full_url('/some/path',
-                                                  'https://another_url.com'),
-                         'https://another_url.com/some/path')
+        self.assertEqual(
+            self.client.get_full_url("/some/path", "https://another_url.com"),
+            "https://another_url.com/some/path",
+        )
 
-    @mock.patch('keycloak.client.requests', autospec=True)
+    @mock.patch("keycloak.client.requests", autospec=True)
     def test_post(self, request_mock):
         """
         Case: A POST request get executed
@@ -67,23 +67,25 @@ class KeycloakClientTestCase(TestCase):
         request_mock.Session.return_value.headers = mock.MagicMock()
 
         self.client._handle_response = mock.MagicMock()
-        response = self.client.post(url='https://example.com/test',
-                                    data={'some': 'data'},
-                                    headers={'some': 'header'},
-                                    extra='param')
+        response = self.client.post(
+            url="https://example.com/test",
+            data={"some": "data"},
+            headers={"some": "header"},
+            extra="param",
+        )
 
         request_mock.Session.return_value.post.assert_called_once_with(
-            'https://example.com/test',
-            data={'some': 'data'},
-            headers={'some': 'header'},
-            params={'extra': 'param'}
+            "https://example.com/test",
+            data={"some": "data"},
+            headers={"some": "header"},
+            params={"extra": "param"},
         )
         self.client._handle_response.assert_called_once_with(
             request_mock.Session.return_value.post.return_value
         )
         self.assertEqual(response, self.client._handle_response.return_value)
 
-    @mock.patch('keycloak.client.requests', autospec=True)
+    @mock.patch("keycloak.client.requests", autospec=True)
     def test_get(self, request_mock):
         """
         Case: A GET request get executed
@@ -92,14 +94,14 @@ class KeycloakClientTestCase(TestCase):
         request_mock.Session.return_value.headers = mock.MagicMock()
 
         self.client._handle_response = mock.MagicMock()
-        response = self.client.get(url='https://example.com/test',
-                                   headers={'some': 'header'},
-                                   extra='param')
+        response = self.client.get(
+            url="https://example.com/test", headers={"some": "header"}, extra="param"
+        )
 
         request_mock.Session.return_value.get.assert_called_once_with(
-            'https://example.com/test',
-            headers={'some': 'header'},
-            params={'extra': 'param'}
+            "https://example.com/test",
+            headers={"some": "header"},
+            params={"extra": "param"},
         )
 
         self.client._handle_response.assert_called_once_with(
@@ -107,7 +109,7 @@ class KeycloakClientTestCase(TestCase):
         )
         self.assertEqual(response, self.client._handle_response.return_value)
 
-    @mock.patch('keycloak.client.requests', autospec=True)
+    @mock.patch("keycloak.client.requests", autospec=True)
     def test_put(self, request_mock):
         """
         Case: A PUT request get executed
@@ -116,25 +118,26 @@ class KeycloakClientTestCase(TestCase):
         request_mock.Session.return_value.headers = mock.MagicMock()
 
         self.client._handle_response = mock.MagicMock()
-        response = self.client.put(url='https://example.com/test',
-                                   data={'some': 'data'},
-                                   headers={'some': 'header'},
-                                   extra='param')
+        response = self.client.put(
+            url="https://example.com/test",
+            data={"some": "data"},
+            headers={"some": "header"},
+            extra="param",
+        )
 
         request_mock.Session.return_value.put.assert_called_once_with(
-            'https://example.com/test',
-            data={'some': 'data'},
-            headers={'some': 'header'},
-            params={'extra': 'param'}
+            "https://example.com/test",
+            data={"some": "data"},
+            headers={"some": "header"},
+            params={"extra": "param"},
         )
 
         self.client._handle_response.assert_called_once_with(
             request_mock.Session.return_value.put.return_value
         )
-        self.assertEqual(response,
-                         self.client._handle_response.return_value)
+        self.assertEqual(response, self.client._handle_response.return_value)
 
-    @mock.patch('keycloak.client.requests', autospec=True)
+    @mock.patch("keycloak.client.requests", autospec=True)
     def test_delete(self, request_mock):
         """
         Case: A DELETE request get executed
@@ -143,17 +146,16 @@ class KeycloakClientTestCase(TestCase):
         request_mock.Session.return_value.headers = mock.MagicMock()
 
         self.client._handle_response = mock.MagicMock()
-        response = self.client.delete(url='https://example.com/test',
-                                      headers={'some': 'header'},
-                                      extra='param')
+        response = self.client.delete(
+            url="https://example.com/test", headers={"some": "header"}, extra="param"
+        )
 
         request_mock.Session.return_value.delete.assert_called_once_with(
-            'https://example.com/test',
-            headers={'some': 'header'},
-            extra='param'
+            "https://example.com/test", headers={"some": "header"}, extra="param"
         )
-        self.assertEqual(response,
-                         request_mock.Session.return_value.delete.return_value)
+        self.assertEqual(
+            response, request_mock.Session.return_value.delete.return_value
+        )
 
     def test_handle_response(self):
         """
