@@ -36,6 +36,7 @@ setup(
         'dev': [
             'bumpversion==0.5.3',
             'twine',
+            'black'
         ],
         'doc': [
             'Sphinx==1.4.4',

@@ -11,7 +11,7 @@ PATH_WELL_KNOWN = "auth/realms/{}/.well-known/uma-configuration"
 
 
 class KeycloakUMA1(WellKnownMixin, object):
-    DEFAULT_HEADERS = {"Content-type": 'application/json'}
+    DEFAULT_HEADERS = {"Content-type": "application/json"}
 
     _realm = None
     _well_known = None
@@ -41,9 +41,9 @@ class KeycloakUMA1(WellKnownMixin, object):
         :rtype: str
         """
         return self._realm.client.post(
-            self.well_known['resource_set_registration_endpoint'],
+            self.well_known["resource_set_registration_endpoint"],
             data=self._get_data(name=name, **kwargs),
-            headers=self.get_headers(token)
+            headers=self.get_headers(token),
         )
 
     def resource_set_update(self, token, id, name, **kwargs):
@@ -62,10 +62,9 @@ class KeycloakUMA1(WellKnownMixin, object):
         :rtype: str
         """
         return self._realm.client.put(
-            '{}/{}'.format(
-                self.well_known['resource_set_registration_endpoint'], id),
+            "{}/{}".format(self.well_known["resource_set_registration_endpoint"], id),
             data=self._get_data(name=name, **kwargs),
-            headers=self.get_headers(token)
+            headers=self.get_headers(token),
         )
 
     def resource_set_read(self, token, id):
@@ -79,9 +78,8 @@ class KeycloakUMA1(WellKnownMixin, object):
         :rtype: dict
         """
         return self._realm.client.get(
-            '{}/{}'.format(
-                self.well_known['resource_set_registration_endpoint'], id),
-            headers=self.get_headers(token)
+            "{}/{}".format(self.well_known["resource_set_registration_endpoint"], id),
+            headers=self.get_headers(token),
         )
 
     def resource_set_delete(self, token, id):
@@ -94,9 +92,8 @@ class KeycloakUMA1(WellKnownMixin, object):
         :param str id: Identifier of the resource set
         """
         return self._realm.client.delete(
-            '{}/{}'.format(
-                self.well_known['resource_set_registration_endpoint'], id),
-            headers=self.get_headers(token)
+            "{}/{}".format(self.well_known["resource_set_registration_endpoint"], id),
+            headers=self.get_headers(token),
         )
 
     def resource_set_list(self, token, **kwargs):
@@ -114,16 +111,14 @@ class KeycloakUMA1(WellKnownMixin, object):
         :rtype: list
         """
         return self._realm.client.get(
-            self.well_known['resource_set_registration_endpoint'],
+            self.well_known["resource_set_registration_endpoint"],
             headers=self.get_headers(token),
             **kwargs
         )
 
     @classmethod
     def get_headers(cls, token):
-        return dict(cls.DEFAULT_HEADERS, **{
-            "Authorization": "Bearer " + token,
-        })
+        return dict(cls.DEFAULT_HEADERS, **{"Authorization": "Bearer " + token})
 
     @staticmethod
     def get_payload(name, scopes=None, **kwargs):

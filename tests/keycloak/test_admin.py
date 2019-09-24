@@ -8,7 +8,6 @@ from keycloak.realm import KeycloakRealm
 
 
 class KeycloakAdminTestCase(TestCase):
-
     def setUp(self):
         self.realm = mock.MagicMock(spec_set=KeycloakRealm)
         self.admin = KeycloakAdmin(realm=self.realm)

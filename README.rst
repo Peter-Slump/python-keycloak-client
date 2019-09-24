@@ -102,8 +102,6 @@ Credits: `phala <https://github.com/pehala>`_:
 
     * Token is automatically refreshed when set up as authentication header.
 
-* Added Pipfile for easier setup
-
 * Removed some called_only_once checks because they didn't make sense anymore.
 
 * Bug fix: `client_class` on `KeycloakRealm` constructor (thanks to `pcaro <https://github.com/pcaro>`_)
