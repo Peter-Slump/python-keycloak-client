@@ -2,11 +2,10 @@ import json
 
 from keycloak.admin import KeycloakAdminBase
 
-__all__ = ('UserRoleMappings', 'UserRoleMappingsRealm')
+__all__ = ("UserRoleMappings", "UserRoleMappingsRealm")
 
 
 class UserRoleMappings(KeycloakAdminBase):
-
     def __init__(self, realm_name, user_id, *args, **kwargs):
         self._realm_name = realm_name
         self._user_id = user_id
@@ -15,9 +14,7 @@ class UserRoleMappings(KeycloakAdminBase):
     @property
     def realm(self):
         return UserRoleMappingsRealm(
-            realm_name=self._realm_name,
-            user_id=self._user_id,
-            client=self._client
+            realm_name=self._realm_name, user_id=self._user_id, client=self._client
         )
 
     def client(self, client):
@@ -25,16 +22,15 @@ class UserRoleMappings(KeycloakAdminBase):
             realm_name=self._realm_name,
             user_id=self._user_id,
             client_id=client._id,
-            client=self._client
+            client=self._client,
         )
 
 
 class UserRoleMappingsRealm(KeycloakAdminBase):
     _paths = {
-        'available': '/auth/admin/realms/{realm}/users/{id}' +
-                     '/role-mappings/realm/available',
-        'single': '/auth/admin/realms/{realm}/users/{id}' +
-                  '/role-mappings/realm'
+        "available": "/auth/admin/realms/{realm}/users/{id}"
+        + "/role-mappings/realm/available",
+        "single": "/auth/admin/realms/{realm}/users/{id}" + "/role-mappings/realm",
     }
 
     def __init__(self, realm_name, user_id, *args, **kwargs):
@@ -45,9 +41,7 @@ class UserRoleMappingsRealm(KeycloakAdminBase):
     def available(self):
         return self._client.get(
             url=self._client.get_full_url(
-                self.get_path(
-                    'available', realm=self._realm_name, id=self._user_id
-                )
+                self.get_path("available", realm=self._realm_name, id=self._user_id)
             )
         )
 
@@ -57,19 +51,15 @@ class UserRoleMappingsRealm(KeycloakAdminBase):
         """
         return self._client.post(
             url=self._client.get_full_url(
-                self.get_path(
-                    'single', realm=self._realm_name, id=self._user_id
-                )
+                self.get_path("single", realm=self._realm_name, id=self._user_id)
             ),
-            data=json.dumps(roles, sort_keys=True)
+            data=json.dumps(roles, sort_keys=True),
         )
 
     def get(self):
         return self._client.get(
             url=self._client.get_full_url(
-                self.get_path(
-                    'single', realm=self._realm_name, id=self._user_id
-                )
+                self.get_path("single", realm=self._realm_name, id=self._user_id)
             )
         )
 
@@ -79,20 +69,15 @@ class UserRoleMappingsRealm(KeycloakAdminBase):
         """
         return self._client.delete(
             url=self._client.get_full_url(
-                self.get_path(
-                    'single', realm=self._realm_name, id=self._user_id
-                )
+                self.get_path("single", realm=self._realm_name, id=self._user_id)
             ),
-            data=json.dumps(roles, sort_keys=True)
+            data=json.dumps(roles, sort_keys=True),
         )
 
 
 class UserRoleMappingsClient(KeycloakAdminBase):
-    _BASE = '/auth/admin/realms/{realm}/users/{id}/role-mappings/clients/{client_id}'
-    _paths = {
-        'available': _BASE + '/available',
-        'single': _BASE
-    }
+    _BASE = "/auth/admin/realms/{realm}/users/{id}/role-mappings/clients/{client_id}"
+    _paths = {"available": _BASE + "/available", "single": _BASE}
 
     def __init__(self, realm_name, user_id, client_id, *args, **kwargs):
         self._realm_name = realm_name
@@ -104,7 +89,10 @@ class UserRoleMappingsClient(KeycloakAdminBase):
         return self._client.get(
             url=self._client.get_full_url(
                 self.get_path(
-                    'available', realm=self._realm_name, id=self._user_id, client_id=self._client_id
+                    "available",
+                    realm=self._realm_name,
+                    id=self._user_id,
+                    client_id=self._client_id,
                 )
             )
         )
@@ -116,17 +104,23 @@ class UserRoleMappingsClient(KeycloakAdminBase):
         return self._client.post(
             url=self._client.get_full_url(
                 self.get_path(
-                    'single', realm=self._realm_name, id=self._user_id, client_id=self._client_id
+                    "single",
+                    realm=self._realm_name,
+                    id=self._user_id,
+                    client_id=self._client_id,
                 )
             ),
-            data=json.dumps(roles, sort_keys=True)
+            data=json.dumps(roles, sort_keys=True),
         )
 
     def get(self):
         return self._client.get(
             url=self._client.get_full_url(
                 self.get_path(
-                    'single', realm=self._realm_name, id=self._user_id, client_id=self._client_id
+                    "single",
+                    realm=self._realm_name,
+                    id=self._user_id,
+                    client_id=self._client_id,
                 )
             )
         )
@@ -138,8 +132,11 @@ class UserRoleMappingsClient(KeycloakAdminBase):
         return self._client.delete(
             url=self._client.get_full_url(
                 self.get_path(
-                    'single', realm=self._realm_name, id=self._user_id, client_id=self._client_id
+                    "single",
+                    realm=self._realm_name,
+                    id=self._user_id,
+                    client_id=self._client_id,
                 )
             ),
-            data=json.dumps(roles, sort_keys=True)
+            data=json.dumps(roles, sort_keys=True),
         )

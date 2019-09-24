@@ -32,8 +32,9 @@ class KeycloakRealm(object):
         :rtype: keycloak.client.KeycloakClient
         """
         if self._client is None:
-            self._client = KeycloakClient(server_url=self._server_url,
-                                          headers=self._headers)
+            self._client = KeycloakClient(
+                server_url=self._server_url, headers=self._headers
+            )
         return self._client
 
     @property
@@ -56,8 +57,9 @@ class KeycloakRealm(object):
         :param str client_secret:
         :rtype: keycloak.openid_connect.KeycloakOpenidConnect
         """
-        return KeycloakOpenidConnect(realm=self, client_id=client_id,
-                                     client_secret=client_secret)
+        return KeycloakOpenidConnect(
+            realm=self, client_id=client_id, client_secret=client_secret
+        )
 
     def authz(self, client_id):
         """

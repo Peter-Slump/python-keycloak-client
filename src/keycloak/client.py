@@ -26,7 +26,7 @@ class KeycloakClient(object):
         :param logging.Logger logger: Optional logger for client
         """
         if logger is None:
-            if hasattr(self.__class__, '__qualname__'):
+            if hasattr(self.__class__, "__qualname__"):
                 logger_name = self.__class__.__qualname__
             else:
                 logger_name = self.__class__.__name__
@@ -60,14 +60,12 @@ class KeycloakClient(object):
 
     def post(self, url, data, headers=None, **kwargs):
         return self._handle_response(
-            self.session.post(url, headers=headers or {}, params=kwargs,
-                              data=data)
+            self.session.post(url, headers=headers or {}, params=kwargs, data=data)
         )
 
     def put(self, url, data, headers=None, **kwargs):
         return self._handle_response(
-            self.session.put(url, headers=headers or {}, params=kwargs,
-                             data=data)
+            self.session.put(url, headers=headers or {}, params=kwargs, data=data)
         )
 
     def get(self, url, headers=None, **kwargs):

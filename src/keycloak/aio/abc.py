@@ -1,6 +1,4 @@
-__all__ = (
-    'AsyncInit',
-)
+__all__ = ("AsyncInit",)
 
 
 class AsyncInit(object):
