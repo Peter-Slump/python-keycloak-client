@@ -144,6 +144,21 @@ class KeycloakOpenidConnect(WellKnownMixin):
             url, headers={"Authorization": "Bearer {}".format(token)}
         )
 
+    def permissions(self, token, **kwargs):
+        """
+        :param str audience: (optional) Client ID to get te permissions for.
+        :rtype: dict
+        """
+
+        payload = {"grant_type": "urn:ietf:params:oauth:grant-type:uma-ticket"}
+        payload.update(**kwargs)
+
+        return self._realm.client.post(
+            self.get_url("token_endpoint"),
+            payload,
+            headers={"Authorization": "Bearer {}".format(token)}
+        )
+
     def authorization_url(self, **kwargs):
         """
         Get authorization URL to redirect the resource owner to.
