@@ -1,3 +1,4 @@
+import warnings
 from keycloak.admin import KeycloakAdmin
 from keycloak.authz import KeycloakAuthz
 from keycloak.client import KeycloakClient
@@ -68,6 +69,8 @@ class KeycloakRealm(object):
         :param str client_id:
         :rtype: keycloak.authz.KeycloakAuthz
         """
+        warnings.warn("The Authz API will be removed in Keycloak 4.0.0",
+                      DeprecationWarning)
         return KeycloakAuthz(realm=self, client_id=client_id)
 
     def uma(self):
