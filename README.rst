@@ -104,6 +104,9 @@ Credits: `phala <https://github.com/pehala>`_:
 
 * Removed some called_only_once checks because they didn't make sense anymore.
 
+
+**v0.2.3**
+
 * Bug fix: `client_class` on `KeycloakRealm` constructor (thanks to `pcaro <https://github.com/pcaro>`_)
 * Improve Keycloak Client (thanks to `ByJacob <https://github.com/ByJacob>`_)
 
