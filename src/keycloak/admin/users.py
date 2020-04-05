@@ -1,7 +1,11 @@
 import json
 from collections import OrderedDict
+from typing import Dict, Optional
 
 from keycloak.admin import KeycloakAdminBase, KeycloakAdminEntity
+from keycloak.admin.user.usergroup import UserGroups
+from keycloak.admin.user.userroles import UserRoleMappings
+
 
 __all__ = ("Users", "User")
 
@@ -83,44 +87,41 @@ class Users(KeycloakAdminBase):
 
 class User(KeycloakAdminEntity):
     _BASE = "/auth/admin/realms/{realm}/users/{user_id}"
-    _paths = {"single": _BASE, "reset_password": _BASE + "/reset-password"}
+    _paths: Dict[str, str] = {
+        "single": _BASE,
+        "reset_password": _BASE + "/reset-password",
+    }
 
-    def __init__(self, realm_name, user_id, client):
+    def __init__(self, realm_name: str, user_id: int, *args, **kwargs):
         self._realm_name = realm_name
         self._user_id = user_id
-        self._user = None
         super(User, self).__init__(
             url=self.get_path("single", realm=realm_name, user_id=user_id),
-            client=client,
+            *args,
+            **kwargs
         )
 
     @property
-    def user(self):
-        if self._user is None:
-            self.get()
-        return self._user
+    def user(self) -> Dict:
+        return self.entity
 
     @property
-    def role_mappings(self):
-        from keycloak.admin.user.userroles import UserRoleMappings
-
+    def role_mappings(self) -> UserRoleMappings:
         return UserRoleMappings(
             realm_name=self._realm_name, user_id=self._user_id, client=self._client
         )
 
     @property
-    def groups(self):
-        from keycloak.admin.user.usergroup import UserGroups
-
+    def groups(self) -> UserGroups:
         return UserGroups(
             realm_name=self._realm_name, user_id=self._user_id, client=self._client
         )
 
-    def update(self, **kwargs):
+    def update(self, **kwargs) -> Dict:
         data = {**kwargs, "id": self._user_id}
         return super().update(**data)
 
-    def reset_password(self, password, temporary=False):
+    def reset_password(self, password: str, temporary: Optional[bool] = False) -> Dict:
         payload = {"type": "password", "value": password, "temporary": temporary}
         result = self._client.put(
             url=self._client.get_full_url(
