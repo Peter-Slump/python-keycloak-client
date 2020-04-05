@@ -84,6 +84,7 @@ Release Notes
 =============
 
 **unreleased**
+**v0.2.3**
 
 * Bug fix: `client_class` on `KeycloakRealm` constructor (thanks to `pcaro <https://github.com/pcaro>`_)
 * Improve Keycloak Client (thanks to `ByJacob <https://github.com/ByJacob>`_)
