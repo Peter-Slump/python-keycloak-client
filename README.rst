@@ -85,14 +85,6 @@ Release Notes
 
 **unreleased**
 
-* Bug fix: `client_class` on `KeycloakRealm` constructor (thanks to `pcaro <https://github.com/pcaro>`_)
-* Improve Keycloak Client (thanks to `ByJacob <https://github.com/ByJacob>`_)
-
-    * add delete in admin client
-    * add manage groups in realm
-    * add manage user roles
-    * rename Roles to ClientRoles
-
 **v0.2.2**
 
 * Added support for UMA1 for Keycloak < 4.0

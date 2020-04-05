@@ -90,9 +90,8 @@ class KeycloakOpenidConnectTestCase(asynctest.TestCase):
         )
         self.assertEqual(
             result,
-            'https://authorization?client_id=client-id&'
-            'redirect_uri=https%3A%2F%2Fredirect-url&'
-            'response_type=code&scope=scope+other-scope&'
+            'https://authorization?response_type=code&client_id=client-id&'
+            'redirect_uri=https%3A%2F%2Fredirect-url&scope=scope+other-scope&'
             'state=some-state'
         )
 

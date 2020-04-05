@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from keycloak.mixins import WellKnownMixin
 
 try:
@@ -172,12 +174,14 @@ class KeycloakOpenidConnect(WellKnownMixin):
         :return: URL to redirect the resource owner to
         :rtype: str
         """
-        payload = {'response_type': 'code', 'client_id': self._client_id}
+        payload = OrderedDict()
+        payload['response_type'] = 'code'
+        payload['client_id'] = self._client_id
 
-        for key in kwargs.keys():
+        for key in sorted(kwargs.keys()):
             # Add items in a sorted way for unittest purposes.
             payload[key] = kwargs[key]
-        payload = sorted(payload.items(), key=lambda val: val[0])
+
         params = urlencode(payload)
         url = self.get_url('authorization_endpoint')
 
