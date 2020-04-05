@@ -13,7 +13,7 @@ ROLE_KWARGS = [
     'scope_param_required'
 ]
 
-__all__ = ('Role', 'Roles',)
+__all__ = ('to_camel_case', 'ClientRole', 'ClientRoles',)
 
 
 def to_camel_case(snake_cased_str):
@@ -23,7 +23,7 @@ def to_camel_case(snake_cased_str):
     return components[0] + ''.join(map(str.capitalize, components[1:]))
 
 
-class Roles(KeycloakAdminBase):
+class ClientRoles(KeycloakAdminBase):
     _client_id = None
     _realm_name = None
     _paths = {
@@ -33,11 +33,12 @@ class Roles(KeycloakAdminBase):
     def __init__(self, realm_name, client_id, *args, **kwargs):
         self._client_id = client_id
         self._realm_name = realm_name
-        super(Roles, self).__init__(*args, **kwargs)
+        super(ClientRoles, self).__init__(*args, **kwargs)
 
     def by_name(self, role_name):
-        return Role(realm_name=self._realm_name, client_id=self._client_id,
-                    role_name=role_name, client=self._client)
+        return ClientRole(realm_name=self._realm_name,
+                          client_id=self._client_id,
+                          role_name=role_name, client=self._client)
 
     def create(self, name, **kwargs):
         """
@@ -67,11 +68,11 @@ class Roles(KeycloakAdminBase):
                               realm=self._realm_name,
                               id=self._client_id)
             ),
-            data=json.dumps(payload)
+            data=json.dumps(payload, sort_keys=True)
         )
 
 
-class Role(KeycloakAdminBase):
+class ClientRole(KeycloakAdminBase):
     _paths = {
         'single': '/auth/admin/realms/{realm}/clients/{id}/roles/{role_name}'
     }
@@ -81,7 +82,7 @@ class Role(KeycloakAdminBase):
         self._realm_name = realm_name
         self._role_name = role_name
 
-        super(Role, self).__init__(*args, **kwargs)
+        super(ClientRole, self).__init__(*args, **kwargs)
 
     def update(self, name, **kwargs):
         """
@@ -111,5 +112,5 @@ class Role(KeycloakAdminBase):
                               id=self._client_id,
                               role_name=self._role_name)
             ),
-            data=json.dumps(payload)
+            data=json.dumps(payload, sort_keys=True)
         )

@@ -6,8 +6,8 @@ from keycloak.admin import KeycloakAdmin
 from keycloak.authz import KeycloakAuthz
 from keycloak.client import KeycloakClient
 from keycloak.openid_connect import KeycloakOpenidConnect
-from keycloak.uma import KeycloakUMA
 from keycloak.realm import KeycloakRealm
+from keycloak.uma import KeycloakUMA
 
 
 class KeycloakRealmTestCase(TestCase):
