@@ -35,6 +35,6 @@ class Client(KeycloakAdminBase):
 
     @property
     def roles(self):
-        from keycloak.admin.roles import Roles
-        return Roles(client=self._client, client_id=self._id,
-                     realm_name=self._realm_name)
+        from keycloak.admin.clientroles import ClientRoles
+        return ClientRoles(client=self._client, client_id=self._id,
+                           realm_name=self._realm_name)

@@ -73,9 +73,10 @@ class KeycloakAdmin(object):
             url=url, headers=self._add_auth_header(headers=headers)
         )
 
-    #
-    # def delete(self, url, headers, **kwargs):
-    #     return self.session.delete(url, headers=headers, **kwargs)
+    def delete(self, url, headers=None, **kwargs):
+        return self._realm.client.delete(
+            url=url, headers=self._add_auth_header(headers=headers), **kwargs
+        )
 
     def _add_auth_header(self, headers=None):
         if callable(self._token):

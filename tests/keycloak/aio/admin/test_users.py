@@ -37,12 +37,12 @@ class KeycloakAdminUsersTestCase(asynctest.TestCase):
         )
         self.realm.client.post.assert_awaited_once_with(
             url=self.realm.client.get_full_url.return_value,
-            data='{"username": "my-username", '
-                 '"credentials": [{"some": "value"}], '
+            data='{"credentials": {"some": "value"}, '
+                 '"email": "my-email", '
+                 '"enabled": true, '
                  '"firstName": "my-first-name", '
                  '"lastName": "my-last-name", '
-                 '"email": "my-email", '
-                 '"enabled": true}',
+                 '"username": "my-username"}',
             headers={
                 'Authorization': 'Bearer some-token',
                 'Content-Type': 'application/json'
