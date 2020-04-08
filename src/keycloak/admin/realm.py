@@ -1,23 +1,26 @@
 import json
+from typing import Dict, Any
 
-from keycloak.admin import KeycloakAdminBase, KeycloakAdminEntity
+from . import KeycloakAdminBase, KeycloakAdminEntity
+from .clients import Clients
+from .groups import Groups
+from .users import Users
+
+from keycloak.client import JSONType
 
 __all__ = ("Realm", "Realms")
 
 
 class Realms(KeycloakAdminBase):
-    _paths = {"collection": "/auth/admin/realms"}
+    _paths: Dict[str, str] = {"collection": "/auth/admin/realms"}
 
-    def __init__(self, *args, **kwargs):
-        super(Realms, self).__init__(*args, **kwargs)
-
-    def by_name(self, name):
+    def by_name(self, name: str) -> "Realm":
         return Realm(name=name, client=self._client)
 
-    def all(self):
+    def all(self) -> JSONType:
         return self._client.get(self._client.get_full_url(self.get_path("collection")))
 
-    def create(self, name, **kwargs):
+    def create(self, name: str, **kwargs: Any) -> "Realm":
         payload = {"realm": name, **kwargs}
         self._client.post(
             self._client.get_full_url(self.get_path("collection")), json.dumps(payload)
@@ -26,29 +29,21 @@ class Realms(KeycloakAdminBase):
 
 
 class Realm(KeycloakAdminEntity):
-    _name = None
-    _paths = {"single": "/auth/admin/realms/{realm}"}
 
-    def __init__(self, name, client):
-        self._name = name
-        super(Realm, self).__init__(
-            url=self.get_path("single", realm=name), client=client
-        )
+    _paths: Dict[str, str] = {"single": "/auth/admin/realms/{realm}"}
+
+    def __init__(self, name: str, *args: Any, **kwargs: Any):
+        self._name: str = name
+        super().__init__(url=self.get_path("single", realm=name), *args, **kwargs)
 
     @property
-    def clients(self):
-        from keycloak.admin.clients import Clients
-
+    def clients(self) -> Clients:
         return Clients(realm_name=self._name, client=self._client)
 
     @property
-    def users(self):
-        from keycloak.admin.users import Users
-
+    def users(self) -> Users:
         return Users(realm_name=self._name, client=self._client)
 
     @property
-    def groups(self):
-        from keycloak.admin.groups import Groups
-
+    def groups(self) -> Groups:
         return Groups(realm_name=self._name, client=self._client)

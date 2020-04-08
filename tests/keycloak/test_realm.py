@@ -56,7 +56,7 @@ class KeycloakRealmTestCase(TestCase):
             realm=self.realm, client_id="client-id", client_secret="client-secret"
         )
 
-    @mock.patch("keycloak.realm.KeycloakAdmin", autospec=True)
+    @mock.patch("keycloak.realm.admin.KeycloakAdmin", autospec=True)
     def test_admin(self, mocked_admin_client):
         """
         Case: Admin client get requested

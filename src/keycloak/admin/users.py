@@ -1,11 +1,12 @@
 import json
 from collections import OrderedDict
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 
-from keycloak.admin import KeycloakAdminBase, KeycloakAdminEntity
-from keycloak.admin.user.usergroup import UserGroups
-from keycloak.admin.user.userroles import UserRoleMappings
-
+from keycloak.client import JSONType
+from . import KeycloakAdminBase, KeycloakAdminEntity
+from .user.usergroup import UserGroups
+from .user.userroles import UserRoleMappings
+from .clientroles import to_camel_case
 
 __all__ = ("Users", "User")
 
@@ -24,15 +25,13 @@ USER_KWARGS = [
 
 
 class Users(KeycloakAdminBase):
-    _paths = {"collection": "/auth/admin/realms/{realm}/users"}
+    _paths: Dict[str, str] = {"collection": "/auth/admin/realms/{realm}/users"}
 
-    _realm_name = None
+    def __init__(self, realm_name: str, *args: Any, **kwargs: Any):
+        self._realm_name: str = realm_name
+        super().__init__(*args, **kwargs)
 
-    def __init__(self, realm_name, *args, **kwargs):
-        self._realm_name = realm_name
-        super(Users, self).__init__(*args, **kwargs)
-
-    def create(self, username, **kwargs):
+    def create(self, username: str, **kwargs: Any) -> "User":
         """
         Create a user in Keycloak
 
@@ -48,7 +47,6 @@ class Users(KeycloakAdminBase):
         payload = OrderedDict(username=username)
 
         for key in USER_KWARGS:
-            from keycloak.admin.clientroles import to_camel_case
 
             if key in kwargs:
                 payload[to_camel_case(key)] = kwargs[key]
@@ -69,7 +67,7 @@ class Users(KeycloakAdminBase):
             realm_name=self._realm_name, user_id=users[0]["id"], client=self._client
         )
 
-    def all(self):
+    def all(self) -> JSONType:
         """
         Return all registered users
 
@@ -81,28 +79,25 @@ class Users(KeycloakAdminBase):
             )
         )
 
-    def by_id(self, user_id):
+    def by_id(self, user_id: str) -> "User":
         return User(realm_name=self._realm_name, user_id=user_id, client=self._client)
 
 
 class User(KeycloakAdminEntity):
-    _BASE = "/auth/admin/realms/{realm}/users/{user_id}"
+    _BASE: str = "/auth/admin/realms/{realm}/users/{user_id}"
     _paths: Dict[str, str] = {
         "single": _BASE,
         "reset_password": _BASE + "/reset-password",
     }
 
-    def __init__(self, realm_name: str, user_id: int, *args, **kwargs):
-        self._realm_name = realm_name
-        self._user_id = user_id
-        super(User, self).__init__(
-            url=self.get_path("single", realm=realm_name, user_id=user_id),
-            *args,
-            **kwargs
-        )
+    def __init__(self, realm_name: str, user_id: str, *args: Any, **kwargs: Any):
+        self._realm_name: str = realm_name
+        self._user_id: str = user_id
+        kwargs["url"] = self.get_path("single", realm=realm_name, user_id=user_id)
+        super().__init__(*args, **kwargs)
 
     @property
-    def user(self) -> Dict:
+    def user(self) -> JSONType:
         return self.entity
 
     @property
@@ -117,11 +112,13 @@ class User(KeycloakAdminEntity):
             realm_name=self._realm_name, user_id=self._user_id, client=self._client
         )
 
-    def update(self, **kwargs) -> Dict:
+    def update(self, **kwargs: Any) -> JSONType:
         data = {**kwargs, "id": self._user_id}
         return super().update(**data)
 
-    def reset_password(self, password: str, temporary: Optional[bool] = False) -> Dict:
+    def reset_password(
+        self, password: str, temporary: Optional[bool] = False
+    ) -> JSONType:
         payload = {"type": "password", "value": password, "temporary": temporary}
         result = self._client.put(
             url=self._client.get_full_url(

@@ -1,5 +1,7 @@
 import logging
+from typing import Union, Dict, List, Any
 
+from requests import Response
 from requests.exceptions import HTTPError
 
 from keycloak.exceptions import KeycloakClientError
@@ -10,6 +12,9 @@ except ImportError:
     from urlparse import urljoin  # noqa: F401
 
 import requests
+
+
+JSONType = Dict[str, Any]
 
 
 class KeycloakClient(object):
@@ -55,7 +60,7 @@ class KeycloakClient(object):
             self._session.headers.update(self._headers)
         return self._session
 
-    def get_full_url(self, path, server_url=None):
+    def get_full_url(self, path, server_url=None) -> str:
         return urljoin(server_url or self._server_url, path)
 
     def post(self, url, data, headers=None, **kwargs):
@@ -76,7 +81,7 @@ class KeycloakClient(object):
     def delete(self, url, headers, **kwargs):
         return self.session.delete(url, headers=headers, **kwargs)
 
-    def _handle_response(self, response):
+    def _handle_response(self, response: Response) -> JSONType:
         with response:
             try:
                 response.raise_for_status()

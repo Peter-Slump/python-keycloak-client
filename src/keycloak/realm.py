@@ -1,4 +1,4 @@
-from keycloak.admin import KeycloakAdmin
+from keycloak import admin
 from keycloak.authz import KeycloakAuthz
 from keycloak.client import KeycloakClient
 from keycloak.openid_connect import KeycloakOpenidConnect
@@ -47,7 +47,7 @@ class KeycloakRealm(object):
 
     @property
     def admin(self):
-        return KeycloakAdmin(realm=self)
+        return admin.KeycloakAdmin(realm=self)
 
     def open_id_connect(self, client_id, client_secret):
         """
