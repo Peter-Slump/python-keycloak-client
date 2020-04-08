@@ -11,7 +11,7 @@ from keycloak.exceptions import KeycloakClientError
 JSONType = Dict[str, Any]
 
 
-class KeycloakClient(object):
+class KeycloakClient:
     _server_url = None
     _session = None
     _headers = None
