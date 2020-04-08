@@ -2,8 +2,9 @@ import json
 from collections import OrderedDict
 from typing import Any, Dict
 
-from . import KeycloakAdminBase, KeycloakAdminEntity
 from keycloak.client import JSONType
+
+from . import KeycloakAdminBase, KeycloakAdminEntity
 
 ROLE_KWARGS = [
     "description",

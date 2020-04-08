@@ -1,12 +1,12 @@
 import json
-from typing import Dict, Any
+from typing import Any, Dict
+
+from keycloak.client import JSONType
 
 from . import KeycloakAdminBase, KeycloakAdminEntity
 from .clients import Clients
 from .groups import Groups
 from .users import Users
-
-from keycloak.client import JSONType
 
 __all__ = ("Realm", "Realms")
 

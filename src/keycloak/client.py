@@ -1,18 +1,12 @@
 import logging
-from typing import Union, Dict, List, Any
+from typing import Any, Dict
+from urllib.parse import urljoin
 
+import requests
 from requests import Response
 from requests.exceptions import HTTPError
 
 from keycloak.exceptions import KeycloakClientError
-
-try:
-    from urllib.parse import urljoin  # noqa: F401
-except ImportError:
-    from urlparse import urljoin  # noqa: F401
-
-import requests
-
 
 JSONType = Dict[str, Any]
 

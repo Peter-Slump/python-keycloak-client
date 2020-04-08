@@ -1,19 +1,20 @@
-from typing import Dict, Optional, Union, Callable
+from typing import Callable, Dict, Optional, Union
 
+from keycloak import realm as keycloak_realm
 from keycloak.client import JSONType
+
 from .base import KeycloakAdminBase, KeycloakAdminEntity
 from .realm import Realms
-from keycloak import realm
 
 __all__ = ("KeycloakAdmin", "KeycloakAdminBase", "KeycloakAdminEntity")
 
 
 class KeycloakAdmin(object):
-    _realm: "realm.KeycloakRealm" = None
+    _realm: "keycloak_realm.KeycloakRealm" = None
     _paths: Dict[str, str] = {"root": "/"}
     _token: Optional[Union[str, Callable]] = None
 
-    def __init__(self, realm: "realm.KeycloakRealm"):
+    def __init__(self, realm: "keycloak_realm.KeycloakRealm"):
         self._realm = realm
 
     def root(self) -> Dict:

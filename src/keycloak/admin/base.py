@@ -1,5 +1,6 @@
 import json
-from typing import Dict, Optional, Any
+from typing import Any, Dict, Optional
+
 from keycloak import admin
 from keycloak.client import JSONType
 

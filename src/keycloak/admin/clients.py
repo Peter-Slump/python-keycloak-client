@@ -1,10 +1,11 @@
 import json
 from typing import Any, Dict, Optional, Union
 
+from keycloak.client import JSONType
+
 from . import KeycloakAdminBase, KeycloakAdminEntity
 from .clientroles import ClientRoles
 from .users import User
-from keycloak.client import JSONType
 
 __all__ = ("Client", "Clients")
 

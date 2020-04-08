@@ -1,8 +1,9 @@
 import json
-from typing import Dict, Any
+from typing import Any, Dict
+
+from keycloak.client import JSONType
 
 from .. import KeycloakAdminBase
-from keycloak.client import JSONType
 
 
 class UserGroups(KeycloakAdminBase):

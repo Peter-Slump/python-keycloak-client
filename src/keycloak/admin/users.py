@@ -1,12 +1,13 @@
 import json
 from collections import OrderedDict
-from typing import Dict, Optional, Any
+from typing import Any, Dict, Optional
 
 from keycloak.client import JSONType
+
 from . import KeycloakAdminBase, KeycloakAdminEntity
+from .clientroles import to_camel_case
 from .user.usergroup import UserGroups
 from .user.userroles import UserRoleMappings
-from .clientroles import to_camel_case
 
 __all__ = ("Users", "User")
 
@@ -57,15 +58,7 @@ class Users(KeycloakAdminBase):
             ),
             data=json.dumps(payload, sort_keys=True),
         )
-        users = self._client.get(
-            url=self._client.get_full_url(
-                self.get_path("collection", realm=self._realm_name)
-            ),
-            username=username,
-        )
-        return User(
-            realm_name=self._realm_name, user_id=users[0]["id"], client=self._client
-        )
+        return self.by_username(username=username)
 
     def all(self) -> JSONType:
         """
@@ -77,6 +70,17 @@ class Users(KeycloakAdminBase):
             url=self._client.get_full_url(
                 self.get_path("collection", realm=self._realm_name)
             )
+        )
+
+    def by_username(self, username: str) -> "User":
+        users = self._client.get(
+            url=self._client.get_full_url(
+                self.get_path("collection", realm=self._realm_name)
+            ),
+            username=username,
+        )
+        return User(
+            realm_name=self._realm_name, user_id=users[0]["id"], client=self._client
         )
 
     def by_id(self, user_id: str) -> "User":
