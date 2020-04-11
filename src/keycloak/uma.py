@@ -1,29 +1,26 @@
 import json
+from typing import Dict, Any, List, Optional
 
-try:
-    from urllib.parse import urlencode  # noqa: F401
-except ImportError:
-    from urllib import urlencode  # noqa: F401
-
+from keycloak.client import JSONType
 from keycloak.mixins import WellKnownMixin
+from keycloak import realm as keycloak_realm
 
 PATH_WELL_KNOWN = "auth/realms/{}/.well-known/uma2-configuration"
 
 
-class KeycloakUMA(WellKnownMixin, object):
-    DEFAULT_HEADERS = {"Content-type": "application/json"}
+class KeycloakUMA(WellKnownMixin):
+    DEFAULT_HEADERS: Dict[str, str] = {"Content-type": "application/json"}
 
-    _realm = None
     _well_known = None
     _dumps = staticmethod(json.dumps)
 
-    def __init__(self, realm):
-        self._realm = realm
+    def __init__(self, realm: "keycloak_realm.KeycloakRealm"):
+        self._realm: "keycloak_realm.KeycloakRealm" = realm
 
-    def get_path_well_known(self):
+    def get_path_well_known(self) -> str:
         return PATH_WELL_KNOWN
 
-    def resource_set_create(self, token, name, **kwargs):
+    def resource_set_create(self, token: str, name: str, **kwargs: Any):
         """
         Create a resource set.
 
@@ -47,7 +44,9 @@ class KeycloakUMA(WellKnownMixin, object):
             headers=self.get_headers(token),
         )
 
-    def resource_set_update(self, token, id, name, **kwargs):
+    def resource_set_update(
+        self, token: str, id: str, name: str, **kwargs: Any
+    ) -> JSONType:
         """
         Update a resource set.
 
@@ -68,7 +67,7 @@ class KeycloakUMA(WellKnownMixin, object):
             headers=self.get_headers(token),
         )
 
-    def resource_set_read(self, token, id):
+    def resource_set_read(self, token: str, id: str) -> JSONType:
         """
         Read a resource set.
 
@@ -83,7 +82,7 @@ class KeycloakUMA(WellKnownMixin, object):
             headers=self.get_headers(token),
         )
 
-    def resource_set_delete(self, token, id):
+    def resource_set_delete(self, token: str, id: str) -> JSONType:
         """
         Delete a resource set.
 
@@ -97,7 +96,7 @@ class KeycloakUMA(WellKnownMixin, object):
             headers=self.get_headers(token),
         )
 
-    def resource_set_list(self, token, **kwargs):
+    def resource_set_list(self, token: str, **kwargs: Any) -> JSONType:
         """
         List a resource set.
 
@@ -117,7 +116,9 @@ class KeycloakUMA(WellKnownMixin, object):
             **kwargs
         )
 
-    def resource_create_ticket(self, token, id, scopes, **kwargs):
+    def resource_create_ticket(
+        self, token: str, id: str, scopes: List[str], **kwargs: Any
+    ) -> JSONType:
         """
         Create a ticket form permission to resource.
 
@@ -136,7 +137,9 @@ class KeycloakUMA(WellKnownMixin, object):
             headers=self.get_headers(token),
         )
 
-    def resource_associate_permission(self, token, id, name, scopes, **kwargs):
+    def resource_associate_permission(
+        self, token: str, id: str, name: str, scopes: List[str], **kwargs: Any
+    ) -> JSONType:
         """
         Associates a permission with a Resource.
 
@@ -159,7 +162,7 @@ class KeycloakUMA(WellKnownMixin, object):
             headers=self.get_headers(token),
         )
 
-    def permission_update(self, token, id, **kwargs):
+    def permission_update(self, token: str, id: str, **kwargs: Any) -> JSONType:
         """
         To update an existing permission.
 
@@ -176,7 +179,7 @@ class KeycloakUMA(WellKnownMixin, object):
             headers=self.get_headers(token),
         )
 
-    def permission_delete(self, token, id):
+    def permission_delete(self, token: str, id: str) -> JSONType:
         """
         Removing a Permission.
 
@@ -192,7 +195,7 @@ class KeycloakUMA(WellKnownMixin, object):
             headers=self.get_headers(token),
         )
 
-    def permission_list(self, token, **kwargs):
+    def permission_list(self, token: str, **kwargs: Any) -> JSONType:
         """
         Querying permission
 
@@ -213,12 +216,14 @@ class KeycloakUMA(WellKnownMixin, object):
         )
 
     @classmethod
-    def get_headers(cls, token):
+    def get_headers(cls, token: str) -> Dict[str, str]:
         return dict(cls.DEFAULT_HEADERS, **{"Authorization": "Bearer " + token})
 
     @staticmethod
-    def get_payload(name, scopes=None, **kwargs):
+    def get_payload(
+        name: str, scopes: Optional[List[str]] = None, **kwargs: Any
+    ) -> Dict[str, Any]:
         return dict(name=name, scopes=scopes or [], **kwargs)
 
-    def _get_data(self, *args, **kwargs):
+    def _get_data(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
         return self._dumps(self.get_payload(*args, **kwargs))

@@ -1,12 +1,12 @@
 import base64
 import json
 import logging
+from typing import Dict, Any, Iterable, Tuple, Optional
 
-try:
-    from urllib.parse import urlencode  # noqa: F401
-except ImportError:
-    from urllib import urlencode  # noqa: F401
+from urllib.parse import urlencode
 
+from keycloak import realm as keycloak_realm
+from keycloak.client import JSONType
 from keycloak.mixins import WellKnownMixin
 from keycloak.exceptions import KeycloakClientError
 
@@ -14,27 +14,18 @@ PATH_ENTITLEMENT = "auth/realms/{}/authz/entitlement/{}"
 
 PATH_WELL_KNOWN = "auth/realms/{}/.well-known/uma2-configuration"
 
+logger = logging.getLogger(__name__)
 
-class KeycloakAuthz(WellKnownMixin, object):
-    _realm = None
-    _client_id = None
-    _well_known = None
 
-    logger = logging.getLogger(__name__)
-
-    def __init__(self, realm, client_id):
-        """
-
-        :param keycloak.realm.KeycloakRealm realm:
-        :param client_id:
-        """
-        self._realm = realm
-        self._client_id = client_id
+class KeycloakAuthz(WellKnownMixin):
+    def __init__(self, realm: "keycloak_realm.KeycloakRealm", client_id: str):
+        self._realm: "keycloak_realm.KeycloakRealm" = realm
+        self._client_id: str = client_id
 
     def get_path_well_known(self):
         return PATH_WELL_KNOWN
 
-    def entitlement(self, token):
+    def entitlement(self, token: str) -> JSONType:
         """
         Client applications can use a specific endpoint to obtain a special
         security token called a requesting party token (RPT). This token
@@ -56,7 +47,7 @@ class KeycloakAuthz(WellKnownMixin, object):
         return self._realm.client.get(url, headers=headers)
 
     @classmethod
-    def _decode_token(cls, token):
+    def _decode_token(cls, token: str) -> Dict[str, Any]:
         """
         Permission information is encoded in an authorization token.
         """
@@ -66,8 +57,12 @@ class KeycloakAuthz(WellKnownMixin, object):
         return json.loads(base64.b64decode(token).decode("utf-8"))
 
     def get_permissions(
-        self, token, resource_scopes_tuples=None, submit_request=False, ticket=None
-    ):
+        self,
+        token: str,
+        resource_scopes_tuples: Optional[Iterable[Tuple[str, str]]] = None,
+        submit_request: Optional[bool] = False,
+        ticket: Optional[str] = None,
+    ) -> Dict[str, Any]:
         """
         Request permissions for user from keycloak server.
 
@@ -108,16 +103,18 @@ class KeycloakAuthz(WellKnownMixin, object):
 
             error = response.get("error")
             if error:
-                self.logger.warning("%s: %s", error, response.get("error_description"))
+                logger.warning("%s: %s", error, response.get("error_description"))
             else:
                 token = response.get("refresh_token")
                 decoded_token = self._decode_token(token.split(".")[1])
                 authz_info = decoded_token.get("authorization", {})
         except KeycloakClientError as error:
-            self.logger.warning(str(error))
+            logger.warning(str(error))
         return authz_info
 
-    def eval_permission(self, token, resource, scope, submit_request=False):
+    def eval_permission(
+        self, token: str, resource: str, scope: str, submit_request=False
+    ):
         """
         Evalutes if user has permission for scope on resource.
 
@@ -134,8 +131,11 @@ class KeycloakAuthz(WellKnownMixin, object):
         )
 
     def eval_permissions(
-        self, token, resource_scopes_tuples=None, submit_request=False
-    ):
+        self,
+        token: str,
+        resource_scopes_tuples: Optional[Iterable[Tuple[str, str]]] = None,
+        submit_request: Optional[bool] = False,
+    ) -> bool:
         """
         Evaluates if user has permission for all the resource scope
         combinations.

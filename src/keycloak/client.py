@@ -67,7 +67,7 @@ class KeycloakClient:
             self.session.put(url, headers=headers or {}, params=kwargs, data=data)
         )
 
-    def get(self, url, headers=None, **kwargs):
+    def get(self, url, headers=None, **kwargs) -> JSONType:
         return self._handle_response(
             self.session.get(url, headers=headers or {}, params=kwargs)
         )
