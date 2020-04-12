@@ -2,6 +2,7 @@ import json
 from collections import OrderedDict
 from typing import Any, Dict
 
+from keycloak.admin.base import to_camel_case
 from keycloak.client import JSONType
 
 from . import KeycloakAdminBase, KeycloakAdminEntity
@@ -16,14 +17,7 @@ ROLE_KWARGS = [
     "scope_param_required",
 ]
 
-__all__ = ("to_camel_case", "ClientRole", "ClientRoles")
-
-
-def to_camel_case(snake_cased_str: str) -> str:
-    components = snake_cased_str.split("_")
-    # We capitalize the first letter of each component except the first one
-    # with the 'title' method and join them together.
-    return components[0] + "".join(map(str.capitalize, components[1:]))
+__all__ = ("ClientRole", "ClientRoles")
 
 
 class ClientRoles(KeycloakAdminBase):

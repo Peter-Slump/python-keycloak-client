@@ -5,6 +5,13 @@ from keycloak import admin
 from keycloak.client import JSONType
 
 
+def to_camel_case(snake_cased_str: str) -> str:
+    components = snake_cased_str.split("_")
+    # We capitalize the first letter of each component except the first one
+    # with the 'title' method and join them together.
+    return components[0] + "".join(map(str.capitalize, components[1:]))
+
+
 class KeycloakAdminBase:
     _client: "admin.KeycloakAdmin" = None
     _paths: Optional[Dict[str, str]] = None
@@ -51,7 +58,11 @@ class KeycloakAdminEntity(KeycloakAdminBase):
         Updates the given entity
         Note: If the url identifier is changed by this method, url won't be changed
         """
-        resp = self._client.put(url=self.url, data=json.dumps(kwargs, sort_keys=True),)
+        data = {to_camel_case(key): value for key, value in kwargs.items()}
+
+        resp = self._client.put(
+            url=self.url, data=json.dumps(data, sort_keys=True),
+        )
         self._entity = None
         return resp
 

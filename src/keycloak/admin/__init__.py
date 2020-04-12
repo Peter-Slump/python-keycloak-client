@@ -3,10 +3,10 @@ from typing import Callable, Dict, Optional, Union
 from keycloak import realm as keycloak_realm
 from keycloak.client import JSONType
 
-from .base import KeycloakAdminBase, KeycloakAdminEntity
+from .base import KeycloakAdminBase, KeycloakAdminEntity, to_camel_case
 from .realm import Realms
 
-__all__ = ("KeycloakAdmin", "KeycloakAdminBase", "KeycloakAdminEntity")
+__all__ = ("KeycloakAdmin", "KeycloakAdminBase", "KeycloakAdminEntity", "to_camel_case")
 
 
 class KeycloakAdmin(object):

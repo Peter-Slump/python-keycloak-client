@@ -1,7 +1,7 @@
 from collections.abc import Mapping
 from typing import Dict, Iterator, Optional
 
-from keycloak import realm
+from keycloak import client as keycloak_client
 
 
 class KeycloakWellKnown(Mapping):
@@ -10,7 +10,7 @@ class KeycloakWellKnown(Mapping):
 
     def __init__(
         self,
-        realm: "realm.KeycloakRealm",
+        client: "keycloak_client.KeycloakClient",
         path: str,
         content: Optional[Dict[str, str]] = None,
     ):
@@ -19,7 +19,7 @@ class KeycloakWellKnown(Mapping):
         :param str path: URL to find the .well-known
         :param dict | None content:
         """
-        self._realm: "realm.KeycloakRealm" = realm
+        self._client: "keycloak_client.KeycloakClient" = client
         self._path: str = path
         if content:
             self._contents = content
@@ -27,7 +27,7 @@ class KeycloakWellKnown(Mapping):
     @property
     def contents(self) -> Dict[str, str]:
         if self._contents is None:
-            self._contents = self._realm.client.get(self._path)
+            self._contents = self._client.get(self._path)
         return self._contents
 
     @contents.setter

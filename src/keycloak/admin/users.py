@@ -4,8 +4,7 @@ from typing import Any, Dict, Optional
 
 from keycloak.client import JSONType
 
-from . import KeycloakAdminBase, KeycloakAdminEntity
-from .clientroles import to_camel_case
+from . import KeycloakAdminBase, KeycloakAdminEntity, to_camel_case
 from .user.usergroup import UserGroups
 from .user.userroles import UserRoleMappings
 
@@ -48,7 +47,6 @@ class Users(KeycloakAdminBase):
         payload = OrderedDict(username=username)
 
         for key in USER_KWARGS:
-
             if key in kwargs:
                 payload[to_camel_case(key)] = kwargs[key]
 

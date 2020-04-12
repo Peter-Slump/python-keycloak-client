@@ -92,7 +92,7 @@ class KeycloakRealmTestCase(asynctest.TestCase):
         Expected: Admin client get returned
         """
         with asynctest.patch(
-            "keycloak.realm.KeycloakAdmin", autospec=True
+            "keycloak.realm.admin.KeycloakAdmin", autospec=True
         ) as mocked_admin_client:
             async with self.realm:
                 admin_client = self.realm.admin

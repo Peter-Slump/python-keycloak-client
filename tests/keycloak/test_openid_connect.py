@@ -138,4 +138,4 @@ class KeycloakOpenidConnectTestCase(TestCase):
                 "audience": "some-audience",
             },
         )
-        self.assertEqual(response, self.realm.client.post.return_value)
+        self.assertEqual(response.token, self.realm.client.post.return_value)

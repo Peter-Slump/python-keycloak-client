@@ -238,7 +238,7 @@ class KeycloakOpenidConnect(WellKnownMixin):
         token = self._token_request(grant_type="client_credentials", **kwargs)
         return Token(token, self)
 
-    def refresh_token(self, refresh_token: str, **kwargs: Any) -> "Token":
+    def refresh_token(self, refresh_token: str, **kwargs: Any) -> JSONType:
         """
         Refresh an access token
 
@@ -249,10 +249,9 @@ class KeycloakOpenidConnect(WellKnownMixin):
         :rtype: dict
         :return: Access token response
         """
-        token = self._token_request(
+        return self._token_request(
             grant_type="refresh_token", refresh_token=refresh_token, **kwargs
         )
-        return Token(token, self)
 
     def token_exchange(self, **kwargs: Any) -> "Token":
         """

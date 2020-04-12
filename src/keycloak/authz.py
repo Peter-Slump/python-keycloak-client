@@ -7,7 +7,7 @@ from urllib.parse import urlencode
 
 from keycloak import realm as keycloak_realm
 from keycloak.client import JSONType
-from keycloak.mixins import WellKnownMixin
+from keycloak import mixins
 from keycloak.exceptions import KeycloakClientError
 
 PATH_ENTITLEMENT = "auth/realms/{}/authz/entitlement/{}"
@@ -17,7 +17,7 @@ PATH_WELL_KNOWN = "auth/realms/{}/.well-known/uma2-configuration"
 logger = logging.getLogger(__name__)
 
 
-class KeycloakAuthz(WellKnownMixin):
+class KeycloakAuthz(mixins.WellKnownMixin):
     def __init__(self, realm: "keycloak_realm.KeycloakRealm", client_id: str):
         self._realm: "keycloak_realm.KeycloakRealm" = realm
         self._client_id: str = client_id
