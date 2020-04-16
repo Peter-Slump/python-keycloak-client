@@ -20,12 +20,11 @@ class Realms(KeycloakAdminBase):
     def all(self) -> JSONType:
         return self._client.get(self._client.get_full_url(self.get_path("collection")))
 
-    def create(self, name: str, **kwargs: Any) -> "Realm":
+    def create(self, name: str, **kwargs: Any) -> JSONType:
         payload = {"realm": name, **kwargs}
-        self._client.post(
+        return self._client.post(
             self._client.get_full_url(self.get_path("collection")), json.dumps(payload)
         )
-        return Realm(name=name, client=self._client)
 
 
 class Realm(KeycloakAdminEntity):

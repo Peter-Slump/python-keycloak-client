@@ -31,7 +31,7 @@ class Users(KeycloakAdminBase):
         self._realm_name: str = realm_name
         super().__init__(*args, **kwargs)
 
-    def create(self, username: str, **kwargs: Any) -> "User":
+    def create(self, username: str, **kwargs: Any) -> JSONType:
         """
         Create a user in Keycloak
 
@@ -50,13 +50,12 @@ class Users(KeycloakAdminBase):
             if key in kwargs:
                 payload[to_camel_case(key)] = kwargs[key]
 
-        self._client.post(
+        return self._client.post(
             url=self._client.get_full_url(
                 self.get_path("collection", realm=self._realm_name)
             ),
             data=json.dumps(payload, sort_keys=True),
         )
-        return self.by_username(username=username)
 
     def all(self) -> JSONType:
         """

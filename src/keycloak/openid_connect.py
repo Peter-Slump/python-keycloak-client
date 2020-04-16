@@ -337,7 +337,9 @@ class Token:
 
     def is_expired(self) -> bool:
         try:
-            self.oidc.decode_token(self.token["access_token"], self.key)
+            self.oidc.decode_token(
+                self.token["access_token"], self.key, audience="realm-management"
+            )
             return False
         except ExpiredSignatureError:
             return True
