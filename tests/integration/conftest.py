@@ -4,6 +4,7 @@ from typing import Dict
 
 import docker
 import pytest
+from docker.errors import NotFound
 
 from keycloak.realm import KeycloakRealm
 
@@ -21,11 +22,13 @@ def realm(pytestconfig) -> KeycloakRealm:
     keycloak_image = pytestconfig.getoption(
         "keycloak_image", "jboss/keycloak:4.8.3.Final"
     )
+    keycloak_container_name = pytestconfig.getoption("keycloak_container_name", "kc")
     realm_name = pytestconfig.getoption("realm_name", "test_realm")
 
-    if True:
-
-        docker_client = docker.from_env()
+    docker_client = docker.from_env()
+    try:
+        keycloak_container = docker_client.containers.get(keycloak_container_name)
+    except NotFound:
         keycloak_container = docker_client.containers.run(
             keycloak_image,
             (
@@ -35,7 +38,7 @@ def realm(pytestconfig) -> KeycloakRealm:
                 "-Dkeycloak.migration.dir=/tmp/ "
                 "-Dkeycloak.migration.strategy=IGNORE_EXISTING"
             ),
-            name="kc",
+            name=keycloak_container_name,
             remove=True,
             detach=True,
             volumes={str(DATA_DIR / "realms"): {"bind": "/tmp", "mode": "ro"}},
@@ -43,6 +46,7 @@ def realm(pytestconfig) -> KeycloakRealm:
             environment={
                 "KEYCLOAK_USER": keycloak_user,
                 "KEYCLOAK_PASSWORD": keycloak_password,
+                "KEYCLOAK_LOGLEVEL": "INFO",
             },
         )
 
@@ -55,22 +59,22 @@ def realm(pytestconfig) -> KeycloakRealm:
 
     yield KeycloakRealm(server_url=server_url, realm_name=realm_name)
 
-    keycloak_container.kill()
+    # keycloak_container.kill()
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def openid_connect(realm: KeycloakRealm, client_details: Dict):
     return realm.open_id_connect(
         client_id=client_details["clientId"], client_secret=client_details["secret"]
     )
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def realm_details():
     return json.load((DATA_DIR / "realms" / "test_realm-realm.json").open("r"))
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def client_details(realm_details):
     for client in realm_details["clients"]:
         if client["clientId"] == "test_client":
