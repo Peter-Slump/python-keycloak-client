@@ -78,7 +78,8 @@ class User(KeycloakAdminBase):
     _BASE = "/auth/admin/realms/{realm}/users/{user_id}"
     _paths = {
         'single': _BASE,
-        'reset_password': _BASE + "/reset-password"
+        'reset_password': _BASE + "/reset-password",
+        'logout': _BASE + "/logout"
     }
 
     def __init__(self, realm_name, user_id, *args, **kwargs):
@@ -182,5 +183,18 @@ class User(KeycloakAdminBase):
                 )
             ),
             data=json.dumps(payload, sort_keys=True)
+        )
+        return result
+
+    def logout(self):
+        """Logs out user with the given user id"""
+        result = self._client.post(
+            url=self._client.get_full_url(
+                self.get_path(
+                    'logout', realm=self._realm_name,
+                    user_id=self._user_id
+                )
+            ),
+            data=None
         )
         return result
