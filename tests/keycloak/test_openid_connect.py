@@ -86,7 +86,7 @@ class KeycloakOpenidConnectTestCase(TestCase):
         )
 
     def test_authorization_code(self):
-        response = self.openid_client.authorization_code(
+        token = self.openid_client.authorization_code(
             code='some-code',
             redirect_uri='https://redirect-uri'
         )
@@ -100,7 +100,7 @@ class KeycloakOpenidConnectTestCase(TestCase):
                 'redirect_uri': 'https://redirect-uri'
             }
         )
-        self.assertEqual(response, self.realm.client.post.return_value)
+        self.assertEqual(token.token, self.realm.client.post.return_value)
 
     def test_client_credentials(self):
         response = self.openid_client.client_credentials(
@@ -115,7 +115,7 @@ class KeycloakOpenidConnectTestCase(TestCase):
                 'scope': 'scope another-scope'
             }
         )
-        self.assertEqual(response, self.realm.client.post.return_value)
+        self.assertEqual(response.token, self.realm.client.post.return_value)
 
     def test_refresh_token(self):
         response = self.openid_client.refresh_token(
