@@ -2,9 +2,12 @@ import json
 from pathlib import Path
 from typing import Dict
 
-import docker
+try:
+    import docker
+    from docker.errors import NotFound
+except ImportError:
+    pass
 import pytest
-from docker.errors import NotFound
 
 from keycloak.realm import KeycloakRealm
 
