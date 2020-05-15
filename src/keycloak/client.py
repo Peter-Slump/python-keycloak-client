@@ -66,7 +66,7 @@ class KeycloakClient:
         url: str,
         data: Dict[str, Any],
         headers: Optional[Dict[str, Any]] = None,
-        **kwargs: Optional[Dict[str, Any]]
+        **kwargs: Any
     ) -> JSONType:
         return self._handle_response(
             self.session.post(url, headers=headers or {}, params=kwargs, data=data)
@@ -77,7 +77,7 @@ class KeycloakClient:
         url: str,
         data: Dict[str, Any],
         headers: Optional[Dict[str, Any]] = None,
-        **kwargs: Optional[Dict[str, Any]]
+        **kwargs: Any
     ) -> JSONType:
         return self._handle_response(
             self.session.put(url, headers=headers or {}, params=kwargs, data=data)
@@ -87,7 +87,7 @@ class KeycloakClient:
         self,
         url: str,
         headers: Optional[Dict[str, Any]] = None,
-        **kwargs: Optional[Dict[str, Any]]
+        **kwargs: Any
     ) -> JSONType:
         return self._handle_response(
             self.session.get(url, headers=headers or {}, params=kwargs)
@@ -97,7 +97,7 @@ class KeycloakClient:
         self,
         url: str,
         headers: Optional[Dict[str, Any]],
-        **kwargs: Optional[Dict[str, Any]]
+        **kwargs: Any
     ) -> JSONType:
         return self._handle_response(
             self.session.delete(url, headers=headers, **kwargs)

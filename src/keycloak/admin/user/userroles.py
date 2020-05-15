@@ -106,7 +106,7 @@ class UserRoleMappingsClient(KeycloakAdminBase):
 
     def add(self, roles: List[Any]) -> JSONType:
         """
-        :param roles: _rolerepresentation array keycloak api
+        roles -- List of roles to add
         """
         return self._client.post(
             url=self._client.get_full_url(

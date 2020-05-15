@@ -9,7 +9,7 @@ from .realm import Realms
 __all__ = ("KeycloakAdmin", "KeycloakAdminBase", "KeycloakAdminEntity", "to_camel_case")
 
 
-class KeycloakAdmin(object):
+class KeycloakAdmin:
     _realm: "keycloak_realm.KeycloakRealm" = None
     _paths: Dict[str, str] = {"root": "/"}
     _token: Optional[Union[str, Callable]] = None

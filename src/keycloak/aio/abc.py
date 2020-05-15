@@ -1,7 +1,7 @@
 __all__ = ("AsyncInit",)
 
 
-class AsyncInit(object):
+class AsyncInit:
     async def __async_init__(self):
         raise NotImplementedError()
 
