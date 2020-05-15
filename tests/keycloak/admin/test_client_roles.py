@@ -1,6 +1,5 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 
-import mock
 
 from keycloak.admin import KeycloakAdmin
 from keycloak.realm import KeycloakRealm

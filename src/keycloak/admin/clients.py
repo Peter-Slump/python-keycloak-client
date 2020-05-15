@@ -1,6 +1,7 @@
 import json
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional, Union, List
 
+from keycloak.admin import to_camel_case
 from keycloak.client import JSONType
 
 from . import KeycloakAdminBase, KeycloakAdminEntity
@@ -17,40 +18,31 @@ class Clients(KeycloakAdminBase):
         self._realm_name: str = realm_name
         super().__init__(*args, **kwargs)
 
-    def all(self) -> JSONType:
+    def all(self, **kwargs) -> JSONType:
+        """
+        :param client_id:
+        """
         return self._client.get(
             self._client.get_full_url(
                 self.get_path("collection", realm=self._realm_name)
-            )
+            ),
+            **{to_camel_case(key): value for key, value in kwargs.items()}
         )
 
     def by_id(self, id: str) -> "Client":
         return Client(client=self._client, realm_name=self._realm_name, id=id)
 
-    def by_client_id(self, client_id) -> Optional["Client"]:
-        id: Union[str, None] = next(
-            iter(
-                [
-                    client["id"]
-                    for client in self.all()
-                    if client["clientId"] == client_id
-                ]
-            ),
-            None,
-        )
-        if id is None:
-            return None
-        return Client(client=self._client, realm_name=self._realm_name, id=id)
+    def by_client_id(self, client_id) -> List[JSONType]:
+        return self.all(client_id=client_id)
 
-    def create(self, id: str, **kwargs: Any) -> "Client":
+    def create(self, id: str, **kwargs: Any) -> JSONType:
         payload = {"id": id, **kwargs}
-        self._client.post(
+        return self._client.post(
             self._client.get_full_url(
                 self.get_path("collection", realm=self._realm_name)
             ),
             json.dumps(payload),
         )
-        return Client(realm_name=self._realm_name, id=id, client=self._client)
 
 
 class Client(KeycloakAdminEntity):

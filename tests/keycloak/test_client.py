@@ -1,6 +1,5 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 
-import mock
 from requests import Session
 
 from keycloak.client import KeycloakClient
@@ -58,13 +57,13 @@ class KeycloakClientTestCase(TestCase):
             "https://another_url.com/some/path",
         )
 
-    @mock.patch("keycloak.client.requests", autospec=True)
-    def test_post(self, request_mock):
+    @mock.patch("keycloak.client.Session", autospec=True)
+    def test_post(self, session_mock):
         """
         Case: A POST request get executed
         Expected: The correct parameters get given to the request library
         """
-        request_mock.Session.return_value.headers = mock.MagicMock()
+        session_mock.return_value.headers = mock.MagicMock()
 
         self.client._handle_response = mock.MagicMock()
         response = self.client.post(
@@ -74,48 +73,48 @@ class KeycloakClientTestCase(TestCase):
             extra="param",
         )
 
-        request_mock.Session.return_value.post.assert_called_once_with(
+        session_mock.return_value.post.assert_called_once_with(
             "https://example.com/test",
             data={"some": "data"},
             headers={"some": "header"},
             params={"extra": "param"},
         )
         self.client._handle_response.assert_called_once_with(
-            request_mock.Session.return_value.post.return_value
+            session_mock.return_value.post.return_value
         )
         self.assertEqual(response, self.client._handle_response.return_value)
 
-    @mock.patch("keycloak.client.requests", autospec=True)
-    def test_get(self, request_mock):
+    @mock.patch("keycloak.client.Session", autospec=True)
+    def test_get(self, session_mock):
         """
         Case: A GET request get executed
         Expected: The correct parameters get given to the request library
         """
-        request_mock.Session.return_value.headers = mock.MagicMock()
+        session_mock.return_value.headers = mock.MagicMock()
 
         self.client._handle_response = mock.MagicMock()
         response = self.client.get(
             url="https://example.com/test", headers={"some": "header"}, extra="param"
         )
 
-        request_mock.Session.return_value.get.assert_called_once_with(
+        session_mock.return_value.get.assert_called_once_with(
             "https://example.com/test",
             headers={"some": "header"},
             params={"extra": "param"},
         )
 
         self.client._handle_response.assert_called_once_with(
-            request_mock.Session.return_value.get.return_value
+            session_mock.return_value.get.return_value
         )
         self.assertEqual(response, self.client._handle_response.return_value)
 
-    @mock.patch("keycloak.client.requests", autospec=True)
-    def test_put(self, request_mock):
+    @mock.patch("keycloak.client.Session", autospec=True)
+    def test_put(self, session_mock):
         """
         Case: A PUT request get executed
         Expected: The correct parameters get given to the request library
         """
-        request_mock.Session.return_value.headers = mock.MagicMock()
+        session_mock.return_value.headers = mock.MagicMock()
 
         self.client._handle_response = mock.MagicMock()
         response = self.client.put(
@@ -125,7 +124,7 @@ class KeycloakClientTestCase(TestCase):
             extra="param",
         )
 
-        request_mock.Session.return_value.put.assert_called_once_with(
+        session_mock.return_value.put.assert_called_once_with(
             "https://example.com/test",
             data={"some": "data"},
             headers={"some": "header"},
@@ -133,29 +132,27 @@ class KeycloakClientTestCase(TestCase):
         )
 
         self.client._handle_response.assert_called_once_with(
-            request_mock.Session.return_value.put.return_value
+            session_mock.return_value.put.return_value
         )
         self.assertEqual(response, self.client._handle_response.return_value)
 
-    @mock.patch("keycloak.client.requests", autospec=True)
-    def test_delete(self, request_mock):
+    @mock.patch("keycloak.client.Session", autospec=True)
+    def test_delete(self, session_mock):
         """
         Case: A DELETE request get executed
         Expected: The correct parameters get given to the request library
         """
-        request_mock.Session.return_value.headers = mock.MagicMock()
+        session_mock.return_value.headers = mock.MagicMock()
 
         self.client._handle_response = mock.MagicMock()
         response = self.client.delete(
             url="https://example.com/test", headers={"some": "header"}, extra="param"
         )
 
-        request_mock.Session.return_value.delete.assert_called_once_with(
+        session_mock.return_value.delete.assert_called_once_with(
             "https://example.com/test", headers={"some": "header"}, extra="param"
         )
-        self.assertEqual(
-            response, request_mock.Session.return_value.delete.return_value
-        )
+        assert response == self.client._handle_response.return_value
 
     def test_handle_response(self):
         """
