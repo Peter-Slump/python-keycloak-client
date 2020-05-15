@@ -36,7 +36,8 @@ setup(
         'dev': [
             'bumpversion==0.5.3',
             'twine',
-            'black'
+            'black',
+            'mypy'
         ],
         'doc': [
             'Sphinx==1.4.4',

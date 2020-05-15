@@ -16,7 +16,7 @@ class UserGroups(KeycloakAdminBase):
     def __init__(self, realm_name: str, user_id: str, *args: Any, **kwargs: Any):
         self._realm_name: str = realm_name
         self._user_id: str = user_id
-        super(UserGroups, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def all(self) -> JSONType:
         return self._client.get(

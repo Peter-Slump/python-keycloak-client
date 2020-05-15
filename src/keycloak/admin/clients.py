@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict, Optional, Union, List
+from typing import Any, Dict, List
 
 from keycloak.admin import to_camel_case
 from keycloak.client import JSONType
