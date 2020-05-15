@@ -1,8 +1,4 @@
-from unittest import TestCase
-try:
-    from unittest import mock
-except ImportError:
-    import mock
+from unittest import TestCase, mock
 
 from keycloak.admin import KeycloakAdmin
 from keycloak.admin.realm import Realms
@@ -10,7 +6,6 @@ from keycloak.realm import KeycloakRealm
 
 
 class KeycloakAdminTestCase(TestCase):
-
     def setUp(self):
         self.realm = mock.MagicMock(spec_set=KeycloakRealm)
         self.admin = KeycloakAdmin(realm=self.realm)

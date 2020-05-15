@@ -1,32 +1,28 @@
 import json
+from typing import Dict, Any, Optional, List
 
-try:
-    from urllib.parse import urlencode  # noqa: F401
-except ImportError:
-    from urllib import urlencode  # noqa: F401
-
+from keycloak import realm as keycloak_realm
+from keycloak.client import JSONType
 from keycloak.mixins import WellKnownMixin
 
 PATH_WELL_KNOWN = "auth/realms/{}/.well-known/uma-configuration"
 
 
-class KeycloakUMA1(WellKnownMixin, object):
-    DEFAULT_HEADERS = {"Content-type": 'application/json'}
+class KeycloakUMA1(WellKnownMixin):
+    DEFAULT_HEADERS: Dict[str, str] = {"Content-type": "application/json"}
 
-    _realm = None
-    _well_known = None
     _dumps = staticmethod(json.dumps)
 
-    def __init__(self, realm):
+    def __init__(self, realm: "keycloak_realm.KeycloakRealm"):
         """
         :type realm: keycloak.realm.KeycloakRealm
         """
-        self._realm = realm
+        self._realm: "keycloak_realm.KeycloakRealm" = realm
 
-    def get_path_well_known(self):
+    def get_path_well_known(self) -> str:
         return PATH_WELL_KNOWN
 
-    def resource_set_create(self, token, name, **kwargs):
+    def resource_set_create(self, token: str, name: str, **kwargs: Any) -> JSONType:
         """
         Create a resource set.
 
@@ -41,12 +37,14 @@ class KeycloakUMA1(WellKnownMixin, object):
         :rtype: str
         """
         return self._realm.client.post(
-            self.well_known['resource_set_registration_endpoint'],
+            self.well_known["resource_set_registration_endpoint"],
             data=self._get_data(name=name, **kwargs),
-            headers=self.get_headers(token)
+            headers=self.get_headers(token),
         )
 
-    def resource_set_update(self, token, id, name, **kwargs):
+    def resource_set_update(
+        self, token: str, id: str, name: str, **kwargs: Any
+    ) -> JSONType:
         """
         Update a resource set.
 
@@ -62,13 +60,12 @@ class KeycloakUMA1(WellKnownMixin, object):
         :rtype: str
         """
         return self._realm.client.put(
-            '{}/{}'.format(
-                self.well_known['resource_set_registration_endpoint'], id),
+            "{}/{}".format(self.well_known["resource_set_registration_endpoint"], id),
             data=self._get_data(name=name, **kwargs),
-            headers=self.get_headers(token)
+            headers=self.get_headers(token),
         )
 
-    def resource_set_read(self, token, id):
+    def resource_set_read(self, token: str, id: str) -> JSONType:
         """
         Read a resource set.
 
@@ -79,12 +76,11 @@ class KeycloakUMA1(WellKnownMixin, object):
         :rtype: dict
         """
         return self._realm.client.get(
-            '{}/{}'.format(
-                self.well_known['resource_set_registration_endpoint'], id),
-            headers=self.get_headers(token)
+            "{}/{}".format(self.well_known["resource_set_registration_endpoint"], id),
+            headers=self.get_headers(token),
         )
 
-    def resource_set_delete(self, token, id):
+    def resource_set_delete(self, token: str, id: str) -> JSONType:
         """
         Delete a resource set.
 
@@ -94,12 +90,11 @@ class KeycloakUMA1(WellKnownMixin, object):
         :param str id: Identifier of the resource set
         """
         return self._realm.client.delete(
-            '{}/{}'.format(
-                self.well_known['resource_set_registration_endpoint'], id),
-            headers=self.get_headers(token)
+            "{}/{}".format(self.well_known["resource_set_registration_endpoint"], id),
+            headers=self.get_headers(token),
         )
 
-    def resource_set_list(self, token, **kwargs):
+    def resource_set_list(self, token: str, **kwargs: Any) -> JSONType:
         """
         List a resource set.
 
@@ -114,20 +109,20 @@ class KeycloakUMA1(WellKnownMixin, object):
         :rtype: list
         """
         return self._realm.client.get(
-            self.well_known['resource_set_registration_endpoint'],
+            self.well_known["resource_set_registration_endpoint"],
             headers=self.get_headers(token),
             **kwargs
         )
 
     @classmethod
-    def get_headers(cls, token):
-        return dict(cls.DEFAULT_HEADERS, **{
-            "Authorization": "Bearer " + token,
-        })
+    def get_headers(cls, token: str) -> Dict[str, Any]:
+        return dict(cls.DEFAULT_HEADERS, **{"Authorization": "Bearer " + token})
 
     @staticmethod
-    def get_payload(name, scopes=None, **kwargs):
+    def get_payload(
+        name: str, scopes: Optional[List[str]] = None, **kwargs: Any
+    ) -> Dict[str, Any]:
         return dict(name=name, scopes=scopes or [], **kwargs)
 
-    def _get_data(self, *args, **kwargs):
+    def _get_data(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
         return self._dumps(self.get_payload(*args, **kwargs))

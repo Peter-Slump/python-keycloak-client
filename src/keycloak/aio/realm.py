@@ -7,9 +7,7 @@ from keycloak.aio.openid_connect import KeycloakOpenidConnect
 from keycloak.aio.uma import KeycloakUMA
 from keycloak.realm import KeycloakRealm as SyncKeycloakRealm
 
-__all__ = (
-    'KeycloakRealm',
-)
+__all__ = ("KeycloakRealm",)
 
 
 class KeycloakRealm(AsyncInit, SyncKeycloakRealm):
@@ -17,7 +15,7 @@ class KeycloakRealm(AsyncInit, SyncKeycloakRealm):
     _loop = None
 
     def __init__(self, *args, loop=None, **kwargs):
-        self.client_class = kwargs.pop('client_class', KeycloakClient)
+        self.client_class = kwargs.pop("client_class", KeycloakClient)
         super().__init__(*args, **kwargs)
         self._lock = asyncio.Lock()
         self._loop = loop or asyncio.get_event_loop()
@@ -41,8 +39,9 @@ class KeycloakRealm(AsyncInit, SyncKeycloakRealm):
         :param str client_secret:
         :rtype: keycloak.aio.openid_connect.KeycloakOpenidConnect
         """
-        return KeycloakOpenidConnect(realm=self, client_id=client_id,
-                                     client_secret=client_secret)
+        return KeycloakOpenidConnect(
+            realm=self, client_id=client_id, client_secret=client_secret
+        )
 
     def authz(self, client_id):
         """
@@ -60,13 +59,11 @@ class KeycloakRealm(AsyncInit, SyncKeycloakRealm):
         """
         return KeycloakUMA(realm=self)
 
-    async def __async_init__(self) -> 'KeycloakRealm':
+    async def __async_init__(self) -> "KeycloakRealm":
         async with self._lock:
             if self._client is None:
                 self._client = await self.client_class(
-                    server_url=self._server_url,
-                    headers=self._headers,
-                    loop=self._loop
+                    server_url=self._server_url, headers=self._headers, loop=self._loop
                 )
         return self
 

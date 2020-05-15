@@ -85,6 +85,28 @@ Release Notes
 
 **unreleased**
 
+Credits: `phala <https://github.com/pehala>`_:
+
+* Extracted basic CRUD logic from entities into common superclass KeycloakAdminEntity.
+
+    * Entity parameters are available directly (e.g entity.id, entity.serviceAccountsEnabled).
+    * Entity is fetched lazily when needed.
+    * Update request shouldn't change unique identifiers, that will make the object not work anymore.
+    * Update method doesn't transform snail_case into camelCase.
+
+* Added more methods to ClientRoles, Realms and Clients collections.
+
+* Added Token class which represents refreshable Token.
+
+    * Token is now returned by most method in KeycloakOpenIDConnect class.
+
+    * Token is automatically refreshed when set up as authentication header.
+
+* Removed some called_only_once checks because they didn't make sense anymore.
+
+
+**v0.2.3**
+
 * Bug fix: `client_class` on `KeycloakRealm` constructor (thanks to `pcaro <https://github.com/pcaro>`_)
 * Improve Keycloak Client (thanks to `ByJacob <https://github.com/ByJacob>`_)
 

@@ -3,7 +3,7 @@ import sys
 
 from setuptools import find_packages, setup
 
-VERSION = '0.2.3-dev'
+VERSION = '0.2.4-dev'
 AIO_COMPATIBLE = sys.version_info >= (3, 5, 3)
 
 with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
@@ -36,6 +36,8 @@ setup(
         'dev': [
             'bumpversion==0.5.3',
             'twine',
+            'black',
+            'mypy'
         ],
         'doc': [
             'Sphinx==1.4.4',

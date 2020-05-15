@@ -1,38 +1,31 @@
 import json
+from typing import Any, Dict
 
-from keycloak.admin import KeycloakAdminBase
+from keycloak.client import JSONType
 
-__all__ = ('Groups',)
+from . import KeycloakAdminBase
+
+__all__ = ("Groups",)
 
 
 class Groups(KeycloakAdminBase):
-    _paths = {
-        'collection': '/auth/admin/realms/{realm}/groups',
-    }
+    _paths: Dict[str, str] = {"collection": "/auth/admin/realms/{realm}/groups"}
 
-    def __init__(self, realm_name, *args, **kwargs):
-        self._realm_name = realm_name
-        super(Groups, self).__init__(*args, **kwargs)
+    def __init__(self, realm_name: str, *args: Any, **kwargs: Any):
+        self._realm_name: str = realm_name
+        super().__init__(*args, **kwargs)
 
-    def all(self):
+    def all(self) -> JSONType:
         return self._client.get(
             url=self._client.get_full_url(
-                self.get_path(
-                    'collection',
-                    realm=self._realm_name
-                )
-            ),
+                self.get_path("collection", realm=self._realm_name)
+            )
         )
 
-    def create(self, name):
+    def create(self, name: str) -> JSONType:
         return self._client.post(
             url=self._client.get_full_url(
-                self.get_path(
-                    'collection',
-                    realm=self._realm_name
-                )
+                self.get_path("collection", realm=self._realm_name)
             ),
-            data=json.dumps({
-                "name": name
-            })
+            data=json.dumps({"name": name}),
         )
