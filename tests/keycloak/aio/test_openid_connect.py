@@ -105,7 +105,7 @@ class KeycloakOpenidConnectTestCase(asynctest.TestCase):
                 "redirect_uri": "https://redirect-uri",
             },
         )
-        self.assertEqual(response, self.realm.client.post.return_value)
+        self.assertEqual(response.token, self.realm.client.post.return_value)
 
     async def test_client_credentials(self):
         response = await self.openid_client.client_credentials(
@@ -120,7 +120,7 @@ class KeycloakOpenidConnectTestCase(asynctest.TestCase):
                 "scope": "scope another-scope",
             },
         )
-        self.assertEqual(response, self.realm.client.post.return_value)
+        self.assertEqual(response.token, self.realm.client.post.return_value)
 
     async def test_refresh_token(self):
         response = await self.openid_client.refresh_token(
@@ -152,4 +152,4 @@ class KeycloakOpenidConnectTestCase(asynctest.TestCase):
                 "audience": "some-audience",
             },
         )
-        self.assertEqual(response, self.realm.client.post.return_value)
+        self.assertEqual(response.token, self.realm.client.post.return_value)

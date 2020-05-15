@@ -1,18 +1,24 @@
 import json
+from typing import Any, Dict
 
-from keycloak.admin import KeycloakAdminBase
+from keycloak.client import JSONType
+
+from .. import KeycloakAdminBase
 
 
 class UserGroups(KeycloakAdminBase):
-    _BASE = "/auth/admin/realms/{realm}/users/{user_id}"
-    _paths = {"collection": _BASE + "/groups", "single": _BASE + "/groups/{group_id}"}
+    _BASE: str = "/auth/admin/realms/{realm}/users/{user_id}"
+    _paths: Dict[str, str] = {
+        "collection": _BASE + "/groups",
+        "single": _BASE + "/groups/{group_id}",
+    }
 
-    def __init__(self, realm_name, user_id, *args, **kwargs):
-        self._realm_name = realm_name
-        self._user_id = user_id
+    def __init__(self, realm_name: str, user_id: str, *args: Any, **kwargs: Any):
+        self._realm_name: str = realm_name
+        self._user_id: str = user_id
         super(UserGroups, self).__init__(*args, **kwargs)
 
-    def all(self):
+    def all(self) -> JSONType:
         return self._client.get(
             url=self._client.get_full_url(
                 self.get_path(
@@ -21,7 +27,7 @@ class UserGroups(KeycloakAdminBase):
             )
         )
 
-    def add(self, group_id):
+    def add(self, group_id: str) -> JSONType:
         return self._client.put(
             url=self._client.get_full_url(
                 self.get_path(
@@ -40,7 +46,7 @@ class UserGroups(KeycloakAdminBase):
             ),
         )
 
-    def delete(self, group_id):
+    def delete(self, group_id: str) -> JSONType:
         return self._client.delete(
             url=self._client.get_full_url(
                 self.get_path(

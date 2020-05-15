@@ -20,7 +20,7 @@ class WellKnownMixin(AsyncInit, SyncWellKnownMixin):
             if self._well_known is None:
                 p = self.get_path_well_known().format(self._realm.realm_name)
                 self._well_known = await KeycloakWellKnown(
-                    realm=self._realm, path=self._realm.client.get_full_url(p)
+                    client=self._realm.client, path=self._realm.client.get_full_url(p)
                 )
         return self
 

@@ -1,6 +1,4 @@
-from unittest import TestCase
-
-import mock
+from unittest import TestCase, mock
 
 from keycloak.openid_connect import KeycloakOpenidConnect
 from keycloak.realm import KeycloakRealm
@@ -138,4 +136,4 @@ class KeycloakOpenidConnectTestCase(TestCase):
                 "audience": "some-audience",
             },
         )
-        self.assertEqual(response, self.realm.client.post.return_value)
+        self.assertEqual(response.token, self.realm.client.post.return_value)

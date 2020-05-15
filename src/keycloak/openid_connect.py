@@ -1,9 +1,11 @@
-from keycloak.mixins import WellKnownMixin
+from typing import Dict, Any, Optional, List
 
-try:
-    from urllib.parse import urlencode  # noqa: F041
-except ImportError:
-    from urllib import urlencode  # noqa: F041
+from keycloak.client import JSONType
+from keycloak.mixins import WellKnownMixin
+from keycloak import realm as keycloak_realm
+
+from urllib.parse import urlencode
+
 
 from jose import jwt, ExpiredSignatureError
 
@@ -11,28 +13,31 @@ PATH_WELL_KNOWN = "auth/realms/{}/.well-known/openid-configuration"
 
 
 class KeycloakOpenidConnect(WellKnownMixin):
-    _well_known = None
-    _client_id = None
-    _client_secret = None
-    _realm = None
-
-    def __init__(self, realm, client_id, client_secret):
+    def __init__(
+        self, realm: "keycloak_realm.KeycloakRealm", client_id: str, client_secret: str
+    ):
         """
         :param keycloak.realm.KeycloakRealm realm:
         :param str client_id:
         :param str client_secret:
         """
-        self._client_id = client_id
-        self._client_secret = client_secret
-        self._realm = realm
+        self._client_id: str = client_id
+        self._client_secret: str = client_secret
+        self._realm: "keycloak_realm.KeycloakRealm" = realm
 
-    def get_path_well_known(self):
+    def get_path_well_known(self) -> str:
         return PATH_WELL_KNOWN
 
-    def get_url(self, name):
+    def get_url(self, name) -> str:
         return self.well_known[name]
 
-    def decode_token(self, token, key, algorithms=None, **kwargs):
+    def decode_token(
+        self,
+        token: str,
+        key: str,
+        algorithms: Optional[List[str]] = None,
+        **kwargs: Any
+    ) -> Dict[str, Any]:
         """
         A JSON Web Key (JWK) is a JavaScript Object Notation (JSON) data
         structure that represents a cryptographic key.  This specification
@@ -97,7 +102,7 @@ class KeycloakOpenidConnect(WellKnownMixin):
             **kwargs
         )
 
-    def logout(self, refresh_token):
+    def logout(self, refresh_token: str) -> JSONType:
         """
         The logout endpoint logs out the authenticated user.
 
@@ -112,7 +117,7 @@ class KeycloakOpenidConnect(WellKnownMixin):
             },
         )
 
-    def certs(self):
+    def certs(self) -> Dict[str, str]:
         """
         The certificate endpoint returns the public keys enabled by the realm,
         encoded as a JSON Web Key (JWK). Depending on the realm settings there
@@ -124,7 +129,7 @@ class KeycloakOpenidConnect(WellKnownMixin):
         """
         return self._realm.client.get(self.get_url("jwks_uri"))
 
-    def userinfo(self, token):
+    def userinfo(self, token: str) -> Dict[str, Any]:
         """
         The UserInfo Endpoint is an OAuth 2.0 Protected Resource that returns
         Claims about the authenticated End-User. To obtain the requested Claims
@@ -144,7 +149,22 @@ class KeycloakOpenidConnect(WellKnownMixin):
             url, headers={"Authorization": "Bearer {}".format(token)}
         )
 
-    def authorization_url(self, **kwargs):
+    def uma_ticket(self, token: str, **kwargs: Any) -> JSONType:
+        """
+        :param str audience: (optional) Client ID to get te permissions for.
+        :rtype: dict
+        """
+
+        payload = {"grant_type": "urn:ietf:params:oauth:grant-type:uma-ticket"}
+        payload.update(**kwargs)
+
+        return self._realm.client.post(
+            self.get_url("token_endpoint"),
+            payload,
+            headers={"Authorization": "Bearer {}".format(token)},
+        )
+
+    def authorization_url(self, **kwargs: Any) -> str:
         """
         Get authorization URL to redirect the resource owner to.
 
@@ -169,7 +189,7 @@ class KeycloakOpenidConnect(WellKnownMixin):
 
         return "{}?{}".format(url, params)
 
-    def authorization_code(self, code, redirect_uri):
+    def authorization_code(self, code: str, redirect_uri: str) -> "Token":
         """
         Retrieve access token by `authorization_code` grant.
 
@@ -187,7 +207,9 @@ class KeycloakOpenidConnect(WellKnownMixin):
         )
         return Token(token, self)
 
-    def password_credentials(self, username, password, **kwargs):
+    def password_credentials(
+        self, username: str, password: str, **kwargs: Any
+    ) -> "Token":
         """
         Retrieve access token by 'password credentials' grant.
 
@@ -203,7 +225,7 @@ class KeycloakOpenidConnect(WellKnownMixin):
         )
         return Token(token, self)
 
-    def client_credentials(self, **kwargs):
+    def client_credentials(self, **kwargs: Any) -> "Token":
         """
         Retrieve access token by `client_credentials` grant.
 
@@ -216,7 +238,7 @@ class KeycloakOpenidConnect(WellKnownMixin):
         token = self._token_request(grant_type="client_credentials", **kwargs)
         return Token(token, self)
 
-    def refresh_token(self, refresh_token, **kwargs):
+    def refresh_token(self, refresh_token: str, **kwargs: Any) -> JSONType:
         """
         Refresh an access token
 
@@ -231,7 +253,7 @@ class KeycloakOpenidConnect(WellKnownMixin):
             grant_type="refresh_token", refresh_token=refresh_token, **kwargs
         )
 
-    def token_exchange(self, **kwargs):
+    def token_exchange(self, **kwargs: Any) -> "Token":
         """
         Token exchange is the process of using a set of credentials or token to
         obtain an entirely different token.
@@ -274,11 +296,12 @@ class KeycloakOpenidConnect(WellKnownMixin):
         :rtype: dict
         :return: access_token, refresh_token and expires_in
         """
-        return self._token_request(
+        token = self._token_request(
             grant_type="urn:ietf:params:oauth:grant-type:token-exchange", **kwargs
         )
+        return Token(token, self)
 
-    def _token_request(self, grant_type, **kwargs):
+    def _token_request(self, grant_type: str, **kwargs: Any) -> JSONType:
         """
         Do the actual call to the token end-point.
 
@@ -298,23 +321,25 @@ class KeycloakOpenidConnect(WellKnownMixin):
 
 
 class Token:
-    def __init__(self, token, oidc: KeycloakOpenidConnect) -> None:
-        self.oidc = oidc
-        self.key = self.oidc.certs()["keys"][0]
-        self.token = token
+    def __init__(self, token: Dict[str, Any], oidc: KeycloakOpenidConnect):
+        self.oidc: KeycloakOpenidConnect = oidc
+        self.key: str = self.oidc.certs()["keys"][0]
+        self.token: Dict[str, Any] = token
 
-    def __getattr__(self, attr):
+    def __getattr__(self, attr: str) -> Any:
         return self.token[attr]
 
-    def __call__(self):
+    def __call__(self) -> str:
         if self.is_expired():
             print("Token expired, trying a new one")
             self.token = self.oidc.refresh_token(self.token["refresh_token"])
         return self.token["access_token"]
 
-    def is_expired(self):
+    def is_expired(self) -> bool:
         try:
-            self.oidc.decode_token(self.token["access_token"], self.key)
+            self.oidc.decode_token(
+                self.token["access_token"], self.key, audience="realm-management"
+            )
             return False
         except ExpiredSignatureError:
             return True

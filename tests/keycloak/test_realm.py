@@ -1,6 +1,4 @@
-from unittest import TestCase
-
-import mock
+from unittest import TestCase, mock
 
 from keycloak.admin import KeycloakAdmin
 from keycloak.authz import KeycloakAuthz
@@ -24,7 +22,7 @@ class KeycloakRealmTestCase(TestCase):
         self.assertEqual(self.realm.realm_name, "some-realm")
         self.assertEqual(self.realm.server_url, "https://example.com")
 
-    @mock.patch("keycloak.realm.KeycloakClient", autospec=True)
+    @mock.patch("keycloak.realm.keycloak_client.KeycloakClient", autospec=True)
     def test_client(self, mocked_client):
         """
         Case: Client get requested
@@ -40,7 +38,7 @@ class KeycloakRealmTestCase(TestCase):
             server_url="https://example.com", headers={"some": "header"}
         )
 
-    @mock.patch("keycloak.realm.KeycloakOpenidConnect", autospec=True)
+    @mock.patch("keycloak.realm.openid_connect.KeycloakOpenidConnect", autospec=True)
     def test_openid_connect(self, mocked_openid_client):
         """
         Case: OpenID client get requested
@@ -56,7 +54,7 @@ class KeycloakRealmTestCase(TestCase):
             realm=self.realm, client_id="client-id", client_secret="client-secret"
         )
 
-    @mock.patch("keycloak.realm.KeycloakAdmin", autospec=True)
+    @mock.patch("keycloak.realm.admin.KeycloakAdmin", autospec=True)
     def test_admin(self, mocked_admin_client):
         """
         Case: Admin client get requested
@@ -66,7 +64,7 @@ class KeycloakRealmTestCase(TestCase):
         self.assertIsInstance(admin_client, KeycloakAdmin)
         mocked_admin_client.assert_called_once_with(realm=self.realm)
 
-    @mock.patch("keycloak.realm.KeycloakAuthz", autospec=True)
+    @mock.patch("keycloak.realm.authz.KeycloakAuthz", autospec=True)
     def test_authz(self, mocked_authz_client):
         """
         Case: Authz client get requested
@@ -79,7 +77,7 @@ class KeycloakRealmTestCase(TestCase):
             realm=self.realm, client_id="client-id"
         )
 
-    @mock.patch("keycloak.realm.KeycloakUMA", autospec=True)
+    @mock.patch("keycloak.realm.uma.KeycloakUMA", autospec=True)
     def test_uma(self, mocked_uma_client):
         """
         Case: UMA client get requested
