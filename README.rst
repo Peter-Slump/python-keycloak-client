@@ -24,7 +24,9 @@ Python Keycloak Client
 .. image:: https://img.shields.io/pypi/wheel/python-keycloak-client.svg
    :target: https://pypi.python.org/pypi/python-keycloak-client
    :alt: Wheel
-
+.. image:: https://badges.gitter.im/Python-Keycloak/Client.svg
+   :alt: Join the chat at https://gitter.im/Python-Keycloak/Client
+   :target: https://gitter.im/Python-Keycloak/Client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
 Python Client for Keycloak identity and access management service
 
@@ -114,6 +116,3 @@ Release Notes
 * Add support for password grant (thanks to `scranen <https://github.com/scranen>`_)
 * Bugfix: Prevent multiple values for keyword argument 'audience' in jwt.decode() (thanks to `eugenejo <https://github.com/eugenejo>`_)
 
-.. image:: https://badges.gitter.im/Python-Keycloak/Client.svg
-   :alt: Join the chat at https://gitter.im/Python-Keycloak/Client
-   :target: https://gitter.im/Python-Keycloak/Client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
