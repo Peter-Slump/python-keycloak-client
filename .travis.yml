@@ -9,10 +9,9 @@ matrix:
   fast_finish: true
 
 python:
-  - "2.7"
-  - "3.4"
   - "3.5"
   - "3.6"
+  - "3.7"
   - "nightly"
 
 before_install:
@@ -42,6 +41,8 @@ jobs:
     - python: "3.5"
       <<: *aio-mixin
     - python: "3.6"
+      <<: *aio-mixin
+    - python: "3.7"
       <<: *aio-mixin
     - python: "nightly"
       <<: *aio-mixin
