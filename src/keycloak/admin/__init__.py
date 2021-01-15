@@ -60,17 +60,17 @@ class KeycloakAdmin(object):
 
     def post(self, url, data, headers=None, **kwargs):
         return self._realm.client.post(
-            url=url, data=data, headers=self._add_auth_header(headers=headers)
+            url=url, data=data, headers=self._add_auth_header(headers=headers), **kwargs
         )
 
     def put(self, url, data, headers=None, **kwargs):
         return self._realm.client.put(
-            url=url, data=data, headers=self._add_auth_header(headers=headers)
+            url=url, data=data, headers=self._add_auth_header(headers=headers), **kwargs
         )
 
     def get(self, url, headers=None, **kwargs):
         return self._realm.client.get(
-            url=url, headers=self._add_auth_header(headers=headers)
+            url=url, headers=self._add_auth_header(headers=headers), **kwargs
         )
 
     def delete(self, url, headers=None, **kwargs):
