@@ -63,7 +63,7 @@ class KeycloakAuthz(WellKnownMixin, object):
         missing_padding = len(token) % 4
         if missing_padding != 0:
             token += '=' * (4 - missing_padding)
-        return json.loads(base64.b64decode(token).decode('utf-8'))
+        return json.loads(base64.b64decode(token + "===").decode('utf-8'))
 
     def get_permissions(self, token, resource_scopes_tuples=None,
                         submit_request=False, ticket=None):
