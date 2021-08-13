@@ -20,7 +20,8 @@ class KeycloakAdminUsersTestCase(TestCase):
             first_name='my-first-name',
             last_name='my-last-name',
             email='my-email',
-            enabled=True
+            enabled=True,
+            required_actions=['action']
         )
         self.realm.client.get_full_url.assert_called_once_with(
             '/auth/admin/realms/realm-name/users'
@@ -37,6 +38,7 @@ class KeycloakAdminUsersTestCase(TestCase):
                  '"enabled": true, '
                  '"firstName": "my-first-name", '
                  '"lastName": "my-last-name", '
+                 '"requiredActions": ["action"], '
                  '"username": "my-username"'
                  '}',
             headers={
@@ -92,7 +94,8 @@ class KeycloakAdminUsersTestCase(TestCase):
             first_name='my-first-name',
             last_name='my-last-name',
             email='my-email',
-            enabled=True
+            enabled=True,
+            required_actions=['action']
         )
         self.realm.client.get_full_url.assert_called_with(
             '/auth/admin/realms/realm-name/users/user-id'
@@ -109,7 +112,8 @@ class KeycloakAdminUsersTestCase(TestCase):
                  '"enabled": true, '
                  '"firstName": "my-first-name", '
                  '"id": "user-id", '
-                 '"lastName": "my-last-name"'
+                 '"lastName": "my-last-name", '
+                 '"requiredActions": ["action"]'
                  '}',
             headers={
                 'Authorization': 'Bearer some-token',
