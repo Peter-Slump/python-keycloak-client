@@ -47,10 +47,11 @@ class KeycloakClient(AsyncInit, SyncKeycloakClient):
         :return:
         """
         async with req_ctx as response:
+            text = await response.text(errors='replace')
+
             try:
                 response.raise_for_status()
             except aiohttp.client.ClientResponseError as cre:
-                text = await response.text(errors='replace')
                 self.logger.debug('{cre}; '
                                   'Request info: {cre.request_info}; '
                                   'Response headers: {cre.headers}; '
