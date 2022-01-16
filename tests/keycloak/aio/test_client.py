@@ -170,7 +170,7 @@ class KeycloakClientTestCase(asynctest.TestCase):
         Expected: The correct parameters get given to the request library
         """
         self.Session_mock.return_value.headers = asynctest.MagicMock()
-        self.Session_mock.return_value.delete = asynctest.CoroutineMock()
+        self.client._handle_response = asynctest.CoroutineMock()
 
         response = await self.client.delete(
             url="https://example.com/test", headers={"some": "header"}, extra="param"
@@ -179,7 +179,7 @@ class KeycloakClientTestCase(asynctest.TestCase):
         self.Session_mock.return_value.delete.assert_called_once_with(
             "https://example.com/test", headers={"some": "header"}, extra="param"
         )
-        self.assertEqual(response, self.Session_mock.return_value.delete.return_value)
+        self.assertEqual(response, self.client._handle_response.return_value)
 
     async def test_handle_response(self):
         """

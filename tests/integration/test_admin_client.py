@@ -6,7 +6,7 @@ from keycloak.admin.realm import Realm
 from keycloak.realm import KeycloakRealm
 
 
-@pytest.mark.incremental
+@pytest.mark.incremental()
 class TestAdminClient:
 
     ID = "some_client"

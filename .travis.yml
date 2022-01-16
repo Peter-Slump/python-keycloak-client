@@ -9,39 +9,21 @@ matrix:
   fast_finish: true
 
 python:
-  - "2.7"
-  - "3.4"
-  - "3.5"
-  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "3.9"
+  - "3.10"
   - "nightly"
 
 before_install:
-  - pip install -U pip
-  - pip install -U wheel setuptools
-  - pip install flake8 codecov
+  - pip install poetry
 
 install:
-  - pip install -e .
-
-env: TEST_OPTS="--cov=keycloak --ignore=tests/keycloak/aio" FLAKE_OPTS="--exclude=src/keycloak/aio,tests/keycloak/aio"
+  - poetry install -E aio
 
 script:
-  - flake8 src/keycloak tests/keycloak $FLAKE_OPTS
-  - python setup.py test --addopts "$TEST_OPTS"
+  - poetry run flake8 src/keycloak tests/keycloak
+  - poetry run pytest --addopts "$TEST_OPTS"
 
 after_success:
   - codecov
-
-.mixins:
-  - &aio-mixin
-    env: TEST_OPTS="--cov=keycloak"  FLAKE_OPTS=""
-    install: pip install -e .[aio]
-
-jobs:
-  include:
-    - python: "3.5"
-      <<: *aio-mixin
-    - python: "3.6"
-      <<: *aio-mixin
-    - python: "nightly"
-      <<: *aio-mixin
