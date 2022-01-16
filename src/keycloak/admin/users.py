@@ -10,6 +10,7 @@ USER_KWARGS = [
     'first_name',
     'last_name',
     'email_verified',
+    'required_actions',
     'attributes',
     'realm_roles',
     'client_roles',
@@ -42,6 +43,7 @@ class Users(KeycloakAdminBase):
         :param str last_name: (optional)
         :param str email: (optional)
         :param boolean enabled: (optional)
+        :param list[str] required_actions: (optional)
         """
         payload = OrderedDict(username=username)
 
@@ -134,6 +136,7 @@ class User(KeycloakAdminBase):
         :param str last_name: last_name for user
         :param str email: Email for user
         :param bool email_verified: User email verified
+        :param list[str] required_actions: Sets required actions
         :param Map attributes: Atributes in user
         :param string array realm_roles: Realm Roles
         :param Map client_roles: Client Roles
