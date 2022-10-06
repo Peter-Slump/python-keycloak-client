@@ -7,7 +7,7 @@ except ImportError:
 
 from keycloak.mixins import WellKnownMixin
 
-PATH_WELL_KNOWN = "auth/realms/{}/.well-known/uma-configuration"
+PATH_WELL_KNOWN = "realms/{}/.well-known/uma-configuration"
 
 
 class KeycloakUMA1(WellKnownMixin, object):

@@ -7,7 +7,7 @@ except ImportError:
 
 from jose import jwt
 
-PATH_WELL_KNOWN = "auth/realms/{}/.well-known/openid-configuration"
+PATH_WELL_KNOWN = "realms/{}/.well-known/openid-configuration"
 
 
 class KeycloakOpenidConnect(WellKnownMixin):

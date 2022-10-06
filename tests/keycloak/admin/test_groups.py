@@ -16,7 +16,7 @@ class KeycloakAdminGroupsTestCase(TestCase):
     def test_create(self):
         self.admin.realms.by_name('realm-name').groups.create("group-name")
         self.realm.client.get_full_url.assert_called_once_with(
-            '/auth/admin/realms/realm-name/groups'
+            '/admin/realms/realm-name/groups'
         )
         self.realm.client.post.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
@@ -30,7 +30,7 @@ class KeycloakAdminGroupsTestCase(TestCase):
     def test_get_all(self):
         self.admin.realms.by_name('realm-name').groups.all()
         self.realm.client.get_full_url.assert_called_once_with(
-            '/auth/admin/realms/realm-name/groups'
+            '/admin/realms/realm-name/groups'
         )
         self.realm.client.get.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,

@@ -87,6 +87,12 @@ Release Notes
 
 **unreleased**
 
+**v0.3.0**
+
+* Added support for Keycloak v17.0 and newer (tested till Keycloak v19.0), by removing `auth` from the APIs URIs as it no longer exists in Keycloak APIs
+You still can use this version with old Keycloak versions if you add `/auth` at the end of the baseUri.
+E.g: 'baseUri' => 'http://keycloak-domain.com/auth',
+
 
 **v0.2.3**
 

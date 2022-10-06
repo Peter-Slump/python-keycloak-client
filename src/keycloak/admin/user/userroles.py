@@ -23,9 +23,9 @@ class UserRoleMappings(KeycloakAdminBase):
 
 class UserRoleMappingsRealm(KeycloakAdminBase):
     _paths = {
-        'available': '/auth/admin/realms/{realm}/users/{id}' +
+        'available': '/admin/realms/{realm}/users/{id}' +
                      '/role-mappings/realm/available',
-        'single': '/auth/admin/realms/{realm}/users/{id}' +
+        'single': '/admin/realms/{realm}/users/{id}' +
                   '/role-mappings/realm'
     }
 

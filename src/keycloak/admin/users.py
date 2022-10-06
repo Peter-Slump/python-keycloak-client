@@ -21,7 +21,7 @@ USER_KWARGS = [
 
 class Users(KeycloakAdminBase):
     _paths = {
-        'collection': '/auth/admin/realms/{realm}/users'
+        'collection': '/admin/realms/{realm}/users'
     }
 
     _realm_name = None
@@ -75,7 +75,7 @@ class Users(KeycloakAdminBase):
 
 
 class User(KeycloakAdminBase):
-    _BASE = "/auth/admin/realms/{realm}/users/{user_id}"
+    _BASE = "/admin/realms/{realm}/users/{user_id}"
     _paths = {
         'single': _BASE,
         'reset_password': _BASE + "/reset-password",

@@ -23,7 +23,7 @@ class KeycloakAdminUsersTestCase(TestCase):
             enabled=True
         )
         self.realm.client.get_full_url.assert_called_once_with(
-            '/auth/admin/realms/realm-name/users'
+            '/admin/realms/realm-name/users'
         )
         self.realm.client.post.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
@@ -48,7 +48,7 @@ class KeycloakAdminUsersTestCase(TestCase):
     def test_get_collection(self):
         self.admin.realms.by_name('realm-name').users.all()
         self.realm.client.get_full_url.assert_called_once_with(
-            '/auth/admin/realms/realm-name/users'
+            '/admin/realms/realm-name/users'
         )
         self.realm.client.get.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
@@ -61,7 +61,7 @@ class KeycloakAdminUsersTestCase(TestCase):
     def test_get_single(self):
         self.admin.realms.by_name('realm-name').users.by_id('an-id').get()
         self.realm.client.get_full_url.assert_called_once_with(
-            '/auth/admin/realms/realm-name/users/an-id'
+            '/admin/realms/realm-name/users/an-id'
         )
         self.realm.client.get.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
@@ -74,7 +74,7 @@ class KeycloakAdminUsersTestCase(TestCase):
     def test_get_single_user(self):
         self.admin.realms.by_name('realm-name').users.by_id('an-id').user
         self.realm.client.get_full_url.assert_called_once_with(
-            '/auth/admin/realms/realm-name/users/an-id'
+            '/admin/realms/realm-name/users/an-id'
         )
         self.realm.client.get.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
@@ -95,7 +95,7 @@ class KeycloakAdminUsersTestCase(TestCase):
             enabled=True
         )
         self.realm.client.get_full_url.assert_called_with(
-            '/auth/admin/realms/realm-name/users/user-id'
+            '/admin/realms/realm-name/users/user-id'
         )
         self.realm.client.put.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
@@ -122,7 +122,7 @@ class KeycloakAdminUsersTestCase(TestCase):
         user = self.admin.realms.by_name('realm-name').users.by_id("user-id")
         user.delete()
         self.realm.client.get_full_url.assert_called_with(
-            '/auth/admin/realms/realm-name/users/user-id'
+            '/admin/realms/realm-name/users/user-id'
         )
         self.realm.client.delete.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
@@ -137,7 +137,7 @@ class KeycloakAdminUsersTestCase(TestCase):
         user = self.admin.realms.by_name('realm-name').users.by_id("user-id")
         user.groups.delete('group-id')
         self.realm.client.get_full_url.assert_called_with(
-            '/auth/admin/realms/realm-name/users/user-id/groups/group-id'
+            '/admin/realms/realm-name/users/user-id/groups/group-id'
         )
         self.realm.client.delete.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
@@ -152,7 +152,7 @@ class KeycloakAdminUsersTestCase(TestCase):
         user = self.admin.realms.by_name('realm-name').users.by_id("user-id")
         user.reset_password("password", True)
         self.realm.client.get_full_url.assert_called_with(
-            '/auth/admin/realms/realm-name/users/user-id/reset-password'
+            '/admin/realms/realm-name/users/user-id/reset-password'
         )
         self.realm.client.put.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
@@ -170,7 +170,7 @@ class KeycloakAdminUsersTestCase(TestCase):
         user = self.admin.realms.by_name('realm-name').users.by_id("user-id")
         user.logout()
         self.realm.client.get_full_url.assert_called_with(
-            '/auth/admin/realms/realm-name/users/user-id/logout'
+            '/admin/realms/realm-name/users/user-id/logout'
         )
         self.realm.client.post.assert_called_once_with(
             url=self.realm.client.get_full_url.return_value,
