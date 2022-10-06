@@ -7,7 +7,7 @@ __all__ = ('Groups',)
 
 class Groups(KeycloakAdminBase):
     _paths = {
-        'collection': '/auth/admin/realms/{realm}/groups',
+        'collection': '/admin/realms/{realm}/groups',
     }
 
     def __init__(self, realm_name, *args, **kwargs):

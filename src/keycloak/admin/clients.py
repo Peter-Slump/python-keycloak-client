@@ -6,7 +6,7 @@ __all__ = ('Client', 'Clients',)
 class Clients(KeycloakAdminBase):
     _realm_name = None
     _paths = {
-        'collection': '/auth/admin/realms/{realm}/clients'
+        'collection': '/admin/realms/{realm}/clients'
     }
 
     def __init__(self, realm_name, *args, **kwargs):

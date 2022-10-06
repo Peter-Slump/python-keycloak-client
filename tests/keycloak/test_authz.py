@@ -19,7 +19,7 @@ class KeycloakAuthzTestCase(TestCase):
         result = self.authz.entitlement(token='some-token')
 
         self.realm.client.get_full_url.assert_called_once_with(
-            'auth/realms/realm-name/authz/entitlement/client-id'
+            'realms/realm-name/authz/entitlement/client-id'
         )
         self.realm.client.get.assert_called_once_with(
             self.realm.client.get_full_url.return_value,

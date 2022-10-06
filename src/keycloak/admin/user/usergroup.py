@@ -4,7 +4,7 @@ from keycloak.admin import KeycloakAdminBase
 
 
 class UserGroups(KeycloakAdminBase):
-    _BASE = "/auth/admin/realms/{realm}/users/{user_id}"
+    _BASE = "/admin/realms/{realm}/users/{user_id}"
     _paths = {
         'collection': _BASE + '/groups',
         'single': _BASE + '/groups/{group_id}'

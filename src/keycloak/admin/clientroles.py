@@ -27,7 +27,7 @@ class ClientRoles(KeycloakAdminBase):
     _client_id = None
     _realm_name = None
     _paths = {
-        'collection': '/auth/admin/realms/{realm}/clients/{id}/roles'
+        'collection': '/admin/realms/{realm}/clients/{id}/roles'
     }
 
     def __init__(self, realm_name, client_id, *args, **kwargs):
@@ -74,7 +74,7 @@ class ClientRoles(KeycloakAdminBase):
 
 class ClientRole(KeycloakAdminBase):
     _paths = {
-        'single': '/auth/admin/realms/{realm}/clients/{id}/roles/{role_name}'
+        'single': '/admin/realms/{realm}/clients/{id}/roles/{role_name}'
     }
 
     def __init__(self, realm_name, client_id, role_name, *args, **kwargs):

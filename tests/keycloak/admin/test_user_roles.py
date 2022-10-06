@@ -27,7 +27,7 @@ class KeycloakAdminUserRolesTestCase(TestCase):
         self.admin.realms.by_name('realm-name').users.by_id(
             'user-id').role_mappings.realm.add(role_representations)
         self.realm.client.get_full_url.assert_called_once_with(
-            '/auth/admin/realms/realm-name/users/user-id' +
+            '/admin/realms/realm-name/users/user-id' +
             '/role-mappings/realm'
         )
         self.realm.client.post.assert_called_once_with(
@@ -52,7 +52,7 @@ class KeycloakAdminUserRolesTestCase(TestCase):
         self.admin.realms.by_name('realm-name').users.by_id(
             'user-id').role_mappings.realm.available()
         self.realm.client.get_full_url.assert_called_once_with(
-            '/auth/admin/realms/realm-name/users/user-id' +
+            '/admin/realms/realm-name/users/user-id' +
             '/role-mappings/realm/available'
         )
         self.realm.client.get.assert_called_once_with(
@@ -67,7 +67,7 @@ class KeycloakAdminUserRolesTestCase(TestCase):
         self.admin.realms.by_name('realm-name').users.by_id(
             'user-id').role_mappings.realm.get()
         self.realm.client.get_full_url.assert_called_once_with(
-            '/auth/admin/realms/realm-name/users/user-id' +
+            '/admin/realms/realm-name/users/user-id' +
             '/role-mappings/realm'
         )
         self.realm.client.get.assert_called_once_with(
@@ -92,7 +92,7 @@ class KeycloakAdminUserRolesTestCase(TestCase):
         self.admin.realms.by_name('realm-name').users.by_id(
             'user-id').role_mappings.realm.delete(role_representations)
         self.realm.client.get_full_url.assert_called_once_with(
-            '/auth/admin/realms/realm-name/users/user-id' +
+            '/admin/realms/realm-name/users/user-id' +
             '/role-mappings/realm'
         )
         self.realm.client.delete.assert_called_once_with(

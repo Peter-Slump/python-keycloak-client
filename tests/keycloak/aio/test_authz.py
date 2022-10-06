@@ -32,7 +32,7 @@ class KeycloakAuthzTestCase(asynctest.TestCase):
         result = await self.authz.entitlement(token='some-token')
 
         self.realm.client.get_full_url.assert_any_call(
-            'auth/realms/realm-name/authz/entitlement/client-id'
+            'realms/realm-name/authz/entitlement/client-id'
         )
         self.realm.client.get.assert_any_await(
             self.realm.client.get_full_url.return_value,

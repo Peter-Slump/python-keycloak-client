@@ -33,7 +33,7 @@ class KeycloakAdminUsersTestCase(asynctest.TestCase):
             enabled=True
         )
         self.realm.client.get_full_url.assert_called_once_with(
-            '/auth/admin/realms/realm-name/users'
+            '/admin/realms/realm-name/users'
         )
         self.realm.client.post.assert_awaited_once_with(
             url=self.realm.client.get_full_url.return_value,
